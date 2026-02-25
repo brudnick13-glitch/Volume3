@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Volume³"/>
+<meta name="theme-color" content="#f59e0b"/>
+<link rel="manifest" href="manifest.json"/>
+<link rel="apple-touch-icon" href="icon-192.png"/>
+<title>Volume³</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap');
+
+  :root {
+    --bg:       #0f1117;
+    --surface:  #1a1d27;
+    --surface2: #22263a;
+    --border:   #2e3347;
+    --amber:    #f59e0b;
+    --amber2:   #fbbf24;
+    --red:      #ef4444;
+    --green:    #22c55e;
+    --text:     #e2e8f0;
+    --muted:    #64748b;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bot: env(safe-area-inset-bottom, 0px);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  html, body {
+    height: 100%;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    overscroll-behavior: none;
+  }
+
+  body {
+    padding-top: var(--safe-top);
+    padding-bottom: var(--safe-bot);
+    display: flex;
+    flex-direction: column;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px 10px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .logo {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 26px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--amber);
+  }
+
+  .logo sup { font-size: 14px; vertical-align: super; }
+
+  /* MODE TOGGLE */
+  .mode-toggle {
+    display: flex;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 3px;
+    gap: 3px;
+  }
+
+  .mode-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .mode-btn.active {
+    background: var(--amber);
+    color: #000;
+  }
+
+  /* MAIN SCROLL AREA */
+  main {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* CARDS */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+  }
+
+  .card-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+
+  /* SHAPE TAB ROW */
+  .shape-tabs {
+    display: flex;
+    gap: 8px;
+  }
+
+  .shape-tab {
+    flex: 1;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    padding: 8px 4px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+
+  .shape-tab.active {
+    border-color: var(--amber);
+    color: var(--amber);
+    background: rgba(245,158,11,0.08);
+  }
+
+  /* INPUT ROWS */
+  .input-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .input-row:last-child { margin-bottom: 0; }
+
+  .input-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    width: 60px;
+    flex-shrink: 0;
+  }
+
+  .fi-group {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+  }
+
+  .fi-wrap {
+    position: relative;
+    flex: 1;
+  }
+
+  .fi-wrap input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    padding: 8px 28px 8px 10px;
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  .fi-wrap input:focus { border-color: var(--amber); }
+
+  .fi-unit {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  /* SLOPE GRID */
+  .slope-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .slope-item {
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .slope-item-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .slope-item select {
+    width: 100%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 6px 8px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .slope-item select:focus { border-color: var(--amber); }
+
+  /* 3D CANVAS */
+  .canvas-wrap {
+    background: var(--surface2);
+    border-radius: 10px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* OUTPUT */
+  .output-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .output-cell {
+    background: var(--surface2);
+    border-radius: 10px;
+    padding: 10px 8px;
+    text-align: center;
+  }
+
+  .output-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 22px;
+    font-weight: 900;
+    color: var(--amber);
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+
+  .output-unit {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* MATERIAL ROW */
+  .material-row {
+    display: flex;
+    gap: 8px;
+    align-items: stretch;
+    margin-bottom: 10px;
+  }
+
+  .material-row select {
+    flex: 1;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 10px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+    cursor: pointer;
+  }
+
+  .material-row select:focus { border-color: var(--amber); }
+
+  .multiplier-wrap {
+    position: relative;
+    width: 90px;
+    flex-shrink: 0;
+  }
+
+  .multiplier-wrap input {
+    width: 100%;
+    background: var(--surface2);
+    border: 1.5px solid var(--amber);
+    border-radius: 8px;
+    color: var(--amber);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    padding: 8px 36px 8px 10px;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  .multiplier-wrap .fi-unit { color: var(--amber); font-size: 10px; }
+
+  /* TEXT FIELDS */
+  .text-field {
+    width: 100%;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    padding: 10px 12px;
+    outline: none;
+    transition: border-color 0.15s;
+    resize: none;
+    -webkit-appearance: none;
+  }
+
+  .text-field:focus { border-color: var(--amber); }
+
+  .text-field.title-field {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+
+  /* GRADE BADGE */
+  .grade-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+  }
+
+  .grade-badge.above { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .grade-badge.below { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  /* FLAT TOP TOGGLE */
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 10px;
+  }
+
+  .toggle-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .toggle-switch {
+    position: relative;
+    width: 44px;
+    height: 24px;
+  }
+
+  .toggle-switch input { opacity: 0; width: 0; height: 0; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--surface2);
+    border-radius: 24px;
+    border: 1.5px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .toggle-slider::after {
+    content: '';
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 16px;
+    height: 16px;
+    background: var(--muted);
+    border-radius: 50%;
+    transition: all 0.2s;
+  }
+
+  .toggle-switch input:checked + .toggle-slider { background: rgba(245,158,11,0.2); border-color: var(--amber); }
+  .toggle-switch input:checked + .toggle-slider::after { transform: translateX(20px); background: var(--amber); }
+
+  /* HIDDEN */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Volume<sup>3</sup></div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <div id="gradeBadge" class="grade-badge above">▲ Above</div>
+    <div class="mode-toggle">
+      <button class="mode-btn active" onclick="setGrade('above')">Pile</button>
+      <button class="mode-btn" onclick="setGrade('below')">Cut</button>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- TITLE -->
+  <div class="card" style="padding:10px 14px;">
+    <input type="text" class="text-field title-field" id="titleField" placeholder="Job / Pile Name" oninput="saveState()"/>
+  </div>
+
+  <!-- SHAPE SELECTOR -->
+  <div class="card">
+    <div class="card-title">Shape Type</div>
+    <div class="shape-tabs">
+      <button class="shape-tab active" id="tabRect" onclick="setShape('rect')">Rectangular</button>
+      <button class="shape-tab" id="tabCone" onclick="setShape('cone')">Conical</button>
+    </div>
+  </div>
+
+  <!-- RECTANGULAR INPUTS -->
+  <div class="card" id="rectInputs">
+    <div class="card-title">Dimensions — Base Measurements</div>
+
+    <div class="input-row">
+      <span class="input-label">Length</span>
+      <div class="fi-group">
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="lenFt" placeholder="0" min="0" oninput="calc()"/>
+          <span class="fi-unit">ft</span>
+        </div>
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="lenIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+          <span class="fi-unit">in</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <span class="input-label">Width</span>
+      <div class="fi-group">
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="widFt" placeholder="0" min="0" oninput="calc()"/>
+          <span class="fi-unit">ft</span>
+        </div>
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="widIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+          <span class="fi-unit">in</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <span class="input-label">Height</span>
+      <div class="fi-group">
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="htFt" placeholder="0" min="0" oninput="calc()"/>
+          <span class="fi-unit">ft</span>
+        </div>
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="htIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+          <span class="fi-unit">in</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- FLAT TOP TOGGLE -->
+    <div class="toggle-row" id="flatTopRow">
+      <span class="toggle-label">Flat Top</span>
+      <label class="toggle-switch">
+        <input type="checkbox" id="flatTopToggle" onchange="calc()"/>
+        <span class="toggle-slider"></span>
+      </label>
+    </div>
+
+    <!-- FLAT TOP DIMS (shown only when flat top enabled) -->
+    <div id="flatTopDims" class="hidden">
+      <div class="input-row">
+        <span class="input-label" style="font-size:11px;">Top L</span>
+        <div class="fi-group">
+          <div class="fi-wrap">
+            <input type="number" inputmode="decimal" id="topLenFt" placeholder="0" min="0" oninput="calc()"/>
+            <span class="fi-unit">ft</span>
+          </div>
+          <div class="fi-wrap">
+            <input type="number" inputmode="decimal" id="topLenIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+            <span class="fi-unit">in</span>
+          </div>
+        </div>
+      </div>
+      <div class="input-row">
+        <span class="input-label" style="font-size:11px;">Top W</span>
+        <div class="fi-group">
+          <div class="fi-wrap">
+            <input type="number" inputmode="decimal" id="topWidFt" placeholder="0" min="0" oninput="calc()"/>
+            <span class="fi-unit">ft</span>
+          </div>
+          <div class="fi-wrap">
+            <input type="number" inputmode="decimal" id="topWidIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+            <span class="fi-unit">in</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONICAL INPUTS -->
+  <div class="card hidden" id="coneInputs">
+    <div class="card-title">Dimensions</div>
+
+    <div class="input-row">
+      <span class="input-label">Diameter</span>
+      <div class="fi-group">
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="coneDFt" placeholder="0" min="0" oninput="calc()"/>
+          <span class="fi-unit">ft</span>
+        </div>
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="coneDIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+          <span class="fi-unit">in</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-row">
+      <span class="input-label">Height</span>
+      <div class="fi-group">
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="coneHFt" placeholder="0" min="0" oninput="calc()"/>
+          <span class="fi-unit">ft</span>
+        </div>
+        <div class="fi-wrap">
+          <input type="number" inputmode="decimal" id="coneHIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+          <span class="fi-unit">in</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Angle of Repose Reference -->
+    <div style="margin-top:8px;">
+      <div class="card-title" style="margin-bottom:6px;">Angle of Repose Reference</div>
+      <select id="aorSelect" onchange="setAOR()" style="width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;padding:8px 10px;outline:none;-webkit-appearance:none;">
+        <option value="">— Select material —</option>
+      </select>
+      <div id="aorInfo" style="margin-top:6px;font-size:12px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:0.3px;"></div>
+    </div>
+  </div>
+
+  <!-- SLOPES (rect only) -->
+  <div class="card" id="slopeCard">
+    <div class="card-title">Wall Angles — Per Side</div>
+    <div class="slope-grid">
+      <div class="slope-item">
+        <div class="slope-item-label">Front</div>
+        <select id="slopeFront" onchange="calc()"></select>
+      </div>
+      <div class="slope-item">
+        <div class="slope-item-label">Back</div>
+        <select id="slopeBack" onchange="calc()"></select>
+      </div>
+      <div class="slope-item">
+        <div class="slope-item-label">Left</div>
+        <select id="slopeLeft" onchange="calc()"></select>
+      </div>
+      <div class="slope-item">
+        <div class="slope-item-label">Right</div>
+        <select id="slopeRight" onchange="calc()"></select>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3D PREVIEW -->
+  <div class="card">
+    <div class="card-title">3D Preview</div>
+    <div class="canvas-wrap">
+      <canvas id="preview3d" width="480" height="280"></canvas>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="card">
+    <div class="section-header">
+      <div class="card-title" style="margin:0;">Volume Output</div>
+    </div>
+    <div class="output-grid">
+      <div class="output-cell">
+        <div class="output-val" id="outCF">—</div>
+        <div class="output-unit">Cubic Ft</div>
+      </div>
+      <div class="output-cell">
+        <div class="output-val" id="outCY">—</div>
+        <div class="output-unit">Cubic Yd</div>
+      </div>
+      <div class="output-cell">
+        <div class="output-val" id="outTons">—</div>
+        <div class="output-unit">Tons</div>
+      </div>
+    </div>
+
+    <!-- Material / density -->
+    <div class="card-title" style="margin-bottom:6px;">Material Density</div>
+    <div class="material-row">
+      <select id="matSelect" onchange="setMaterial()"></select>
+      <div class="multiplier-wrap">
+        <input type="number" inputmode="decimal" id="densityVal" placeholder="1.35" step="0.01" min="0.1" oninput="calc()"/>
+        <span class="fi-unit">T/CY</span>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.3px;">
+      Tons = CY × multiplier. Edit multiplier to override.
+    </div>
+  </div>
+
+  <!-- NOTES -->
+  <div class="card">
+    <div class="card-title">Notes</div>
+    <textarea class="text-field" id="notesField" rows="3" placeholder="Field notes, location, date..." oninput="saveState()"></textarea>
+  </div>
+
+  <div style="height:20px;"></div>
+
+</main>
+
+<script>
+// ─── DATA ─────────────────────────────────────────────────────────────────────
+
+const SLOPE_OPTIONS = [
+  { label: '90° — Vertical',    deg: 90  },
+  { label: '80°',               deg: 80  },
+  { label: '75°',               deg: 75  },
+  { label: '70°',               deg: 70  },
+  { label: '63.4° — 1:1',       deg: 63.4},
+  { label: '60°',               deg: 60  },
+  { label: '56.3° — 1.5:1',     deg: 56.3},
+  { label: '53°',               deg: 53  },
+  { label: '45° — Equal Slope', deg: 45  },
+  { label: '33.7° — 2:1',       deg: 33.7},
+  { label: '26.6° — 3:1',       deg: 26.6},
+  { label: '18.4° — 4:1',       deg: 18.4},
+  { label: '14° — 4.5:1',       deg: 14  },
+];
+
+const MATERIALS = [
+  { name: '— Select material —',   tcy: null },
+  { name: 'Bank Gravel',           tcy: 1.50 },
+  { name: 'Broken Asphalt',        tcy: 1.35 },
+  { name: 'Broken Concrete',       tcy: 1.55 },
+  { name: 'Clay — Dry',            tcy: 1.40 },
+  { name: 'Clay — Wet',            tcy: 1.70 },
+  { name: 'Coarse Gravel',         tcy: 1.65 },
+  { name: 'Common Earth (Loose)',   tcy: 1.25 },
+  { name: 'Common Earth (Compact)', tcy: 1.45 },
+  { name: 'Crushed Stone',         tcy: 1.55 },
+  { name: 'Dense Graded Aggregate',tcy: 1.60 },
+  { name: 'Dredged Material',      tcy: 0.90 },
+  { name: 'Fill Dirt',             tcy: 1.20 },
+  { name: 'Fine Sand',             tcy: 1.30 },
+  { name: 'Limestone (Crushed)',   tcy: 1.55 },
+  { name: 'Loam',                  tcy: 1.25 },
+  { name: 'Mulch',                 tcy: 0.40 },
+  { name: 'Pea Gravel',            tcy: 1.45 },
+  { name: 'Recycled Concrete Base',tcy: 1.60 },
+  { name: 'Rip Rap',               tcy: 1.65 },
+  { name: 'Sand (Dry)',            tcy: 1.40 },
+  { name: 'Sand (Wet)',            tcy: 1.70 },
+  { name: 'Sandy Loam',            tcy: 1.30 },
+  { name: 'Silty Clay',            tcy: 1.50 },
+  { name: 'Slag',                  tcy: 1.75 },
+  { name: 'Topsoil',               tcy: 1.10 },
+];
+
+const AOR_MATERIALS = [
+  { name: 'Clay (Damp)',      aor: 15, notes: 'Cohesive, low angle' },
+  { name: 'Clay (Dry)',       aor: 25, notes: 'Crumbly, moderate' },
+  { name: 'Coal',             aor: 35, notes: 'Typical bulk coal' },
+  { name: 'Coarse Gravel',    aor: 35, notes: 'Angular, self-supporting' },
+  { name: 'Crushed Stone',    aor: 38, notes: 'Angular aggregate' },
+  { name: 'Fine Sand (Dry)',  aor: 30, notes: 'Rounded particles' },
+  { name: 'Fine Sand (Wet)',  aor: 45, notes: 'Capillary cohesion' },
+  { name: 'Grain (Corn/Wheat)',aor:28, notes: 'Smooth, rounded' },
+  { name: 'Gravel (Mixed)',   aor: 32, notes: 'Common fill gravel' },
+  { name: 'Iron Ore',         aor: 35, notes: 'Dense angular' },
+  { name: 'Limestone (Crushed)',aor:38,notes: 'Angular, locks well' },
+  { name: 'Loam',             aor: 20, notes: 'Mixed fine soil' },
+  { name: 'Mulch (Wood)',     aor: 45, notes: 'Fibrous, interlock' },
+  { name: 'Pea Gravel',       aor: 25, notes: 'Rounded, low friction' },
+  { name: 'Sand (Coarse)',    aor: 34, notes: 'Angular coarse grains' },
+  { name: 'Sandy Loam',       aor: 25, notes: 'Mixed cohesion' },
+  { name: 'Silty Earth',      aor: 22, notes: 'Low internal friction' },
+  { name: 'Slag (Crushed)',   aor: 40, notes: 'Very angular, high lock' },
+  { name: 'Snow (Compacted)', aor: 38, notes: 'Bonded ice/snow' },
+  { name: 'Stone Dust',       aor: 30, notes: 'Quarry fines' },
+  { name: 'Topsoil (Loose)',  aor: 20, notes: 'Organic material' },
+  { name: 'Wood Chips',       aor: 45, notes: 'Fibrous interlock' },
+];
+
+// ─── STATE ────────────────────────────────────────────────────────────────────
+
+let state = {
+  grade: 'above',   // above | below
+  shape: 'rect',    // rect | cone
+  lenFt:0, lenIn:0,
+  widFt:0, widIn:0,
+  htFt:0,  htIn:0,
+  flatTop: false,
+  topLenFt:0, topLenIn:0,
+  topWidFt:0, topWidIn:0,
+  coneDFt:0, coneDIn:0,
+  coneHFt:0, coneHIn:0,
+  slopeFront:90, slopeBack:90, slopeLeft:90, slopeRight:90,
+  density: 1.35,
+  title: '',
+  notes: ''
+};
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+
+function init() {
+  // Populate slope selects
+  ['slopeFront','slopeBack','slopeLeft','slopeRight'].forEach(id => {
+    const sel = document.getElementById(id);
+    SLOPE_OPTIONS.forEach(o => {
+      const opt = document.createElement('option');
+      opt.value = o.deg;
+      opt.textContent = o.label;
+      if (o.deg === 45) opt.selected = true;
+      sel.appendChild(opt);
+    });
+    sel.addEventListener('change', calc);
+  });
+
+  // Populate material select
+  const mat = document.getElementById('matSelect');
+  MATERIALS.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.tcy || '';
+    opt.textContent = m.name;
+    mat.appendChild(opt);
+  });
+
+  // Populate AOR select
+  const aor = document.getElementById('aorSelect');
+  AOR_MATERIALS.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = JSON.stringify(m);
+    opt.textContent = `${m.name} — ${m.aor}°`;
+    aor.appendChild(opt);
+  });
+
+  // Restore saved state
+  try {
+    const saved = localStorage.getItem('v3state');
+    if (saved) {
+      const s = JSON.parse(saved);
+      Object.assign(state, s);
+      applyStateToUI();
+    }
+  } catch(e) {}
+
+  calc();
+}
+
+function applyStateToUI() {
+  document.getElementById('titleField').value = state.title || '';
+  document.getElementById('notesField').value = state.notes || '';
+  document.getElementById('lenFt').value = state.lenFt || '';
+  document.getElementById('lenIn').value = state.lenIn || '';
+  document.getElementById('widFt').value = state.widFt || '';
+  document.getElementById('widIn').value = state.widIn || '';
+  document.getElementById('htFt').value = state.htFt || '';
+  document.getElementById('htIn').value = state.htIn || '';
+  document.getElementById('topLenFt').value = state.topLenFt || '';
+  document.getElementById('topLenIn').value = state.topLenIn || '';
+  document.getElementById('topWidFt').value = state.topWidFt || '';
+  document.getElementById('topWidIn').value = state.topWidIn || '';
+  document.getElementById('coneDFt').value = state.coneDFt || '';
+  document.getElementById('coneDIn').value = state.coneDIn || '';
+  document.getElementById('coneHFt').value = state.coneHFt || '';
+  document.getElementById('coneHIn').value = state.coneHIn || '';
+  document.getElementById('densityVal').value = state.density || 1.35;
+  document.getElementById('flatTopToggle').checked = state.flatTop || false;
+  setGrade(state.grade || 'above', true);
+  setShape(state.shape || 'rect', true);
+  ['slopeFront','slopeBack','slopeLeft','slopeRight'].forEach(id => {
+    const key = id.replace('slope','slope');
+    const sel = document.getElementById(id);
+    if (state[id]) sel.value = state[id];
+  });
+}
+
+function saveState() {
+  state.title = document.getElementById('titleField').value;
+  state.notes = document.getElementById('notesField').value;
+  try { localStorage.setItem('v3state', JSON.stringify(state)); } catch(e) {}
+}
+
+// ─── MODE SETTERS ─────────────────────────────────────────────────────────────
+
+function setGrade(g, silent) {
+  state.grade = g;
+  const btns = document.querySelectorAll('.mode-btn');
+  btns[0].classList.toggle('active', g === 'above');
+  btns[1].classList.toggle('active', g === 'below');
+  const badge = document.getElementById('gradeBadge');
+  if (g === 'above') {
+    badge.className = 'grade-badge above';
+    badge.textContent = '▲ Above';
+  } else {
+    badge.className = 'grade-badge below';
+    badge.textContent = '▼ Below';
+  }
+  if (!silent) { saveState(); calc(); }
+}
+
+function setShape(s, silent) {
+  state.shape = s;
+  document.getElementById('tabRect').classList.toggle('active', s === 'rect');
+  document.getElementById('tabCone').classList.toggle('active', s === 'cone');
+  document.getElementById('rectInputs').classList.toggle('hidden', s !== 'rect');
+  document.getElementById('coneInputs').classList.toggle('hidden', s !== 'cone');
+  document.getElementById('slopeCard').classList.toggle('hidden', s !== 'rect');
+  if (!silent) { saveState(); calc(); }
+}
+
+function setMaterial() {
+  const sel = document.getElementById('matSelect');
+  const val = parseFloat(sel.value);
+  if (!isNaN(val) && val > 0) {
+    document.getElementById('densityVal').value = val;
+    state.density = val;
+  }
+  calc();
+}
+
+function setAOR() {
+  const sel = document.getElementById('aorSelect');
+  if (!sel.value) { document.getElementById('aorInfo').textContent = ''; return; }
+  try {
+    const m = JSON.parse(sel.value);
+    document.getElementById('aorInfo').textContent =
+      `Typical angle: ${m.aor}° — ${m.notes}`;
+  } catch(e) {}
+}
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+
+function fi(ftId, inId) {
+  const ft = parseFloat(document.getElementById(ftId).value) || 0;
+  const inp = parseFloat(document.getElementById(inId).value) || 0;
+  return ft + inp / 12;
+}
+
+function fmt(n) {
+  if (n === null || isNaN(n)) return '—';
+  if (n >= 10000) return n.toLocaleString('en-US', {maximumFractionDigits:0});
+  if (n >= 1000)  return n.toLocaleString('en-US', {maximumFractionDigits:1});
+  return n.toLocaleString('en-US', {maximumFractionDigits:2});
+}
+
+function slopeVal(id) {
+  return parseFloat(document.getElementById(id).value) || 90;
+}
+
+// Run/rise from angle (degrees from horizontal)
+// angle = degrees from horizontal, so 90 = vertical (run=0)
+function runPerFt(angleDeg) {
+  const rad = angleDeg * Math.PI / 180;
+  return 1 / Math.tan(rad); // run per unit rise
+}
+
+// ─── VOLUME CALCULATIONS ──────────────────────────────────────────────────────
+
+function calcRectVolume(L, W, H, flatTop, topL, topW, aFront, aBack, aLeft, aRight) {
+  if (L <= 0 || W <= 0 || H <= 0) return null;
+
+  if (flatTop) {
+    // Frustum-like prismatoid with flat top
+    // Top dims given directly
+    if (topL <= 0 || topW <= 0) return null;
+    // Prismatoid formula: V = h/6 * (A_base + 4*A_mid + A_top)
+    const Ab = L * W;
+    const At = topL * topW;
+    const Lm = (L + topL) / 2;
+    const Wm = (W + topW) / 2;
+    const Am = Lm * Wm;
+    return (H / 6) * (Ab + 4 * Am + At);
+  }
+
+  // 4-sided pyramid-like shape (all sides slope to a ridge or point)
+  // Use prismatoid: compute top footprint from slopes
+  const rFront = runPerFt(aFront);
+  const rBack  = runPerFt(aBack);
+  const rLeft  = runPerFt(aLeft);
+  const rRight = runPerFt(aRight);
+
+  // Top length: reduced by left+right slopes
+  const topLCalc = Math.max(0, L - H * (rLeft + rRight));
+  // Top width:  reduced by front+back slopes
+  const topWCalc = Math.max(0, W - H * (rFront + rBack));
+
+  if (topLCalc === 0 && topWCalc === 0) {
+    // Comes to a point — true pyramid
+    // Prismatoid V = h/6*(Ab + 4Am + 0)
+    const Ab = L * W;
+    const Lm = L - H/2 * (rLeft + rRight);
+    const Wm = W - H/2 * (rFront + rBack);
+    const Am = Math.max(0,Lm) * Math.max(0,Wm);
+    return (H / 6) * (Ab + 4 * Am);
+  }
+
+  // Prismatoid
+  const Ab = L * W;
+  const At = topLCalc * topWCalc;
+  const Lm = (L + topLCalc) / 2;
+  const Wm = (W + topWCalc) / 2;
+  const Am = Lm * Wm;
+  return (H / 6) * (Ab + 4 * Am + At);
+}
+
+function calcConeVolume(D, H) {
+  if (D <= 0 || H <= 0) return null;
+  const r = D / 2;
+  return (Math.PI * r * r * H) / 3;
+}
+
+// ─── MAIN CALC ────────────────────────────────────────────────────────────────
+
+function calc() {
+  // Read inputs
+  const density = parseFloat(document.getElementById('densityVal').value) || 1.35;
+  state.density = density;
+
+  // Flat top toggle
+  const flatTop = document.getElementById('flatTopToggle').checked;
+  state.flatTop = flatTop;
+  document.getElementById('flatTopDims').classList.toggle('hidden', !flatTop);
+
+  let cf = null;
+
+  if (state.shape === 'rect') {
+    const L = fi('lenFt','lenIn');
+    const W = fi('widFt','widIn');
+    const H = fi('htFt','htIn');
+    const topL = fi('topLenFt','topLenIn');
+    const topW = fi('topWidFt','topWidIn');
+    const aFront = slopeVal('slopeFront');
+    const aBack  = slopeVal('slopeBack');
+    const aLeft  = slopeVal('slopeLeft');
+    const aRight = slopeVal('slopeRight');
+
+    cf = calcRectVolume(L, W, H, flatTop, topL, topW, aFront, aBack, aLeft, aRight);
+
+    // Save
+    state.lenFt=parseFloat(document.getElementById('lenFt').value)||0;
+    state.lenIn=parseFloat(document.getElementById('lenIn').value)||0;
+    state.widFt=parseFloat(document.getElementById('widFt').value)||0;
+    state.widIn=parseFloat(document.getElementById('widIn').value)||0;
+    state.htFt=parseFloat(document.getElementById('htFt').value)||0;
+    state.htIn=parseFloat(document.getElementById('htIn').value)||0;
+    state.topLenFt=parseFloat(document.getElementById('topLenFt').value)||0;
+    state.topLenIn=parseFloat(document.getElementById('topLenIn').value)||0;
+    state.topWidFt=parseFloat(document.getElementById('topWidFt').value)||0;
+    state.topWidIn=parseFloat(document.getElementById('topWidIn').value)||0;
+    state.slopeFront=aFront; state.slopeBack=aBack;
+    state.slopeLeft=aLeft;   state.slopeRight=aRight;
+
+    draw3DRect(L, W, H, flatTop, topL, topW, aFront, aBack, aLeft, aRight);
+
+  } else {
+    const D = fi('coneDFt','coneDIn');
+    const H = fi('coneHFt','coneHIn');
+    cf = calcConeVolume(D, H);
+    state.coneDFt=parseFloat(document.getElementById('coneDFt').value)||0;
+    state.coneDIn=parseFloat(document.getElementById('coneDIn').value)||0;
+    state.coneHFt=parseFloat(document.getElementById('coneHFt').value)||0;
+    state.coneHIn=parseFloat(document.getElementById('coneHIn').value)||0;
+    draw3DCone(D, H);
+  }
+
+  const cy = cf !== null ? cf / 27 : null;
+  const tons = cy !== null ? cy * density : null;
+
+  document.getElementById('outCF').textContent   = fmt(cf);
+  document.getElementById('outCY').textContent   = fmt(cy);
+  document.getElementById('outTons').textContent = fmt(tons);
+
+  saveState();
+}
+
+// ─── 3D RENDERING ─────────────────────────────────────────────────────────────
+
+const CW = 480, CH = 280;
+
+function getCanvas() {
+  const c = document.getElementById('preview3d');
+  // Scale for retina
+  const dpr = window.devicePixelRatio || 1;
+  if (c.dataset.scaled !== '1') {
+    c.width = CW * dpr;
+    c.height = CH * dpr;
+    c.style.width = CW + 'px';
+    c.style.height = CH + 'px';
+    const ctx = c.getContext('2d');
+    ctx.scale(dpr, dpr);
+    c.dataset.scaled = '1';
+  }
+  return c.getContext('2d');
+}
+
+// Isometric project: world (x,y,z) → screen (sx,sy)
+// x = right, y = into screen (depth), z = up
+function iso(x, y, z, ox, oy, scale) {
+  const sx = ox + (x - y) * Math.cos(Math.PI/6) * scale;
+  const sy = oy - z * scale + (x + y) * Math.sin(Math.PI/6) * scale;
+  return { x: sx, y: sy };
+}
+
+function clearCanvas(ctx) {
+  ctx.clearRect(0, 0, CW*2, CH*2);
+  // subtle grid bg
+  ctx.fillStyle = '#1a1d27';
+  ctx.fillRect(0, 0, CW*2, CH*2);
+}
+
+function drawEmpty(ctx) {
+  clearCanvas(ctx);
+  ctx.fillStyle = '#2e3347';
+  ctx.font = '600 13px Barlow Condensed, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('Enter dimensions to preview', CW/2, CH/2);
+}
+
+const AMBER = '#f59e0b';
+const AMBER_DIM = '#92400e';
+const SURFACE_TOP = '#2d3147';
+const SURFACE_SIDE_L = '#1e2235';
+const SURFACE_SIDE_R = '#252840';
+
+function draw3DRect(L, W, H, flatTop, topL, topW, aFront, aBack, aLeft, aRight) {
+  const ctx = getCanvas();
+  clearCanvas(ctx);
+
+  if (L <= 0 || W <= 0 || H <= 0) { drawEmpty(ctx); return; }
+
+  const isBelow = state.grade === 'below';
+
+  // Compute top dims
+  let tL, tW;
+  if (flatTop && topL > 0 && topW > 0) {
+    tL = topL; tW = topW;
+  } else {
+    const rFront = runPerFt(aFront), rBack = runPerFt(aBack);
+    const rLeft  = runPerFt(aLeft),  rRight = runPerFt(aRight);
+    tL = Math.max(0, L - H * (rLeft + rRight));
+    tW = Math.max(0, W - H * (rFront + rBack));
+  }
+
+  // Scale to fit canvas
+  const maxDim = Math.max(L, W, H * 1.5);
+  const scale = Math.min(CW, CH) * 0.38 / maxDim;
+  const ox = CW / 2, oy = isBelow ? CH * 0.28 : CH * 0.62;
+
+  // Sign for above/below
+  const sign = isBelow ? -1 : 1;
+
+  // Base corners (plan view: x=L axis, y=W axis)
+  const bFL = iso(0, 0, 0, ox, oy, scale);
+  const bFR = iso(L, 0, 0, ox, oy, scale);
+  const bBL = iso(0, W, 0, ox, oy, scale);
+  const bBR = iso(L, W, 0, ox, oy, scale);
+
+  // Top offset from slopes
+  const rLeft  = runPerFt(aLeft);
+  const rRight = runPerFt(aRight);
+  const rFront = runPerFt(aFront);
+  const rBack  = runPerFt(aBack);
+  const xOff = H * rLeft;
+  const wOff = H * (rLeft + rRight);
+  const yOff = H * rFront;
+  const dOff = H * (rFront + rBack);
+
+  let tFL, tFR, tBL, tBR;
+  if (flatTop && topL > 0 && topW > 0) {
+    const xc = (L - topL) / 2;
+    const yc = (W - topW) / 2;
+    tFL = iso(xc,      yc,      sign*H, ox, oy, scale);
+    tFR = iso(xc+topL, yc,      sign*H, ox, oy, scale);
+    tBL = iso(xc,      yc+topW, sign*H, ox, oy, scale);
+    tBR = iso(xc+topL, yc+topW, sign*H, ox, oy, scale);
+  } else {
+    tFL = iso(xOff,        yOff,        sign*H, ox, oy, scale);
+    tFR = iso(L-H*rRight,  yOff,        sign*H, ox, oy, scale);
+    tBL = iso(xOff,        W-H*rBack,   sign*H, ox, oy, scale);
+    tBR = iso(L-H*rRight,  W-H*rBack,   sign*H, ox, oy, scale);
+  }
+
+  function poly(pts, fill, stroke, lw) {
+    ctx.beginPath();
+    ctx.moveTo(pts[0].x, pts[0].y);
+    for (let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
+    ctx.closePath();
+    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
+    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw||1; ctx.stroke(); }
+  }
+
+  if (!isBelow) {
+    // Front face
+    poly([bFL,bFR,tFR,tFL], SURFACE_SIDE_R, AMBER+'55', 1);
+    // Right face
+    poly([bFR,bBR,tBR,tFR], SURFACE_SIDE_L, AMBER+'55', 1);
+    // Top
+    poly([tFL,tFR,tBR,tBL], SURFACE_TOP, AMBER+'88', 1.5);
+    // Left face (hidden but draw lightly)
+    poly([bFL,bBL,tBL,tFL], SURFACE_SIDE_L+'aa', AMBER+'33', 0.5);
+    // Base outline
+    poly([bFL,bFR,bBR,bBL], null, AMBER+'44', 1);
+    // Ground plane indicator
+    ctx.strokeStyle = AMBER+'33';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4,4]);
+    ctx.beginPath();
+    ctx.moveTo(bFL.x, bFL.y); ctx.lineTo(bFR.x, bFR.y);
+    ctx.moveTo(bFR.x, bFR.y); ctx.lineTo(bBR.x, bBR.y);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  } else {
+    // Cut — invert, show hole in ground
+    // Ground plane at y=0
+    const gExt = 30;
+    const g1 = iso(-gExt, -gExt, 0, ox, oy, scale);
+    const g2 = iso(L+gExt,-gExt, 0, ox, oy, scale);
+    const g3 = iso(L+gExt,W+gExt,0, ox, oy, scale);
+    const g4 = iso(-gExt, W+gExt,0, ox, oy, scale);
+
+    // Ground fill
+    ctx.fillStyle = '#1a1d27';
+    poly([g1,g2,g3,g4], '#222636', null);
+    // Cut hole outline on ground
+    poly([bFL,bFR,bBR,bBL], null, AMBER+'77', 1.5);
+
+    // Bottom
+    poly([tFL,tFR,tBR,tBL], SURFACE_TOP, AMBER+'66', 1.5);
+    // Front wall
+    poly([bFL,bFR,tFR,tFL], SURFACE_SIDE_R, AMBER+'55', 1);
+    // Right wall
+    poly([bFR,bBR,tBR,tFR], SURFACE_SIDE_L, AMBER+'55', 1);
+    // Left wall
+    poly([bFL,bBL,tBL,tFL], SURFACE_SIDE_L+'cc', AMBER+'33', 0.5);
+  }
+
+  // Dimension lines
+  drawDimLine(ctx, bFL, bFR, `L: ${L.toFixed(1)}'`, -12, scale);
+  drawDimLine(ctx, bFR, bBR, `W: ${W.toFixed(1)}'`, 10, scale);
+
+  // Height indicator
+  const hp1 = isBelow ? bFL : bFL;
+  const hp2 = isBelow ? tFL : tFL;
+  ctx.strokeStyle = AMBER+'99';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3,3]);
+  ctx.beginPath();
+  ctx.moveTo(hp1.x - 10, hp1.y);
+  ctx.lineTo(hp2.x - 10, hp2.y);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = AMBER+'cc';
+  ctx.font = '600 10px Barlow Condensed, sans-serif';
+  ctx.textAlign = 'right';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(`H: ${H.toFixed(1)}'`, hp2.x - 13, (hp1.y+hp2.y)/2);
+}
+
+function draw3DCone(D, H) {
+  const ctx = getCanvas();
+  clearCanvas(ctx);
+
+  if (D <= 0 || H <= 0) { drawEmpty(ctx); return; }
+
+  const isBelow = state.grade === 'below';
+  const r = D / 2;
+  const maxDim = Math.max(D, H * 1.5);
+  const scale = Math.min(CW, CH) * 0.35 / maxDim;
+  const ox = CW / 2, oy = CH * 0.58;
+  const sign = isBelow ? -1 : 1;
+
+  // Draw elliptical base
+  const rx = r * Math.cos(Math.PI/6) * scale;
+  const ry = r * Math.sin(Math.PI/6) * scale;
+  const bCx = ox, bCy = oy;
+
+  // Apex
+  const apex = iso(0, 0, sign * H, ox, oy, scale);
+  // Adjust apex x for cone center
+  const apexX = ox;
+  const apexY = oy - sign * H * scale;
+
+  // Left tangent point on ellipse
+  const lx = bCx - rx;
+  const ly = bCy;
+  const rx2 = bCx + rx;
+  const ry2 = bCy;
+
+  // Side faces
+  if (!isBelow) {
+    // Dark back half
+    ctx.beginPath();
+    ctx.ellipse(bCx, bCy, rx, ry, 0, 0, Math.PI);
+    ctx.fillStyle = SURFACE_SIDE_L;
+    ctx.fill();
+
+    // Cone sides
+    ctx.beginPath();
+    ctx.moveTo(apexX, apexY);
+    ctx.lineTo(lx, ly);
+    ctx.ellipse(bCx, bCy, rx, ry, 0, Math.PI, 2*Math.PI);
+    ctx.closePath();
+    ctx.fillStyle = SURFACE_SIDE_R;
+    ctx.fill();
+    ctx.strokeStyle = AMBER + '77';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // Base ellipse top
+    ctx.beginPath();
+    ctx.ellipse(bCx, bCy, rx, ry, 0, 0, 2*Math.PI);
+    ctx.strokeStyle = AMBER + '55';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
+    // Silhouette lines
+    ctx.strokeStyle = AMBER + 'aa';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(apexX, apexY);
+    ctx.lineTo(lx, ly);
+    ctx.moveTo(apexX, apexY);
+    ctx.lineTo(rx2, ry2);
+    ctx.stroke();
+
+    // Apex dot
+    ctx.beginPath();
+    ctx.arc(apexX, apexY, 3, 0, 2*Math.PI);
+    ctx.fillStyle = AMBER;
+    ctx.fill();
+
+  } else {
+    // Inverted cone (conical pit)
+    ctx.beginPath();
+    ctx.ellipse(bCx, bCy, rx, ry, 0, 0, 2*Math.PI);
+    ctx.fillStyle = SURFACE_TOP;
+    ctx.fill();
+    ctx.strokeStyle = AMBER + '88';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(apexX, apexY);
+    ctx.lineTo(lx, ly);
+    ctx.moveTo(apexX, apexY);
+    ctx.lineTo(rx2, ry2);
+    ctx.strokeStyle = AMBER + 'aa';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+  }
+
+  // Labels
+  ctx.fillStyle = AMBER + 'cc';
+  ctx.font = '600 11px Barlow Condensed, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.fillText(`Ø ${D.toFixed(1)}'`, bCx, bCy + ry + 4);
+
+  ctx.textBaseline = 'middle';
+  ctx.textAlign = 'left';
+  ctx.fillText(`H: ${H.toFixed(1)}'`, apexX + 8, (apexY + bCy) / 2);
+
+  // Diameter line
+  ctx.strokeStyle = AMBER + '55';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3,3]);
+  ctx.beginPath();
+  ctx.moveTo(lx, bCy); ctx.lineTo(rx2, bCy);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawDimLine(ctx, p1, p2, label, offset, scale) {
+  const mx = (p1.x + p2.x) / 2;
+  const my = (p1.y + p2.y) / 2;
+  ctx.strokeStyle = AMBER + '55';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3,3]);
+  ctx.beginPath();
+  ctx.moveTo(p1.x, p1.y + offset);
+  ctx.lineTo(p2.x, p2.y + offset);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = AMBER + 'cc';
+  ctx.font = '600 10px Barlow Condensed, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, mx, my + offset - 7);
+}
+
+// ─── SERVICE WORKER ───────────────────────────────────────────────────────────
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+// ─── START ────────────────────────────────────────────────────────────────────
+
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
