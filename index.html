@@ -6,7 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Volume³"/>
-<meta name="theme-color" content="#f59e0b"/>
+<meta name="theme-color" content="#c0392b"/>
 <link rel="manifest" href="manifest.json"/>
 <link rel="apple-touch-icon" href="icon-192.png"/>
 <title>Volume³</title>
@@ -14,18 +14,21 @@
   @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap');
 
   :root {
-    --bg:       #0f1117;
-    --surface:  #1a1d27;
-    --surface2: #22263a;
-    --border:   #2e3347;
-    --amber:    #f59e0b;
-    --amber2:   #fbbf24;
-    --red:      #ef4444;
-    --green:    #22c55e;
-    --text:     #e2e8f0;
-    --muted:    #64748b;
+    --bg:       #0a0c14;
+    --surface:  #131828;
+    --surface2: #1b2035;
+    --border:   #253055;
+    --red:      #c0392b;
+    --red2:     #e74c3c;
+    --blue:     #2563eb;
+    --blue2:    #3b82f6;
+    --white:    #f0f4ff;
+    --text:     #dde4f5;
+    --muted:    #5a6a9a;
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-bot: env(safe-area-inset-bottom, 0px);
+    --accent:   #e74c3c;
+    --accent2:  #3b82f6;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
@@ -54,7 +57,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 12px 16px 10px;
-    border-bottom: 1px solid var(--border);
+    border-bottom: 2px solid var(--red);
     background: var(--bg);
     position: sticky;
     top: 0;
@@ -66,10 +69,11 @@
     font-size: 26px;
     font-weight: 900;
     letter-spacing: -0.5px;
-    color: var(--amber);
+    color: var(--white);
   }
 
-  .logo sup { font-size: 14px; vertical-align: super; }
+  .logo span.v { color: var(--red2); }
+  .logo sup { font-size: 14px; vertical-align: super; color: var(--blue2); }
 
   /* MODE TOGGLE */
   .mode-toggle {
@@ -96,8 +100,8 @@
   }
 
   .mode-btn.active {
-    background: var(--amber);
-    color: #000;
+    background: var(--blue);
+    color: #fff;
   }
 
   /* MAIN SCROLL AREA */
@@ -153,9 +157,9 @@
   }
 
   .shape-tab.active {
-    border-color: var(--amber);
-    color: var(--amber);
-    background: rgba(245,158,11,0.08);
+    border-color: var(--red2);
+    color: var(--red2);
+    background: rgba(231,76,60,0.08);
   }
 
   /* INPUT ROWS */
@@ -207,7 +211,14 @@
     appearance: none;
   }
 
-  .fi-wrap input:focus { border-color: var(--amber); }
+  .fi-wrap input:focus { border-color: var(--red2); }
+
+  /* auto-filled inputs get blue tint */
+  .fi-wrap input.auto-filled {
+    border-color: var(--blue2);
+    color: var(--blue2);
+    background: rgba(59,130,246,0.07);
+  }
 
   .fi-unit {
     position: absolute;
@@ -244,23 +255,73 @@
     margin-bottom: 6px;
   }
 
-  .slope-item select {
+  /* Angle text inputs inside slope items */
+  .slope-item .angle-input-wrap {
+    position: relative;
+  }
+
+  .slope-item .angle-input-wrap input {
     width: 100%;
     background: var(--bg);
     border: 1.5px solid var(--border);
     border-radius: 6px;
     color: var(--text);
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: 600;
-    padding: 6px 8px;
+    padding: 6px 26px 6px 8px;
     outline: none;
     -webkit-appearance: none;
     appearance: none;
-    cursor: pointer;
+    transition: border-color 0.15s;
   }
 
-  .slope-item select:focus { border-color: var(--amber); }
+  .slope-item .angle-input-wrap input:focus { border-color: var(--red2); }
+  .slope-item .angle-input-wrap input.auto-filled {
+    border-color: var(--blue2);
+    color: var(--blue2);
+    background: rgba(59,130,246,0.07);
+  }
+
+  .slope-item .angle-input-wrap .fi-unit {
+    font-size: 12px;
+    right: 7px;
+  }
+
+  /* Auto-source indicator */
+  .auto-note {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 10px;
+    color: var(--blue2);
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+    opacity: 0.85;
+  }
+
+  /* Section divider between angle/flat-top */
+  .or-divider {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+  }
+
+  .or-divider::before,
+  .or-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .or-divider span {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
 
   /* 3D CANVAS */
   .canvas-wrap {
@@ -297,7 +358,7 @@
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 22px;
     font-weight: 900;
-    color: var(--amber);
+    color: var(--red2);
     line-height: 1;
     margin-bottom: 2px;
   }
@@ -334,7 +395,7 @@
     cursor: pointer;
   }
 
-  .material-row select:focus { border-color: var(--amber); }
+  .material-row select:focus { border-color: var(--red2); }
 
   .multiplier-wrap {
     position: relative;
@@ -345,9 +406,9 @@
   .multiplier-wrap input {
     width: 100%;
     background: var(--surface2);
-    border: 1.5px solid var(--amber);
+    border: 1.5px solid var(--red2);
     border-radius: 8px;
-    color: var(--amber);
+    color: var(--red2);
     font-family: 'Barlow Condensed', sans-serif;
     font-size: 18px;
     font-weight: 700;
@@ -356,7 +417,7 @@
     -webkit-appearance: none;
   }
 
-  .multiplier-wrap .fi-unit { color: var(--amber); font-size: 10px; }
+  .multiplier-wrap .fi-unit { color: var(--red2); font-size: 10px; }
 
   /* TEXT FIELDS */
   .text-field {
@@ -374,7 +435,7 @@
     -webkit-appearance: none;
   }
 
-  .text-field:focus { border-color: var(--amber); }
+  .text-field:focus { border-color: var(--red2); }
 
   .text-field.title-field {
     font-family: 'Barlow Condensed', sans-serif;
@@ -397,8 +458,8 @@
     border-radius: 4px;
   }
 
-  .grade-badge.above { background: rgba(34,197,94,0.15); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
-  .grade-badge.below { background: rgba(239,68,68,0.15); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+  .grade-badge.above { background: rgba(59,130,246,0.15); color: var(--blue2); border: 1px solid rgba(59,130,246,0.3); }
+  .grade-badge.below { background: rgba(192,57,43,0.15); color: var(--red2); border: 1px solid rgba(192,57,43,0.3); }
 
   .section-header {
     display: flex;
@@ -407,66 +468,29 @@
     margin-bottom: 10px;
   }
 
-  /* FLAT TOP TOGGLE */
-  .toggle-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 10px;
-  }
-
-  .toggle-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    color: var(--text);
-  }
-
-  .toggle-switch {
-    position: relative;
-    width: 44px;
-    height: 24px;
-  }
-
-  .toggle-switch input { opacity: 0; width: 0; height: 0; }
-
-  .toggle-slider {
-    position: absolute;
-    inset: 0;
-    background: var(--surface2);
-    border-radius: 24px;
-    border: 1.5px solid var(--border);
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .toggle-slider::after {
-    content: '';
-    position: absolute;
-    left: 3px;
-    top: 3px;
-    width: 16px;
-    height: 16px;
-    background: var(--muted);
-    border-radius: 50%;
-    transition: all 0.2s;
-  }
-
-  .toggle-switch input:checked + .toggle-slider { background: rgba(245,158,11,0.2); border-color: var(--amber); }
-  .toggle-switch input:checked + .toggle-slider::after { transform: translateX(20px); background: var(--amber); }
-
   /* HIDDEN */
   .hidden { display: none !important; }
+
+  /* Cone AOR select */
+  #aorSelect {
+    width: 100%;
+    background: var(--surface2);
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 8px 10px;
+    outline: none;
+    -webkit-appearance: none;
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">Volume<sup>3</sup></div>
+  <div class="logo"><span class="v">V</span>olume<sup>3</sup></div>
   <div style="display:flex;gap:8px;align-items:center;">
     <div id="gradeBadge" class="grade-badge above">▲ Above</div>
     <div class="mode-toggle">
@@ -500,11 +524,11 @@
       <span class="input-label">Length</span>
       <div class="fi-group">
         <div class="fi-wrap">
-          <input type="number" inputmode="decimal" id="lenFt" placeholder="0" min="0" oninput="calc()"/>
+          <input type="number" inputmode="decimal" id="lenFt" placeholder="0" min="0" oninput="onBaseDimInput()"/>
           <span class="fi-unit">ft</span>
         </div>
         <div class="fi-wrap">
-          <input type="number" inputmode="decimal" id="lenIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+          <input type="number" inputmode="decimal" id="lenIn" placeholder="0" min="0" max="11" oninput="onBaseDimInput()"/>
           <span class="fi-unit">in</span>
         </div>
       </div>
@@ -514,11 +538,11 @@
       <span class="input-label">Width</span>
       <div class="fi-group">
         <div class="fi-wrap">
-          <input type="number" inputmode="decimal" id="widFt" placeholder="0" min="0" oninput="calc()"/>
+          <input type="number" inputmode="decimal" id="widFt" placeholder="0" min="0" oninput="onBaseDimInput()"/>
           <span class="fi-unit">ft</span>
         </div>
         <div class="fi-wrap">
-          <input type="number" inputmode="decimal" id="widIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+          <input type="number" inputmode="decimal" id="widIn" placeholder="0" min="0" max="11" oninput="onBaseDimInput()"/>
           <span class="fi-unit">in</span>
         </div>
       </div>
@@ -528,49 +552,80 @@
       <span class="input-label">Height</span>
       <div class="fi-group">
         <div class="fi-wrap">
-          <input type="number" inputmode="decimal" id="htFt" placeholder="0" min="0" oninput="calc()"/>
+          <input type="number" inputmode="decimal" id="htFt" placeholder="0" min="0" oninput="onBaseDimInput()"/>
           <span class="fi-unit">ft</span>
         </div>
         <div class="fi-wrap">
-          <input type="number" inputmode="decimal" id="htIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+          <input type="number" inputmode="decimal" id="htIn" placeholder="0" min="0" max="11" oninput="onBaseDimInput()"/>
           <span class="fi-unit">in</span>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- FLAT TOP TOGGLE -->
-    <div class="toggle-row" id="flatTopRow">
-      <span class="toggle-label">Flat Top</span>
-      <label class="toggle-switch">
-        <input type="checkbox" id="flatTopToggle" onchange="calc()"/>
-        <span class="toggle-slider"></span>
-      </label>
+  <!-- SLOPES (rect only) -->
+  <div class="card" id="slopeCard">
+    <div class="card-title">Wall Angles — Per Side (0–90°)</div>
+    <div id="autoNoteAngles" class="auto-note hidden" style="margin-bottom:8px;">⟵ Auto-calculated from flat top dimensions</div>
+    <div class="slope-grid">
+      <div class="slope-item">
+        <div class="slope-item-label">Front</div>
+        <div class="angle-input-wrap">
+          <input type="number" inputmode="decimal" id="slopeFront" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/>
+          <span class="fi-unit">°</span>
+        </div>
+      </div>
+      <div class="slope-item">
+        <div class="slope-item-label">Back</div>
+        <div class="angle-input-wrap">
+          <input type="number" inputmode="decimal" id="slopeBack" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/>
+          <span class="fi-unit">°</span>
+        </div>
+      </div>
+      <div class="slope-item">
+        <div class="slope-item-label">Left</div>
+        <div class="angle-input-wrap">
+          <input type="number" inputmode="decimal" id="slopeLeft" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/>
+          <span class="fi-unit">°</span>
+        </div>
+      </div>
+      <div class="slope-item">
+        <div class="slope-item-label">Right</div>
+        <div class="angle-input-wrap">
+          <input type="number" inputmode="decimal" id="slopeRight" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/>
+          <span class="fi-unit">°</span>
+        </div>
+      </div>
     </div>
 
-    <!-- FLAT TOP DIMS (shown only when flat top enabled) -->
-    <div id="flatTopDims" class="hidden">
+    <!-- OR divider -->
+    <div class="or-divider"><span>or enter flat top</span></div>
+
+    <!-- FLAT TOP DIMS -->
+    <div id="flatTopDims">
+      <div id="autoNoteTopDims" class="auto-note hidden" style="margin-bottom:8px;">⟵ Auto-calculated from wall angles</div>
       <div class="input-row">
         <span class="input-label" style="font-size:11px;">Top L</span>
         <div class="fi-group">
           <div class="fi-wrap">
-            <input type="number" inputmode="decimal" id="topLenFt" placeholder="0" min="0" oninput="calc()"/>
+            <input type="number" inputmode="decimal" id="topLenFt" placeholder="0" min="0" oninput="onTopDimInput()"/>
             <span class="fi-unit">ft</span>
           </div>
           <div class="fi-wrap">
-            <input type="number" inputmode="decimal" id="topLenIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+            <input type="number" inputmode="decimal" id="topLenIn" placeholder="0" min="0" max="11" oninput="onTopDimInput()"/>
             <span class="fi-unit">in</span>
           </div>
         </div>
       </div>
-      <div class="input-row">
+      <div class="input-row" style="margin-bottom:0;">
         <span class="input-label" style="font-size:11px;">Top W</span>
         <div class="fi-group">
           <div class="fi-wrap">
-            <input type="number" inputmode="decimal" id="topWidFt" placeholder="0" min="0" oninput="calc()"/>
+            <input type="number" inputmode="decimal" id="topWidFt" placeholder="0" min="0" oninput="onTopDimInput()"/>
             <span class="fi-unit">ft</span>
           </div>
           <div class="fi-wrap">
-            <input type="number" inputmode="decimal" id="topWidIn" placeholder="0" min="0" max="11" oninput="calc()"/>
+            <input type="number" inputmode="decimal" id="topWidIn" placeholder="0" min="0" max="11" oninput="onTopDimInput()"/>
             <span class="fi-unit">in</span>
           </div>
         </div>
@@ -613,33 +668,10 @@
     <!-- Angle of Repose Reference -->
     <div style="margin-top:8px;">
       <div class="card-title" style="margin-bottom:6px;">Angle of Repose Reference</div>
-      <select id="aorSelect" onchange="setAOR()" style="width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;padding:8px 10px;outline:none;-webkit-appearance:none;">
+      <select id="aorSelect" onchange="setAOR()">
         <option value="">— Select material —</option>
       </select>
       <div id="aorInfo" style="margin-top:6px;font-size:12px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:0.3px;"></div>
-    </div>
-  </div>
-
-  <!-- SLOPES (rect only) -->
-  <div class="card" id="slopeCard">
-    <div class="card-title">Wall Angles — Per Side</div>
-    <div class="slope-grid">
-      <div class="slope-item">
-        <div class="slope-item-label">Front</div>
-        <select id="slopeFront" onchange="calc()"></select>
-      </div>
-      <div class="slope-item">
-        <div class="slope-item-label">Back</div>
-        <select id="slopeBack" onchange="calc()"></select>
-      </div>
-      <div class="slope-item">
-        <div class="slope-item-label">Left</div>
-        <select id="slopeLeft" onchange="calc()"></select>
-      </div>
-      <div class="slope-item">
-        <div class="slope-item-label">Right</div>
-        <select id="slopeRight" onchange="calc()"></select>
-      </div>
     </div>
   </div>
 
@@ -671,7 +703,6 @@
       </div>
     </div>
 
-    <!-- Material / density -->
     <div class="card-title" style="margin-bottom:6px;">Material Density</div>
     <div class="material-row">
       <select id="matSelect" onchange="setMaterial()"></select>
@@ -698,111 +729,239 @@
 <script>
 // ─── DATA ─────────────────────────────────────────────────────────────────────
 
-const SLOPE_OPTIONS = [
-  { label: '90° — Vertical',    deg: 90  },
-  { label: '80°',               deg: 80  },
-  { label: '75°',               deg: 75  },
-  { label: '70°',               deg: 70  },
-  { label: '63.4° — 1:1',       deg: 63.4},
-  { label: '60°',               deg: 60  },
-  { label: '56.3° — 1.5:1',     deg: 56.3},
-  { label: '53°',               deg: 53  },
-  { label: '45° — Equal Slope', deg: 45  },
-  { label: '33.7° — 2:1',       deg: 33.7},
-  { label: '26.6° — 3:1',       deg: 26.6},
-  { label: '18.4° — 4:1',       deg: 18.4},
-  { label: '14° — 4.5:1',       deg: 14  },
-];
-
 const MATERIALS = [
-  { name: '— Select material —',   tcy: null },
-  { name: 'Bank Gravel',           tcy: 1.50 },
-  { name: 'Broken Asphalt',        tcy: 1.35 },
-  { name: 'Broken Concrete',       tcy: 1.55 },
-  { name: 'Clay — Dry',            tcy: 1.40 },
-  { name: 'Clay — Wet',            tcy: 1.70 },
-  { name: 'Coarse Gravel',         tcy: 1.65 },
-  { name: 'Common Earth (Loose)',   tcy: 1.25 },
-  { name: 'Common Earth (Compact)', tcy: 1.45 },
-  { name: 'Crushed Stone',         tcy: 1.55 },
-  { name: 'Dense Graded Aggregate',tcy: 1.60 },
-  { name: 'Dredged Material',      tcy: 0.90 },
-  { name: 'Fill Dirt',             tcy: 1.20 },
-  { name: 'Fine Sand',             tcy: 1.30 },
-  { name: 'Limestone (Crushed)',   tcy: 1.55 },
-  { name: 'Loam',                  tcy: 1.25 },
-  { name: 'Mulch',                 tcy: 0.40 },
-  { name: 'Pea Gravel',            tcy: 1.45 },
-  { name: 'Recycled Concrete Base',tcy: 1.60 },
-  { name: 'Rip Rap',               tcy: 1.65 },
-  { name: 'Sand (Dry)',            tcy: 1.40 },
-  { name: 'Sand (Wet)',            tcy: 1.70 },
-  { name: 'Sandy Loam',            tcy: 1.30 },
-  { name: 'Silty Clay',            tcy: 1.50 },
-  { name: 'Slag',                  tcy: 1.75 },
-  { name: 'Topsoil',               tcy: 1.10 },
+  { name: '— Select material —',    tcy: null },
+  { name: 'Bank Gravel',            tcy: 1.50 },
+  { name: 'Broken Asphalt',         tcy: 1.35 },
+  { name: 'Broken Concrete',        tcy: 1.55 },
+  { name: 'Clay — Dry',             tcy: 1.40 },
+  { name: 'Clay — Wet',             tcy: 1.70 },
+  { name: 'Coarse Gravel',          tcy: 1.65 },
+  { name: 'Common Earth (Loose)',    tcy: 1.25 },
+  { name: 'Common Earth (Compact)',  tcy: 1.45 },
+  { name: 'Crushed Stone',          tcy: 1.55 },
+  { name: 'Dense Graded Aggregate', tcy: 1.60 },
+  { name: 'Dredged Material',       tcy: 0.90 },
+  { name: 'Fill Dirt',              tcy: 1.20 },
+  { name: 'Fine Sand',              tcy: 1.30 },
+  { name: 'Limestone (Crushed)',    tcy: 1.55 },
+  { name: 'Loam',                   tcy: 1.25 },
+  { name: 'Mulch',                  tcy: 0.40 },
+  { name: 'Pea Gravel',             tcy: 1.45 },
+  { name: 'Recycled Concrete Base', tcy: 1.60 },
+  { name: 'Rip Rap',                tcy: 1.65 },
+  { name: 'Sand (Dry)',             tcy: 1.40 },
+  { name: 'Sand (Wet)',             tcy: 1.70 },
+  { name: 'Sandy Loam',             tcy: 1.30 },
+  { name: 'Silty Clay',             tcy: 1.50 },
+  { name: 'Slag',                   tcy: 1.75 },
+  { name: 'Topsoil',                tcy: 1.10 },
 ];
 
 const AOR_MATERIALS = [
-  { name: 'Clay (Damp)',      aor: 15, notes: 'Cohesive, low angle' },
-  { name: 'Clay (Dry)',       aor: 25, notes: 'Crumbly, moderate' },
-  { name: 'Coal',             aor: 35, notes: 'Typical bulk coal' },
-  { name: 'Coarse Gravel',    aor: 35, notes: 'Angular, self-supporting' },
-  { name: 'Crushed Stone',    aor: 38, notes: 'Angular aggregate' },
-  { name: 'Fine Sand (Dry)',  aor: 30, notes: 'Rounded particles' },
-  { name: 'Fine Sand (Wet)',  aor: 45, notes: 'Capillary cohesion' },
-  { name: 'Grain (Corn/Wheat)',aor:28, notes: 'Smooth, rounded' },
-  { name: 'Gravel (Mixed)',   aor: 32, notes: 'Common fill gravel' },
-  { name: 'Iron Ore',         aor: 35, notes: 'Dense angular' },
-  { name: 'Limestone (Crushed)',aor:38,notes: 'Angular, locks well' },
-  { name: 'Loam',             aor: 20, notes: 'Mixed fine soil' },
-  { name: 'Mulch (Wood)',     aor: 45, notes: 'Fibrous, interlock' },
-  { name: 'Pea Gravel',       aor: 25, notes: 'Rounded, low friction' },
-  { name: 'Sand (Coarse)',    aor: 34, notes: 'Angular coarse grains' },
-  { name: 'Sandy Loam',       aor: 25, notes: 'Mixed cohesion' },
-  { name: 'Silty Earth',      aor: 22, notes: 'Low internal friction' },
-  { name: 'Slag (Crushed)',   aor: 40, notes: 'Very angular, high lock' },
-  { name: 'Snow (Compacted)', aor: 38, notes: 'Bonded ice/snow' },
-  { name: 'Stone Dust',       aor: 30, notes: 'Quarry fines' },
-  { name: 'Topsoil (Loose)',  aor: 20, notes: 'Organic material' },
-  { name: 'Wood Chips',       aor: 45, notes: 'Fibrous interlock' },
+  { name: 'Clay (Damp)',       aor: 15, notes: 'Cohesive, low angle' },
+  { name: 'Clay (Dry)',        aor: 25, notes: 'Crumbly, moderate' },
+  { name: 'Coal',              aor: 35, notes: 'Typical bulk coal' },
+  { name: 'Coarse Gravel',     aor: 35, notes: 'Angular, self-supporting' },
+  { name: 'Crushed Stone',     aor: 38, notes: 'Angular aggregate' },
+  { name: 'Fine Sand (Dry)',   aor: 30, notes: 'Rounded particles' },
+  { name: 'Fine Sand (Wet)',   aor: 45, notes: 'Capillary cohesion' },
+  { name: 'Grain (Corn/Wheat)',aor: 28, notes: 'Smooth, rounded' },
+  { name: 'Gravel (Mixed)',    aor: 32, notes: 'Common fill gravel' },
+  { name: 'Iron Ore',          aor: 35, notes: 'Dense angular' },
+  { name: 'Limestone (Crushed)',aor:38, notes: 'Angular, locks well' },
+  { name: 'Loam',              aor: 20, notes: 'Mixed fine soil' },
+  { name: 'Mulch (Wood)',      aor: 45, notes: 'Fibrous, interlock' },
+  { name: 'Pea Gravel',        aor: 25, notes: 'Rounded, low friction' },
+  { name: 'Sand (Coarse)',     aor: 34, notes: 'Angular coarse grains' },
+  { name: 'Sandy Loam',        aor: 25, notes: 'Mixed cohesion' },
+  { name: 'Silty Earth',       aor: 22, notes: 'Low internal friction' },
+  { name: 'Slag (Crushed)',    aor: 40, notes: 'Very angular, high lock' },
+  { name: 'Snow (Compacted)',  aor: 38, notes: 'Bonded ice/snow' },
+  { name: 'Stone Dust',        aor: 30, notes: 'Quarry fines' },
+  { name: 'Topsoil (Loose)',   aor: 20, notes: 'Organic material' },
+  { name: 'Wood Chips',        aor: 45, notes: 'Fibrous interlock' },
 ];
 
 // ─── STATE ────────────────────────────────────────────────────────────────────
 
 let state = {
-  grade: 'above',   // above | below
-  shape: 'rect',    // rect | cone
+  grade: 'above',
+  shape: 'rect',
   lenFt:0, lenIn:0,
   widFt:0, widIn:0,
   htFt:0,  htIn:0,
-  flatTop: false,
   topLenFt:0, topLenIn:0,
   topWidFt:0, topWidIn:0,
   coneDFt:0, coneDIn:0,
   coneHFt:0, coneHIn:0,
-  slopeFront:90, slopeBack:90, slopeLeft:90, slopeRight:90,
+  slopeFront:45, slopeBack:45, slopeLeft:45, slopeRight:45,
   density: 1.35,
   title: '',
   notes: ''
 };
 
+// Track which "source" is active: 'angles' or 'topdims'
+// When user edits angles → auto-fill top dims
+// When user edits top dims → auto-fill angles
+let lastEditSource = 'angles';
+
+// ─── HELPERS ──────────────────────────────────────────────────────────────────
+
+function fi(ftId, inId) {
+  const ft = parseFloat(document.getElementById(ftId).value) || 0;
+  const inp = parseFloat(document.getElementById(inId).value) || 0;
+  return ft + inp / 12;
+}
+
+function fmt(n) {
+  if (n === null || isNaN(n)) return '—';
+  if (n >= 10000) return n.toLocaleString('en-US', {maximumFractionDigits:0});
+  if (n >= 1000)  return n.toLocaleString('en-US', {maximumFractionDigits:1});
+  return n.toLocaleString('en-US', {maximumFractionDigits:2});
+}
+
+// run per unit of rise from angle in degrees (from horizontal)
+// angle=90 → vertical, run=0
+// angle=45 → run=1
+function runPerRise(angleDeg) {
+  const clamped = Math.max(0.1, Math.min(90, angleDeg));
+  const rad = clamped * Math.PI / 180;
+  return 1 / Math.tan(rad);
+}
+
+// angle from run/rise
+function angleFromRun(run) {
+  if (run <= 0) return 90;
+  return Math.atan(1 / run) * 180 / Math.PI;
+}
+
+function getAngle(id) {
+  const val = parseFloat(document.getElementById(id).value);
+  if (isNaN(val) || val <= 0) return 45;
+  return Math.max(0.1, Math.min(90, val));
+}
+
+function setInputVal(id, val, decimals, markAuto) {
+  const el = document.getElementById(id);
+  el.value = val !== null ? val.toFixed(decimals) : '';
+  if (markAuto) {
+    el.classList.add('auto-filled');
+  } else {
+    el.classList.remove('auto-filled');
+  }
+}
+
+// ─── AUTO-COMPLETE LOGIC ───────────────────────────────────────────────────────
+
+// Called when angles change → compute & fill top dims
+function autoFillTopDims() {
+  const L = fi('lenFt','lenIn');
+  const W = fi('widFt','widIn');
+  const H = fi('htFt','htIn');
+  if (L <= 0 || W <= 0 || H <= 0) return;
+
+  const aFront = getAngle('slopeFront');
+  const aBack  = getAngle('slopeBack');
+  const aLeft  = getAngle('slopeLeft');
+  const aRight = getAngle('slopeRight');
+
+  const rFront = runPerRise(aFront);
+  const rBack  = runPerRise(aBack);
+  const rLeft  = runPerRise(aLeft);
+  const rRight = runPerRise(aRight);
+
+  // Clamp: slopes cannot consume more than the full base dimension
+  const topL = Math.max(0, L - H * (rLeft + rRight));
+  const topW = Math.max(0, W - H * (rFront + rBack));
+
+  // Write to top dim fields as ft (no inch split for auto-fill, simpler)
+  const topLFt = Math.floor(topL);
+  const topLIn = (topL - topLFt) * 12;
+  const topWFt = Math.floor(topW);
+  const topWIn = (topW - topWFt) * 12;
+
+  setInputVal('topLenFt', topLFt, 0, true);
+  setInputVal('topLenIn', topLIn, 1, true);
+  setInputVal('topWidFt', topWFt, 0, true);
+  setInputVal('topWidIn', topWIn, 1, true);
+
+  document.getElementById('autoNoteTopDims').classList.remove('hidden');
+  document.getElementById('autoNoteAngles').classList.add('hidden');
+}
+
+// Called when top dims change → compute & fill angles
+function autoFillAngles() {
+  const L = fi('lenFt','lenIn');
+  const W = fi('widFt','widIn');
+  const H = fi('htFt','htIn');
+  if (L <= 0 || W <= 0 || H <= 0) return;
+
+  const topL = fi('topLenFt','topLenIn');
+  const topW = fi('topWidFt','topWidIn');
+
+  // Validate: top dims must be < base dims
+  if (topL >= L || topW >= W) return;
+
+  // Assume symmetric sides for auto-fill
+  // Total run = (L - topL), split evenly between left and right
+  const totalRunLR = L - topL;
+  const runEachLR  = totalRunLR / 2;
+  const angleEachLR = angleFromRun(runEachLR / H);
+
+  const totalRunFB = W - topW;
+  const runEachFB  = totalRunFB / 2;
+  const angleEachFB = angleFromRun(runEachFB / H);
+
+  // Clamp to 0–90
+  const aLR = Math.max(0.1, Math.min(90, angleEachLR));
+  const aFB = Math.max(0.1, Math.min(90, angleEachFB));
+
+  setInputVal('slopeFront', aFB, 1, true);
+  setInputVal('slopeBack',  aFB, 1, true);
+  setInputVal('slopeLeft',  aLR, 1, true);
+  setInputVal('slopeRight', aLR, 1, true);
+
+  document.getElementById('autoNoteAngles').classList.remove('hidden');
+  document.getElementById('autoNoteTopDims').classList.add('hidden');
+}
+
+function clearAutoFilled(ids) {
+  ids.forEach(id => {
+    document.getElementById(id).classList.remove('auto-filled');
+  });
+}
+
+// ─── INPUT HANDLERS ────────────────────────────────────────────────────────────
+
+function onBaseDimInput() {
+  // When base dims change, re-run whichever source is active
+  if (lastEditSource === 'angles') {
+    autoFillTopDims();
+  } else {
+    autoFillAngles();
+  }
+  calc();
+}
+
+function onAngleInput() {
+  lastEditSource = 'angles';
+  // Clear auto-fill styling from angle inputs
+  clearAutoFilled(['slopeFront','slopeBack','slopeLeft','slopeRight']);
+  autoFillTopDims();
+  calc();
+}
+
+function onTopDimInput() {
+  lastEditSource = 'topdims';
+  clearAutoFilled(['topLenFt','topLenIn','topWidFt','topWidIn']);
+  autoFillAngles();
+  calc();
+}
+
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 
 function init() {
-  // Populate slope selects
-  ['slopeFront','slopeBack','slopeLeft','slopeRight'].forEach(id => {
-    const sel = document.getElementById(id);
-    SLOPE_OPTIONS.forEach(o => {
-      const opt = document.createElement('option');
-      opt.value = o.deg;
-      opt.textContent = o.label;
-      if (o.deg === 45) opt.selected = true;
-      sel.appendChild(opt);
-    });
-    sel.addEventListener('change', calc);
-  });
-
   // Populate material select
   const mat = document.getElementById('matSelect');
   MATERIALS.forEach(m => {
@@ -835,31 +994,29 @@ function init() {
 }
 
 function applyStateToUI() {
-  document.getElementById('titleField').value = state.title || '';
-  document.getElementById('notesField').value = state.notes || '';
-  document.getElementById('lenFt').value = state.lenFt || '';
-  document.getElementById('lenIn').value = state.lenIn || '';
-  document.getElementById('widFt').value = state.widFt || '';
-  document.getElementById('widIn').value = state.widIn || '';
-  document.getElementById('htFt').value = state.htFt || '';
-  document.getElementById('htIn').value = state.htIn || '';
-  document.getElementById('topLenFt').value = state.topLenFt || '';
-  document.getElementById('topLenIn').value = state.topLenIn || '';
-  document.getElementById('topWidFt').value = state.topWidFt || '';
-  document.getElementById('topWidIn').value = state.topWidIn || '';
-  document.getElementById('coneDFt').value = state.coneDFt || '';
-  document.getElementById('coneDIn').value = state.coneDIn || '';
-  document.getElementById('coneHFt').value = state.coneHFt || '';
-  document.getElementById('coneHIn').value = state.coneHIn || '';
-  document.getElementById('densityVal').value = state.density || 1.35;
-  document.getElementById('flatTopToggle').checked = state.flatTop || false;
+  document.getElementById('titleField').value   = state.title || '';
+  document.getElementById('notesField').value   = state.notes || '';
+  document.getElementById('lenFt').value        = state.lenFt  || '';
+  document.getElementById('lenIn').value        = state.lenIn  || '';
+  document.getElementById('widFt').value        = state.widFt  || '';
+  document.getElementById('widIn').value        = state.widIn  || '';
+  document.getElementById('htFt').value         = state.htFt   || '';
+  document.getElementById('htIn').value         = state.htIn   || '';
+  document.getElementById('topLenFt').value     = state.topLenFt || '';
+  document.getElementById('topLenIn').value     = state.topLenIn || '';
+  document.getElementById('topWidFt').value     = state.topWidFt || '';
+  document.getElementById('topWidIn').value     = state.topWidIn || '';
+  document.getElementById('coneDFt').value      = state.coneDFt || '';
+  document.getElementById('coneDIn').value      = state.coneDIn || '';
+  document.getElementById('coneHFt').value      = state.coneHFt || '';
+  document.getElementById('coneHIn').value      = state.coneHIn || '';
+  document.getElementById('densityVal').value   = state.density || 1.35;
+  document.getElementById('slopeFront').value   = state.slopeFront || 45;
+  document.getElementById('slopeBack').value    = state.slopeBack  || 45;
+  document.getElementById('slopeLeft').value    = state.slopeLeft  || 45;
+  document.getElementById('slopeRight').value   = state.slopeRight || 45;
   setGrade(state.grade || 'above', true);
   setShape(state.shape || 'rect', true);
-  ['slopeFront','slopeBack','slopeLeft','slopeRight'].forEach(id => {
-    const key = id.replace('slope','slope');
-    const sel = document.getElementById(id);
-    if (state[id]) sel.value = state[id];
-  });
 }
 
 function saveState() {
@@ -916,77 +1073,25 @@ function setAOR() {
   } catch(e) {}
 }
 
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
-
-function fi(ftId, inId) {
-  const ft = parseFloat(document.getElementById(ftId).value) || 0;
-  const inp = parseFloat(document.getElementById(inId).value) || 0;
-  return ft + inp / 12;
-}
-
-function fmt(n) {
-  if (n === null || isNaN(n)) return '—';
-  if (n >= 10000) return n.toLocaleString('en-US', {maximumFractionDigits:0});
-  if (n >= 1000)  return n.toLocaleString('en-US', {maximumFractionDigits:1});
-  return n.toLocaleString('en-US', {maximumFractionDigits:2});
-}
-
-function slopeVal(id) {
-  return parseFloat(document.getElementById(id).value) || 90;
-}
-
-// Run/rise from angle (degrees from horizontal)
-// angle = degrees from horizontal, so 90 = vertical (run=0)
-function runPerFt(angleDeg) {
-  const rad = angleDeg * Math.PI / 180;
-  return 1 / Math.tan(rad); // run per unit rise
-}
-
 // ─── VOLUME CALCULATIONS ──────────────────────────────────────────────────────
 
-function calcRectVolume(L, W, H, flatTop, topL, topW, aFront, aBack, aLeft, aRight) {
+function calcRectVolume(L, W, H, topL, topW) {
   if (L <= 0 || W <= 0 || H <= 0) return null;
-
-  if (flatTop) {
-    // Frustum-like prismatoid with flat top
-    // Top dims given directly
-    if (topL <= 0 || topW <= 0) return null;
-    // Prismatoid formula: V = h/6 * (A_base + 4*A_mid + A_top)
+  if (topL <= 0 || topW <= 0) {
+    // Comes to a ridge or point — pure pyramid-like shape
+    // Use prismatoid with At=0
     const Ab = L * W;
-    const At = topL * topW;
-    const Lm = (L + topL) / 2;
-    const Wm = (W + topW) / 2;
+    // midpoint dimensions
+    const Lm = L / 2;
+    const Wm = W / 2;
     const Am = Lm * Wm;
-    return (H / 6) * (Ab + 4 * Am + At);
-  }
-
-  // 4-sided pyramid-like shape (all sides slope to a ridge or point)
-  // Use prismatoid: compute top footprint from slopes
-  const rFront = runPerFt(aFront);
-  const rBack  = runPerFt(aBack);
-  const rLeft  = runPerFt(aLeft);
-  const rRight = runPerFt(aRight);
-
-  // Top length: reduced by left+right slopes
-  const topLCalc = Math.max(0, L - H * (rLeft + rRight));
-  // Top width:  reduced by front+back slopes
-  const topWCalc = Math.max(0, W - H * (rFront + rBack));
-
-  if (topLCalc === 0 && topWCalc === 0) {
-    // Comes to a point — true pyramid
-    // Prismatoid V = h/6*(Ab + 4Am + 0)
-    const Ab = L * W;
-    const Lm = L - H/2 * (rLeft + rRight);
-    const Wm = W - H/2 * (rFront + rBack);
-    const Am = Math.max(0,Lm) * Math.max(0,Wm);
     return (H / 6) * (Ab + 4 * Am);
   }
-
   // Prismatoid
   const Ab = L * W;
-  const At = topLCalc * topWCalc;
-  const Lm = (L + topLCalc) / 2;
-  const Wm = (W + topWCalc) / 2;
+  const At = topL * topW;
+  const Lm = (L + topL) / 2;
+  const Wm = (W + topW) / 2;
   const Am = Lm * Wm;
   return (H / 6) * (Ab + 4 * Am + At);
 }
@@ -1000,14 +1105,8 @@ function calcConeVolume(D, H) {
 // ─── MAIN CALC ────────────────────────────────────────────────────────────────
 
 function calc() {
-  // Read inputs
   const density = parseFloat(document.getElementById('densityVal').value) || 1.35;
   state.density = density;
-
-  // Flat top toggle
-  const flatTop = document.getElementById('flatTopToggle').checked;
-  state.flatTop = flatTop;
-  document.getElementById('flatTopDims').classList.toggle('hidden', !flatTop);
 
   let cf = null;
 
@@ -1017,41 +1116,48 @@ function calc() {
     const H = fi('htFt','htIn');
     const topL = fi('topLenFt','topLenIn');
     const topW = fi('topWidFt','topWidIn');
-    const aFront = slopeVal('slopeFront');
-    const aBack  = slopeVal('slopeBack');
-    const aLeft  = slopeVal('slopeLeft');
-    const aRight = slopeVal('slopeRight');
 
-    cf = calcRectVolume(L, W, H, flatTop, topL, topW, aFront, aBack, aLeft, aRight);
+    const aFront = getAngle('slopeFront');
+    const aBack  = getAngle('slopeBack');
+    const aLeft  = getAngle('slopeLeft');
+    const aRight = getAngle('slopeRight');
 
-    // Save
-    state.lenFt=parseFloat(document.getElementById('lenFt').value)||0;
-    state.lenIn=parseFloat(document.getElementById('lenIn').value)||0;
-    state.widFt=parseFloat(document.getElementById('widFt').value)||0;
-    state.widIn=parseFloat(document.getElementById('widIn').value)||0;
-    state.htFt=parseFloat(document.getElementById('htFt').value)||0;
-    state.htIn=parseFloat(document.getElementById('htIn').value)||0;
-    state.topLenFt=parseFloat(document.getElementById('topLenFt').value)||0;
-    state.topLenIn=parseFloat(document.getElementById('topLenIn').value)||0;
-    state.topWidFt=parseFloat(document.getElementById('topWidFt').value)||0;
-    state.topWidIn=parseFloat(document.getElementById('topWidIn').value)||0;
-    state.slopeFront=aFront; state.slopeBack=aBack;
-    state.slopeLeft=aLeft;   state.slopeRight=aRight;
+    // Clamped top dims used for volume
+    const rFront = runPerRise(aFront), rBack = runPerRise(aBack);
+    const rLeft  = runPerRise(aLeft),  rRight = runPerRise(aRight);
+    const tLCalc = Math.max(0, Math.min(topL, L - H * (rLeft + rRight)));
+    const tWCalc = Math.max(0, Math.min(topW, W - H * (rFront + rBack)));
 
-    draw3DRect(L, W, H, flatTop, topL, topW, aFront, aBack, aLeft, aRight);
+    cf = calcRectVolume(L, W, H, tLCalc, tWCalc);
+
+    // Save state
+    state.lenFt  = parseFloat(document.getElementById('lenFt').value)  || 0;
+    state.lenIn  = parseFloat(document.getElementById('lenIn').value)  || 0;
+    state.widFt  = parseFloat(document.getElementById('widFt').value)  || 0;
+    state.widIn  = parseFloat(document.getElementById('widIn').value)  || 0;
+    state.htFt   = parseFloat(document.getElementById('htFt').value)   || 0;
+    state.htIn   = parseFloat(document.getElementById('htIn').value)   || 0;
+    state.topLenFt = parseFloat(document.getElementById('topLenFt').value) || 0;
+    state.topLenIn = parseFloat(document.getElementById('topLenIn').value) || 0;
+    state.topWidFt = parseFloat(document.getElementById('topWidFt').value) || 0;
+    state.topWidIn = parseFloat(document.getElementById('topWidIn').value) || 0;
+    state.slopeFront = aFront; state.slopeBack = aBack;
+    state.slopeLeft  = aLeft;  state.slopeRight = aRight;
+
+    draw3DRect(L, W, H, tLCalc, tWCalc, aFront, aBack, aLeft, aRight);
 
   } else {
     const D = fi('coneDFt','coneDIn');
     const H = fi('coneHFt','coneHIn');
     cf = calcConeVolume(D, H);
-    state.coneDFt=parseFloat(document.getElementById('coneDFt').value)||0;
-    state.coneDIn=parseFloat(document.getElementById('coneDIn').value)||0;
-    state.coneHFt=parseFloat(document.getElementById('coneHFt').value)||0;
-    state.coneHIn=parseFloat(document.getElementById('coneHIn').value)||0;
+    state.coneDFt = parseFloat(document.getElementById('coneDFt').value) || 0;
+    state.coneDIn = parseFloat(document.getElementById('coneDIn').value) || 0;
+    state.coneHFt = parseFloat(document.getElementById('coneHFt').value) || 0;
+    state.coneHIn = parseFloat(document.getElementById('coneHIn').value) || 0;
     draw3DCone(D, H);
   }
 
-  const cy = cf !== null ? cf / 27 : null;
+  const cy   = cf !== null ? cf / 27 : null;
   const tons = cy !== null ? cy * density : null;
 
   document.getElementById('outCF').textContent   = fmt(cf);
@@ -1067,51 +1173,50 @@ const CW = 480, CH = 280;
 
 function getCanvas() {
   const c = document.getElementById('preview3d');
-  // Scale for retina
   const dpr = window.devicePixelRatio || 1;
   if (c.dataset.scaled !== '1') {
-    c.width = CW * dpr;
+    c.width  = CW * dpr;
     c.height = CH * dpr;
-    c.style.width = CW + 'px';
+    c.style.width  = CW + 'px';
     c.style.height = CH + 'px';
-    const ctx = c.getContext('2d');
-    ctx.scale(dpr, dpr);
+    c.getContext('2d').scale(dpr, dpr);
     c.dataset.scaled = '1';
   }
   return c.getContext('2d');
 }
 
-// Isometric project: world (x,y,z) → screen (sx,sy)
-// x = right, y = into screen (depth), z = up
 function iso(x, y, z, ox, oy, scale) {
-  const sx = ox + (x - y) * Math.cos(Math.PI/6) * scale;
-  const sy = oy - z * scale + (x + y) * Math.sin(Math.PI/6) * scale;
+  const sx = ox + (x - y) * Math.cos(Math.PI / 6) * scale;
+  const sy = oy - z * scale + (x + y) * Math.sin(Math.PI / 6) * scale;
   return { x: sx, y: sy };
 }
 
 function clearCanvas(ctx) {
-  ctx.clearRect(0, 0, CW*2, CH*2);
-  // subtle grid bg
-  ctx.fillStyle = '#1a1d27';
-  ctx.fillRect(0, 0, CW*2, CH*2);
+  ctx.clearRect(0, 0, CW * 2, CH * 2);
+  ctx.fillStyle = '#131828';
+  ctx.fillRect(0, 0, CW * 2, CH * 2);
 }
 
 function drawEmpty(ctx) {
   clearCanvas(ctx);
-  ctx.fillStyle = '#2e3347';
+  ctx.fillStyle = '#253055';
   ctx.font = '600 13px Barlow Condensed, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('Enter dimensions to preview', CW/2, CH/2);
+  ctx.fillText('Enter dimensions to preview', CW / 2, CH / 2);
 }
 
-const AMBER = '#f59e0b';
-const AMBER_DIM = '#92400e';
-const SURFACE_TOP = '#2d3147';
-const SURFACE_SIDE_L = '#1e2235';
-const SURFACE_SIDE_R = '#252840';
+// Color palette - red/white/blue theme
+const C_RED      = '#c0392b';
+const C_RED_LT   = '#e74c3c';
+const C_BLUE     = '#1a3a7a';
+const C_BLUE_LT  = '#2563eb';
+const C_WHITE    = '#dde4f5';
+const C_TOP      = '#1e3060';
+const C_SIDE_L   = '#14213d';
+const C_SIDE_R   = '#1a2d55';
 
-function draw3DRect(L, W, H, flatTop, topL, topW, aFront, aBack, aLeft, aRight) {
+function draw3DRect(L, W, H, topL, topW, aFront, aBack, aLeft, aRight) {
   const ctx = getCanvas();
   clearCanvas(ctx);
 
@@ -1119,130 +1224,133 @@ function draw3DRect(L, W, H, flatTop, topL, topW, aFront, aBack, aLeft, aRight) 
 
   const isBelow = state.grade === 'below';
 
-  // Compute top dims
-  let tL, tW;
-  if (flatTop && topL > 0 && topW > 0) {
-    tL = topL; tW = topW;
-  } else {
-    const rFront = runPerFt(aFront), rBack = runPerFt(aBack);
-    const rLeft  = runPerFt(aLeft),  rRight = runPerFt(aRight);
-    tL = Math.max(0, L - H * (rLeft + rRight));
-    tW = Math.max(0, W - H * (rFront + rBack));
-  }
-
-  // Scale to fit canvas
+  // Scale to fit canvas with padding
   const maxDim = Math.max(L, W, H * 1.5);
-  const scale = Math.min(CW, CH) * 0.38 / maxDim;
-  const ox = CW / 2, oy = isBelow ? CH * 0.28 : CH * 0.62;
-
-  // Sign for above/below
+  const scale  = Math.min(CW, CH) * 0.38 / maxDim;
+  const ox = CW / 2;
+  const oy = isBelow ? CH * 0.28 : CH * 0.62;
   const sign = isBelow ? -1 : 1;
 
-  // Base corners (plan view: x=L axis, y=W axis)
-  const bFL = iso(0, 0, 0, ox, oy, scale);
-  const bFR = iso(L, 0, 0, ox, oy, scale);
-  const bBL = iso(0, W, 0, ox, oy, scale);
-  const bBR = iso(L, W, 0, ox, oy, scale);
+  // Compute safe offsets from angles — clamped so slopes never exceed pile height
+  const rLeft  = runPerRise(aLeft);
+  const rRight = runPerRise(aRight);
+  const rFront = runPerRise(aFront);
+  const rBack  = runPerRise(aBack);
 
-  // Top offset from slopes
-  const rLeft  = runPerFt(aLeft);
-  const rRight = runPerFt(aRight);
-  const rFront = runPerFt(aFront);
-  const rBack  = runPerFt(aBack);
-  const xOff = H * rLeft;
-  const wOff = H * (rLeft + rRight);
-  const yOff = H * rFront;
-  const dOff = H * (rFront + rBack);
+  // Max slope run = H * run/rise, but clamped so opposite sides don't exceed base dim
+  const maxRunLR = Math.max(0, L / 2); // each side can't exceed half the base
+  const maxRunFB = Math.max(0, W / 2);
 
-  let tFL, tFR, tBL, tBR;
-  if (flatTop && topL > 0 && topW > 0) {
+  const xOffL = Math.min(H * rLeft,  maxRunLR);
+  const xOffR = Math.min(H * rRight, maxRunLR);
+  const yOffF = Math.min(H * rFront, maxRunFB);
+  const yOffB = Math.min(H * rBack,  maxRunFB);
+
+  // Top corner positions (plan view)
+  let tFL_x, tFL_y, tFR_x, tFR_y, tBL_x, tBL_y, tBR_x, tBR_y;
+
+  if (topL > 0 && topW > 0) {
+    // Use flat top dims, centered
     const xc = (L - topL) / 2;
     const yc = (W - topW) / 2;
-    tFL = iso(xc,      yc,      sign*H, ox, oy, scale);
-    tFR = iso(xc+topL, yc,      sign*H, ox, oy, scale);
-    tBL = iso(xc,      yc+topW, sign*H, ox, oy, scale);
-    tBR = iso(xc+topL, yc+topW, sign*H, ox, oy, scale);
+    // Clamp so they don't go out of bounds
+    const xcS = Math.max(0, xc);
+    const ycS = Math.max(0, yc);
+    const tLS = Math.min(topL, L);
+    const tWS = Math.min(topW, W);
+    tFL_x = xcS;          tFL_y = ycS;
+    tFR_x = xcS + tLS;    tFR_y = ycS;
+    tBL_x = xcS;          tBL_y = ycS + tWS;
+    tBR_x = xcS + tLS;    tBR_y = ycS + tWS;
   } else {
-    tFL = iso(xOff,        yOff,        sign*H, ox, oy, scale);
-    tFR = iso(L-H*rRight,  yOff,        sign*H, ox, oy, scale);
-    tBL = iso(xOff,        W-H*rBack,   sign*H, ox, oy, scale);
-    tBR = iso(L-H*rRight,  W-H*rBack,   sign*H, ox, oy, scale);
+    // Slopes meet — may form ridge or point
+    tFL_x = xOffL;         tFL_y = yOffF;
+    tFR_x = L - xOffR;     tFR_y = yOffF;
+    tBL_x = xOffL;         tBL_y = W - yOffB;
+    tBR_x = L - xOffR;     tBR_y = W - yOffB;
+
+    // Clamp so top corners don't cross each other (impossible geometry fix)
+    const midX = L / 2;
+    const midY = W / 2;
+    tFL_x = Math.min(tFL_x, midX); tFR_x = Math.max(tFR_x, midX);
+    tBL_x = Math.min(tBL_x, midX); tBR_x = Math.max(tBR_x, midX);
+    tFL_y = Math.min(tFL_y, midY); tFR_y = Math.min(tFR_y, midY);
+    tBL_y = Math.max(tBL_y, midY); tBR_y = Math.max(tBR_y, midY);
   }
+
+  // Project all points
+  const bFL = iso(0, 0, 0,       ox, oy, scale);
+  const bFR = iso(L, 0, 0,       ox, oy, scale);
+  const bBL = iso(0, W, 0,       ox, oy, scale);
+  const bBR = iso(L, W, 0,       ox, oy, scale);
+  const tFL = iso(tFL_x, tFL_y, sign*H, ox, oy, scale);
+  const tFR = iso(tFR_x, tFR_y, sign*H, ox, oy, scale);
+  const tBL = iso(tBL_x, tBL_y, sign*H, ox, oy, scale);
+  const tBR = iso(tBR_x, tBR_y, sign*H, ox, oy, scale);
 
   function poly(pts, fill, stroke, lw) {
     ctx.beginPath();
     ctx.moveTo(pts[0].x, pts[0].y);
-    for (let i=1;i<pts.length;i++) ctx.lineTo(pts[i].x, pts[i].y);
+    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
     ctx.closePath();
-    if (fill) { ctx.fillStyle = fill; ctx.fill(); }
-    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw||1; ctx.stroke(); }
+    if (fill)  { ctx.fillStyle   = fill;   ctx.fill(); }
+    if (stroke){ ctx.strokeStyle = stroke; ctx.lineWidth = lw || 1; ctx.stroke(); }
   }
 
   if (!isBelow) {
     // Front face
-    poly([bFL,bFR,tFR,tFL], SURFACE_SIDE_R, AMBER+'55', 1);
+    poly([bFL, bFR, tFR, tFL], C_SIDE_R, C_RED_LT + '66', 1);
     // Right face
-    poly([bFR,bBR,tBR,tFR], SURFACE_SIDE_L, AMBER+'55', 1);
+    poly([bFR, bBR, tBR, tFR], C_SIDE_L, C_RED_LT + '44', 1);
+    // Left face (back-left, dimmed)
+    poly([bFL, bBL, tBL, tFL], C_SIDE_L + 'bb', C_BLUE_LT + '33', 0.5);
     // Top
-    poly([tFL,tFR,tBR,tBL], SURFACE_TOP, AMBER+'88', 1.5);
-    // Left face (hidden but draw lightly)
-    poly([bFL,bBL,tBL,tFL], SURFACE_SIDE_L+'aa', AMBER+'33', 0.5);
+    poly([tFL, tFR, tBR, tBL], C_TOP, C_WHITE + 'aa', 1.5);
     // Base outline
-    poly([bFL,bFR,bBR,bBL], null, AMBER+'44', 1);
-    // Ground plane indicator
-    ctx.strokeStyle = AMBER+'33';
+    poly([bFL, bFR, bBR, bBL], null, C_RED_LT + '44', 1);
+    // Ground dashes
+    ctx.strokeStyle = C_BLUE_LT + '33';
     ctx.lineWidth = 1;
-    ctx.setLineDash([4,4]);
+    ctx.setLineDash([4, 4]);
     ctx.beginPath();
     ctx.moveTo(bFL.x, bFL.y); ctx.lineTo(bFR.x, bFR.y);
     ctx.moveTo(bFR.x, bFR.y); ctx.lineTo(bBR.x, bBR.y);
     ctx.stroke();
     ctx.setLineDash([]);
   } else {
-    // Cut — invert, show hole in ground
-    // Ground plane at y=0
-    const gExt = 30;
-    const g1 = iso(-gExt, -gExt, 0, ox, oy, scale);
-    const g2 = iso(L+gExt,-gExt, 0, ox, oy, scale);
-    const g3 = iso(L+gExt,W+gExt,0, ox, oy, scale);
-    const g4 = iso(-gExt, W+gExt,0, ox, oy, scale);
+    // Below grade cut
+    const gE = 30;
+    const g1 = iso(-gE,   -gE,   0, ox, oy, scale);
+    const g2 = iso(L+gE,  -gE,   0, ox, oy, scale);
+    const g3 = iso(L+gE,  W+gE,  0, ox, oy, scale);
+    const g4 = iso(-gE,   W+gE,  0, ox, oy, scale);
 
-    // Ground fill
-    ctx.fillStyle = '#1a1d27';
-    poly([g1,g2,g3,g4], '#222636', null);
-    // Cut hole outline on ground
-    poly([bFL,bFR,bBR,bBL], null, AMBER+'77', 1.5);
-
-    // Bottom
-    poly([tFL,tFR,tBR,tBL], SURFACE_TOP, AMBER+'66', 1.5);
-    // Front wall
-    poly([bFL,bFR,tFR,tFL], SURFACE_SIDE_R, AMBER+'55', 1);
-    // Right wall
-    poly([bFR,bBR,tBR,tFR], SURFACE_SIDE_L, AMBER+'55', 1);
-    // Left wall
-    poly([bFL,bBL,tBL,tFL], SURFACE_SIDE_L+'cc', AMBER+'33', 0.5);
+    poly([g1, g2, g3, g4], '#1a2035', null);
+    poly([bFL, bFR, bBR, bBL], null, C_RED_LT + '88', 1.5);
+    poly([tFL, tFR, tBR, tBL], C_TOP, C_WHITE + '77', 1.5);
+    poly([bFL, bFR, tFR, tFL], C_SIDE_R, C_RED_LT + '55', 1);
+    poly([bFR, bBR, tBR, tFR], C_SIDE_L, C_RED_LT + '44', 1);
+    poly([bFL, bBL, tBL, tFL], C_SIDE_L + 'cc', C_BLUE_LT + '33', 0.5);
   }
 
   // Dimension lines
-  drawDimLine(ctx, bFL, bFR, `L: ${L.toFixed(1)}'`, -12, scale);
-  drawDimLine(ctx, bFR, bBR, `W: ${W.toFixed(1)}'`, 10, scale);
+  drawDimLine(ctx, bFL, bFR, `L: ${L.toFixed(1)}'`, -12);
+  drawDimLine(ctx, bFR, bBR, `W: ${W.toFixed(1)}'`, 10);
 
   // Height indicator
-  const hp1 = isBelow ? bFL : bFL;
-  const hp2 = isBelow ? tFL : tFL;
-  ctx.strokeStyle = AMBER+'99';
+  ctx.strokeStyle = C_WHITE + '88';
   ctx.lineWidth = 1;
-  ctx.setLineDash([3,3]);
+  ctx.setLineDash([3, 3]);
   ctx.beginPath();
-  ctx.moveTo(hp1.x - 10, hp1.y);
-  ctx.lineTo(hp2.x - 10, hp2.y);
+  ctx.moveTo(bFL.x - 10, bFL.y);
+  ctx.lineTo(tFL.x - 10, tFL.y);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = AMBER+'cc';
+  ctx.fillStyle = C_WHITE + 'cc';
   ctx.font = '600 10px Barlow Condensed, sans-serif';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'middle';
-  ctx.fillText(`H: ${H.toFixed(1)}'`, hp2.x - 13, (hp1.y+hp2.y)/2);
+  ctx.fillText(`H: ${H.toFixed(1)}'`, tFL.x - 13, (bFL.y + tFL.y) / 2);
 }
 
 function draw3DCone(D, H) {
@@ -1255,55 +1363,45 @@ function draw3DCone(D, H) {
   const r = D / 2;
   const maxDim = Math.max(D, H * 1.5);
   const scale = Math.min(CW, CH) * 0.35 / maxDim;
-  const ox = CW / 2, oy = CH * 0.58;
+  const ox = CW / 2;
+  const oy = CH * 0.58;
   const sign = isBelow ? -1 : 1;
 
-  // Draw elliptical base
-  const rx = r * Math.cos(Math.PI/6) * scale;
-  const ry = r * Math.sin(Math.PI/6) * scale;
+  const rx = r * Math.cos(Math.PI / 6) * scale;
+  const ry = r * Math.sin(Math.PI / 6) * scale;
   const bCx = ox, bCy = oy;
-
-  // Apex
-  const apex = iso(0, 0, sign * H, ox, oy, scale);
-  // Adjust apex x for cone center
   const apexX = ox;
   const apexY = oy - sign * H * scale;
 
-  // Left tangent point on ellipse
   const lx = bCx - rx;
   const ly = bCy;
   const rx2 = bCx + rx;
   const ry2 = bCy;
 
-  // Side faces
   if (!isBelow) {
-    // Dark back half
     ctx.beginPath();
     ctx.ellipse(bCx, bCy, rx, ry, 0, 0, Math.PI);
-    ctx.fillStyle = SURFACE_SIDE_L;
+    ctx.fillStyle = C_SIDE_L;
     ctx.fill();
 
-    // Cone sides
     ctx.beginPath();
     ctx.moveTo(apexX, apexY);
     ctx.lineTo(lx, ly);
-    ctx.ellipse(bCx, bCy, rx, ry, 0, Math.PI, 2*Math.PI);
+    ctx.ellipse(bCx, bCy, rx, ry, 0, Math.PI, 2 * Math.PI);
     ctx.closePath();
-    ctx.fillStyle = SURFACE_SIDE_R;
+    ctx.fillStyle = C_SIDE_R;
     ctx.fill();
-    ctx.strokeStyle = AMBER + '77';
+    ctx.strokeStyle = C_RED_LT + '88';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
-    // Base ellipse top
     ctx.beginPath();
-    ctx.ellipse(bCx, bCy, rx, ry, 0, 0, 2*Math.PI);
-    ctx.strokeStyle = AMBER + '55';
+    ctx.ellipse(bCx, bCy, rx, ry, 0, 0, 2 * Math.PI);
+    ctx.strokeStyle = C_RED_LT + '55';
     ctx.lineWidth = 1;
     ctx.stroke();
 
-    // Silhouette lines
-    ctx.strokeStyle = AMBER + 'aa';
+    ctx.strokeStyle = C_WHITE + 'bb';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(apexX, apexY);
@@ -1312,19 +1410,17 @@ function draw3DCone(D, H) {
     ctx.lineTo(rx2, ry2);
     ctx.stroke();
 
-    // Apex dot
     ctx.beginPath();
-    ctx.arc(apexX, apexY, 3, 0, 2*Math.PI);
-    ctx.fillStyle = AMBER;
+    ctx.arc(apexX, apexY, 3, 0, 2 * Math.PI);
+    ctx.fillStyle = C_WHITE;
     ctx.fill();
 
   } else {
-    // Inverted cone (conical pit)
     ctx.beginPath();
-    ctx.ellipse(bCx, bCy, rx, ry, 0, 0, 2*Math.PI);
-    ctx.fillStyle = SURFACE_TOP;
+    ctx.ellipse(bCx, bCy, rx, ry, 0, 0, 2 * Math.PI);
+    ctx.fillStyle = C_TOP;
     ctx.fill();
-    ctx.strokeStyle = AMBER + '88';
+    ctx.strokeStyle = C_RED_LT + '88';
     ctx.lineWidth = 1.5;
     ctx.stroke();
 
@@ -1333,13 +1429,12 @@ function draw3DCone(D, H) {
     ctx.lineTo(lx, ly);
     ctx.moveTo(apexX, apexY);
     ctx.lineTo(rx2, ry2);
-    ctx.strokeStyle = AMBER + 'aa';
+    ctx.strokeStyle = C_WHITE + 'aa';
     ctx.lineWidth = 1.5;
     ctx.stroke();
   }
 
-  // Labels
-  ctx.fillStyle = AMBER + 'cc';
+  ctx.fillStyle = C_WHITE + 'cc';
   ctx.font = '600 11px Barlow Condensed, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
@@ -1349,28 +1444,27 @@ function draw3DCone(D, H) {
   ctx.textAlign = 'left';
   ctx.fillText(`H: ${H.toFixed(1)}'`, apexX + 8, (apexY + bCy) / 2);
 
-  // Diameter line
-  ctx.strokeStyle = AMBER + '55';
+  ctx.strokeStyle = C_BLUE_LT + '55';
   ctx.lineWidth = 1;
-  ctx.setLineDash([3,3]);
+  ctx.setLineDash([3, 3]);
   ctx.beginPath();
   ctx.moveTo(lx, bCy); ctx.lineTo(rx2, bCy);
   ctx.stroke();
   ctx.setLineDash([]);
 }
 
-function drawDimLine(ctx, p1, p2, label, offset, scale) {
+function drawDimLine(ctx, p1, p2, label, offset) {
   const mx = (p1.x + p2.x) / 2;
   const my = (p1.y + p2.y) / 2;
-  ctx.strokeStyle = AMBER + '55';
+  ctx.strokeStyle = C_WHITE + '44';
   ctx.lineWidth = 1;
-  ctx.setLineDash([3,3]);
+  ctx.setLineDash([3, 3]);
   ctx.beginPath();
   ctx.moveTo(p1.x, p1.y + offset);
   ctx.lineTo(p2.x, p2.y + offset);
   ctx.stroke();
   ctx.setLineDash([]);
-  ctx.fillStyle = AMBER + 'cc';
+  ctx.fillStyle = C_WHITE + 'cc';
   ctx.font = '600 10px Barlow Condensed, sans-serif';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
