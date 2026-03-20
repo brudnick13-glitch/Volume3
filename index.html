@@ -12,449 +12,136 @@
 <title>Volume³</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap');
-
   :root {
-    --bg:       #0a0c14;
-    --surface:  #131828;
-    --surface2: #1b2035;
-    --border:   #253055;
-    --red:      #c0392b;
-    --red2:     #e74c3c;
-    --blue:     #2563eb;
-    --blue2:    #3b82f6;
-    --white:    #f0f4ff;
-    --text:     #dde4f5;
-    --muted:    #5a6a9a;
-    --green:    #22c55e;
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bot: env(safe-area-inset-bottom, 0px);
+    --bg:#0a0c14;--surface:#131828;--surface2:#1b2035;--border:#253055;
+    --red:#c0392b;--red2:#e74c3c;--blue:#2563eb;--blue2:#3b82f6;
+    --white:#f0f4ff;--text:#dde4f5;--muted:#5a6a9a;--green:#22c55e;
+    --safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px);
   }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-
-  html, body {
-    height: 100%;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Barlow', sans-serif;
-    font-size: 15px;
-    overscroll-behavior: none;
-  }
-
-  body {
-    padding-top: var(--safe-top);
-    padding-bottom: var(--safe-bot);
-    display: flex;
-    flex-direction: column;
-    max-width: 480px;
-    margin: 0 auto;
-  }
-
-  /* HEADER */
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px 10px;
-    border-bottom: 2px solid var(--red);
-    background: var(--bg);
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    flex-shrink: 0;
-  }
-
-  .logo {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 26px;
-    font-weight: 900;
-    letter-spacing: -0.5px;
-    color: var(--white);
-  }
-  .logo span.v { color: var(--red2); }
-  .logo sup { font-size: 14px; vertical-align: super; color: var(--blue2); }
-
-  /* NAV TABS */
-  .nav-tabs {
-    display: flex;
-    background: var(--surface2);
-    border-radius: 8px;
-    padding: 3px;
-    gap: 3px;
-  }
-  .nav-tab {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    padding: 5px 12px;
-    border-radius: 6px;
-    border: none;
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
-    position: relative;
-  }
-  .nav-tab.active { background: var(--blue); color: #fff; }
-  .nav-tab .badge {
-    position: absolute;
-    top: 2px; right: 4px;
-    background: var(--red2);
-    color: #fff;
-    font-size: 9px;
-    font-weight: 900;
-    border-radius: 10px;
-    padding: 1px 4px;
-    min-width: 14px;
-    text-align: center;
-    line-height: 12px;
-  }
-
-  /* SCREENS */
-  .screen { display: none; flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; flex-direction: column; }
-  .screen.active { display: flex; }
-
-  /* MAIN SCROLL AREA */
-  .scroll-area {
-    padding: 14px 16px;
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    flex: 1;
-  }
-
-  /* CARDS */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-  }
-  .card-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-
-  /* SHAPE TABS */
-  .shape-tabs { display: flex; gap: 8px; }
-  .shape-tab {
-    flex: 1;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px; font-weight: 700;
-    letter-spacing: 0.5px; text-transform: uppercase;
-    padding: 8px 4px; border-radius: 8px;
-    border: 1.5px solid var(--border);
-    background: transparent; color: var(--muted);
-    cursor: pointer; transition: all 0.15s; text-align: center;
-  }
-  .shape-tab.active { border-color: var(--red2); color: var(--red2); background: rgba(231,76,60,0.08); }
-
-  /* INPUT ROWS */
-  .input-row { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-  .input-row:last-child { margin-bottom: 0; }
-  .input-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 13px; font-weight: 600;
-    letter-spacing: 0.5px; text-transform: uppercase;
-    color: var(--muted); width: 60px; flex-shrink: 0;
-  }
-  .fi-group { display: flex; align-items: center; gap: 6px; flex: 1; }
-  .fi-wrap { position: relative; flex: 1; }
-  .fi-wrap input {
-    width: 100%; background: var(--surface2);
-    border: 1.5px solid var(--border); border-radius: 8px;
-    color: var(--text);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px; font-weight: 600;
-    padding: 8px 28px 8px 10px; outline: none;
-    transition: border-color 0.15s;
-    -webkit-appearance: none; appearance: none;
-  }
-  .fi-wrap input:focus { border-color: var(--red2); }
-  .fi-wrap input.auto-filled { border-color: var(--blue2); color: var(--blue2); background: rgba(59,130,246,0.07); }
-  .fi-unit {
-    position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
-    font-size: 11px; font-weight: 600; color: var(--muted); pointer-events: none;
-  }
-
-  /* SLOPE GRID */
-  .slope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .slope-item { background: var(--surface2); border: 1.5px solid var(--border); border-radius: 8px; padding: 10px; }
-  .slope-item-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
-  .slope-item .angle-input-wrap { position: relative; }
-  .slope-item .angle-input-wrap input {
-    width: 100%; background: var(--bg);
-    border: 1.5px solid var(--border); border-radius: 6px;
-    color: var(--text); font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px; font-weight: 600;
-    padding: 6px 26px 6px 8px; outline: none;
-    -webkit-appearance: none; appearance: none; transition: border-color 0.15s;
-  }
-  .slope-item .angle-input-wrap input:focus { border-color: var(--red2); }
-  .slope-item .angle-input-wrap input.auto-filled { border-color: var(--blue2); color: var(--blue2); background: rgba(59,130,246,0.07); }
-  .slope-item .angle-input-wrap .fi-unit { font-size: 12px; right: 7px; }
-
-  .auto-note { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; color: var(--blue2); letter-spacing: 0.5px; margin-top: 4px; opacity: 0.85; }
-
-  .or-divider { display: flex; align-items: center; gap: 8px; margin: 10px 0; }
-  .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .or-divider span { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; color: var(--muted); text-transform: uppercase; }
-
-  /* CANVAS WRAP */
-  .canvas-wrap {
-    background: var(--surface2);
-    border-radius: 10px;
-    overflow: hidden;
-    position: relative;
-    touch-action: none;
-    user-select: none;
-  }
-  canvas {
-    display: block;
-    width: 100%;
-    height: auto;
-    cursor: grab;
-  }
-  canvas:active { cursor: grabbing; }
-
-  /* DIM TOGGLE ROW */
-  .dim-toggle-row {
-    display: flex;
-    gap: 6px;
-    margin-bottom: 8px;
-    align-items: center;
-  }
-  .dim-toggle-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--muted);
-    flex-shrink: 0;
-  }
-  .dim-toggle-btn {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    padding: 4px 10px;
-    border-radius: 5px;
-    border: 1.5px solid var(--border);
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .dim-toggle-btn.on.base-btn  { border-color: var(--red2);  color: var(--red2);  background: rgba(231,76,60,0.10); }
-  .dim-toggle-btn.on.top-btn   { border-color: var(--blue2); color: var(--blue2); background: rgba(59,130,246,0.10); }
-
-  /* RESET ZOOM BTN */
-  .canvas-controls {
-    position: absolute;
-    bottom: 8px;
-    right: 8px;
-    display: flex;
-    gap: 5px;
-  }
-  .canvas-ctrl-btn {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    padding: 4px 8px;
-    border-radius: 5px;
-    border: 1px solid rgba(255,255,255,0.15);
-    background: rgba(10,12,20,0.75);
-    color: rgba(221,228,245,0.7);
-    cursor: pointer;
-    backdrop-filter: blur(4px);
-    transition: all 0.15s;
-  }
-  .canvas-ctrl-btn:active { background: rgba(59,130,246,0.3); color: #fff; }
-
-  /* OUTPUT */
-  .output-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-  .output-cell { background: var(--surface2); border-radius: 10px; padding: 10px 8px; text-align: center; }
-  .output-val { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900; color: var(--red2); line-height: 1; margin-bottom: 2px; }
-  .output-unit { font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); }
-
-  /* MATERIAL ROW */
-  .material-row { display: flex; gap: 8px; align-items: stretch; margin-bottom: 10px; }
-  .material-row select {
-    flex: 1; background: var(--surface2); border: 1.5px solid var(--border);
-    border-radius: 8px; color: var(--text); font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px; font-weight: 600; padding: 8px 10px; outline: none;
-    -webkit-appearance: none; appearance: none; cursor: pointer;
-  }
-  .material-row select:focus { border-color: var(--red2); }
-  .multiplier-wrap { position: relative; width: 90px; flex-shrink: 0; }
-  .multiplier-wrap input {
-    width: 100%; background: var(--surface2); border: 1.5px solid var(--red2);
-    border-radius: 8px; color: var(--red2); font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px; font-weight: 700; padding: 8px 36px 8px 10px; outline: none; -webkit-appearance: none;
-  }
-  .multiplier-wrap .fi-unit { color: var(--red2); font-size: 10px; }
-
-  /* TEXT FIELDS */
-  .text-field {
-    width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
-    border-radius: 8px; color: var(--text); font-family: 'Barlow', sans-serif;
-    font-size: 15px; padding: 10px 12px; outline: none; transition: border-color 0.15s;
-    resize: none; -webkit-appearance: none;
-  }
-  .text-field:focus { border-color: var(--red2); }
-  .text-field.title-field { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: 0.3px; }
-
-  /* GRADE BADGE */
-  .grade-badge { display: inline-flex; align-items: center; gap: 5px; font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 4px; }
-  .grade-badge.above { background: rgba(59,130,246,0.15); color: var(--blue2); border: 1px solid rgba(59,130,246,0.3); }
-  .grade-badge.below { background: rgba(192,57,43,0.15); color: var(--red2); border: 1px solid rgba(192,57,43,0.3); }
-
-  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
-
-  /* BUTTONS */
-  .btn {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 15px; font-weight: 700; letter-spacing: 0.8px; text-transform: uppercase;
-    padding: 11px 18px; border-radius: 9px; border: none; cursor: pointer;
-    transition: all 0.15s; display: inline-flex; align-items: center; gap: 7px;
-  }
-  .btn-red { background: var(--red2); color: #fff; }
-  .btn-red:active { background: var(--red); }
-  .btn-blue { background: var(--blue); color: #fff; }
-  .btn-blue:active { background: #1d4ed8; }
-  .btn-ghost { background: var(--surface2); color: var(--text); border: 1.5px solid var(--border); }
-  .btn-ghost:active { background: var(--border); }
-  .btn-row { display: flex; gap: 8px; }
-  .btn-row .btn { flex: 1; justify-content: center; }
-
-  /* AOR select */
-  #aorSelect {
-    width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
-    border-radius: 8px; color: var(--text); font-family: 'Barlow Condensed', sans-serif;
-    font-size: 14px; font-weight: 600; padding: 8px 10px; outline: none; -webkit-appearance: none;
-  }
-
-  /* ── HISTORY SCREEN ── */
-  .history-empty {
-    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 12px; padding: 40px 20px; text-align: center;
-  }
-  .history-empty-icon { font-size: 48px; opacity: 0.3; }
-  .history-empty-text { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; color: var(--muted); letter-spacing: 0.5px; }
-  .history-empty-sub { font-size: 13px; color: var(--muted); opacity: 0.7; }
-
-  .history-list { padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; }
-
-  .job-card {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-    padding: 12px 14px; cursor: pointer; transition: border-color 0.15s;
-    position: relative; overflow: hidden;
-  }
-  .job-card:active { border-color: var(--blue2); }
-  .job-card-accent { position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--red2); border-radius: 12px 0 0 12px; }
-  .job-card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 6px; }
-  .job-card-name { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: var(--white); letter-spacing: 0.3px; flex: 1; padding-right: 8px; word-break: break-word; }
-  .job-card-date { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; color: var(--muted); font-weight: 600; white-space: nowrap; flex-shrink: 0; }
-  .job-card-shape { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--blue2); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 6px; }
-  .job-card-dims { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-  .job-card-vols { display: flex; gap: 6px; }
-  .job-vol-chip { background: var(--surface2); border-radius: 6px; padding: 4px 8px; text-align: center; flex: 1; }
-  .job-vol-chip .val { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 900; color: var(--red2); line-height: 1; }
-  .job-vol-chip .lbl { font-size: 9px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--muted); }
-  .job-card-actions { display: flex; gap: 6px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
-  .job-action-btn {
-    font-family: 'Barlow Condensed', sans-serif; font-size: 12px; font-weight: 700;
-    letter-spacing: 0.5px; text-transform: uppercase; padding: 5px 10px;
-    border-radius: 6px; border: 1.5px solid var(--border); background: transparent;
-    cursor: pointer; transition: all 0.15s;
-  }
-  .job-action-btn.rename { color: var(--blue2); border-color: rgba(59,130,246,0.3); }
-  .job-action-btn.rename:active { background: rgba(59,130,246,0.1); }
-  .job-action-btn.delete { color: var(--red2); border-color: rgba(231,76,60,0.3); margin-left: auto; }
-  .job-action-btn.delete:active { background: rgba(231,76,60,0.1); }
-  .job-action-btn.view { color: var(--white); border-color: var(--border); }
-  .job-action-btn.view:active { background: var(--surface2); }
-
-  /* ── JOB DETAIL SCREEN ── */
-  #jobDetailScreen {
-    position: fixed; inset: 0; background: var(--bg);
-    z-index: 30; display: none; flex-direction: column;
-    padding-top: var(--safe-top); padding-bottom: var(--safe-bot);
-    max-width: 480px; margin: 0 auto;
-  }
-  #jobDetailScreen.open { display: flex; }
-
-  .detail-header {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 16px 10px; border-bottom: 1px solid var(--border);
-    background: var(--bg); flex-shrink: 0;
-  }
-  .detail-back {
-    font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700;
-    color: var(--blue2); background: none; border: none; cursor: pointer;
-    padding: 4px 0; letter-spacing: 0.3px; display: flex; align-items: center; gap: 4px;
-  }
-  .detail-title { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 900; color: var(--white); flex: 1; }
-  .detail-body { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; }
-
-  .detail-section { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 14px; }
-  .detail-section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
-
-  .detail-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
-  .detail-row:last-child { margin-bottom: 0; }
-  .detail-key { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: 0.3px; text-transform: uppercase; }
-  .detail-val { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); text-align: right; }
-
-  .detail-vol-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .detail-vol-cell { background: var(--surface2); border-radius: 10px; padding: 10px 8px; text-align: center; }
-  .detail-vol-val { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 900; color: var(--red2); line-height: 1; margin-bottom: 2px; }
-  .detail-vol-unit { font-size: 10px; font-weight: 600; letter-spacing: 0.8px; text-transform: uppercase; color: var(--muted); }
-
-  /* MODAL (rename) */
-  .modal-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
-    z-index: 50; display: none; align-items: center; justify-content: center;
-    padding: 20px;
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
-    padding: 20px; width: 100%; max-width: 360px;
-  }
-  .modal-title { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 900; color: var(--white); margin-bottom: 14px; letter-spacing: 0.3px; }
-  .modal input {
-    width: 100%; background: var(--surface2); border: 1.5px solid var(--border);
-    border-radius: 8px; color: var(--text); font-family: 'Barlow Condensed', sans-serif;
-    font-size: 18px; font-weight: 600; padding: 10px 12px; outline: none;
-    -webkit-appearance: none; margin-bottom: 14px; transition: border-color 0.15s;
-  }
-  .modal input:focus { border-color: var(--red2); }
-  .modal-btns { display: flex; gap: 8px; }
-  .modal-btns .btn { flex: 1; justify-content: center; }
-
-  /* HIDDEN */
-  .hidden { display: none !important; }
-
-  /* Save success flash */
-  @keyframes flashGreen {
-    0% { background: var(--green); }
-    100% { background: var(--red2); }
-  }
-  .save-flash { animation: flashGreen 0.6s ease forwards; }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;overscroll-behavior:none;}
+  body{padding-top:var(--safe-top);padding-bottom:var(--safe-bot);display:flex;flex-direction:column;max-width:480px;margin:0 auto;}
+  header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px;border-bottom:2px solid var(--red);background:var(--bg);position:sticky;top:0;z-index:20;flex-shrink:0;}
+  .logo{font-family:'Barlow Condensed',sans-serif;font-size:26px;font-weight:900;letter-spacing:-0.5px;color:var(--white);}
+  .logo span.v{color:var(--red2);}.logo sup{font-size:14px;vertical-align:super;color:var(--blue2);}
+  .nav-tabs{display:flex;background:var(--surface2);border-radius:8px;padding:3px;gap:3px;}
+  .nav-tab{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:5px 12px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:all 0.15s;position:relative;}
+  .nav-tab.active{background:var(--blue);color:#fff;}
+  .nav-tab .badge{position:absolute;top:2px;right:4px;background:var(--red2);color:#fff;font-size:9px;font-weight:900;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;line-height:12px;}
+  .screen{display:none;flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;flex-direction:column;}
+  .screen.active{display:flex;}
+  .scroll-area{padding:14px 16px;display:flex;flex-direction:column;gap:14px;flex:1;}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;}
+  .card-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .shape-tabs{display:flex;gap:8px;}
+  .shape-tab{flex:1;font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:8px 4px;border-radius:8px;border:1.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all 0.15s;text-align:center;}
+  .shape-tab.active{border-color:var(--red2);color:var(--red2);background:rgba(231,76,60,0.08);}
+  .input-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .input-row:last-child{margin-bottom:0;}
+  .input-label{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);width:60px;flex-shrink:0;}
+  .fi-group{display:flex;align-items:center;gap:6px;flex:1;}
+  .fi-wrap{position:relative;flex:1;}
+  .fi-wrap input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;padding:8px 28px 8px 10px;outline:none;transition:border-color 0.15s;-webkit-appearance:none;appearance:none;}
+  .fi-wrap input:focus{border-color:var(--red2);}
+  .fi-wrap input.auto-filled{border-color:var(--blue2);color:var(--blue2);background:rgba(59,130,246,0.07);}
+  .fi-unit{position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:600;color:var(--muted);pointer-events:none;}
+  .slope-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .slope-item{background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:10px;}
+  .slope-item-label{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+  .slope-item .angle-input-wrap{position:relative;}
+  .slope-item .angle-input-wrap input{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:6px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;padding:6px 26px 6px 8px;outline:none;-webkit-appearance:none;appearance:none;transition:border-color 0.15s;}
+  .slope-item .angle-input-wrap input:focus{border-color:var(--red2);}
+  .slope-item .angle-input-wrap input.auto-filled{border-color:var(--blue2);color:var(--blue2);background:rgba(59,130,246,0.07);}
+  .slope-item .angle-input-wrap .fi-unit{font-size:12px;right:7px;}
+  .auto-note{font-family:'Barlow Condensed',sans-serif;font-size:10px;color:var(--blue2);letter-spacing:0.5px;margin-top:4px;opacity:0.85;}
+  .or-divider{display:flex;align-items:center;gap:8px;margin:10px 0;}
+  .or-divider::before,.or-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+  .or-divider span{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;color:var(--muted);text-transform:uppercase;}
+  .canvas-wrap{background:var(--surface2);border-radius:10px;overflow:hidden;position:relative;touch-action:none;user-select:none;}
+  canvas{display:block;width:100%;height:auto;cursor:grab;}
+  canvas:active{cursor:grabbing;}
+  .dim-toggle-row{display:flex;gap:6px;margin-bottom:8px;align-items:center;}
+  .dim-toggle-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);flex-shrink:0;}
+  .dim-toggle-btn{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:4px 10px;border-radius:5px;border:1.5px solid var(--border);background:transparent;color:var(--muted);cursor:pointer;transition:all 0.15s;}
+  .dim-toggle-btn.on.base-btn{border-color:var(--red2);color:var(--red2);background:rgba(231,76,60,0.10);}
+  .dim-toggle-btn.on.top-btn{border-color:var(--blue2);color:var(--blue2);background:rgba(59,130,246,0.10);}
+  .canvas-controls{position:absolute;bottom:8px;right:8px;display:flex;gap:5px;}
+  .canvas-ctrl-btn{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:0.5px;padding:4px 8px;border-radius:5px;border:1px solid rgba(255,255,255,0.15);background:rgba(10,12,20,0.75);color:rgba(221,228,245,0.7);cursor:pointer;backdrop-filter:blur(4px);transition:all 0.15s;}
+  .canvas-ctrl-btn:active{background:rgba(59,130,246,0.3);color:#fff;}
+  .output-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px;}
+  .output-cell{background:var(--surface2);border-radius:10px;padding:10px 8px;text-align:center;}
+  .output-val{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--red2);line-height:1;margin-bottom:2px;}
+  .output-unit{font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);}
+  .material-row{display:flex;gap:8px;align-items:stretch;margin-bottom:10px;}
+  .material-row select{flex:1;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;padding:8px 10px;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;}
+  .material-row select:focus{border-color:var(--red2);}
+  .multiplier-wrap{position:relative;width:90px;flex-shrink:0;}
+  .multiplier-wrap input{width:100%;background:var(--surface2);border:1.5px solid var(--red2);border-radius:8px;color:var(--red2);font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;padding:8px 36px 8px 10px;outline:none;-webkit-appearance:none;}
+  .multiplier-wrap .fi-unit{color:var(--red2);font-size:10px;}
+  .text-field{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;padding:10px 12px;outline:none;transition:border-color 0.15s;resize:none;-webkit-appearance:none;}
+  .text-field:focus{border-color:var(--red2);}
+  .text-field.title-field{font-family:'Barlow Condensed',sans-serif;font-size:20px;font-weight:700;letter-spacing:0.3px;}
+  .grade-badge{display:inline-flex;align-items:center;gap:5px;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:3px 8px;border-radius:4px;}
+  .grade-badge.above{background:rgba(59,130,246,0.15);color:var(--blue2);border:1px solid rgba(59,130,246,0.3);}
+  .grade-badge.below{background:rgba(192,57,43,0.15);color:var(--red2);border:1px solid rgba(192,57,43,0.3);}
+  .section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+  .btn{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;letter-spacing:0.8px;text-transform:uppercase;padding:11px 18px;border-radius:9px;border:none;cursor:pointer;transition:all 0.15s;display:inline-flex;align-items:center;gap:7px;}
+  .btn-red{background:var(--red2);color:#fff;}.btn-red:active{background:var(--red);}
+  .btn-blue{background:var(--blue);color:#fff;}.btn-blue:active{background:#1d4ed8;}
+  .btn-ghost{background:var(--surface2);color:var(--text);border:1.5px solid var(--border);}.btn-ghost:active{background:var(--border);}
+  .btn-row{display:flex;gap:8px;}.btn-row .btn{flex:1;justify-content:center;}
+  #aorSelect{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;padding:8px 10px;outline:none;-webkit-appearance:none;}
+  .history-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:40px 20px;text-align:center;}
+  .history-empty-icon{font-size:48px;opacity:0.3;}
+  .history-empty-text{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:700;color:var(--muted);letter-spacing:0.5px;}
+  .history-empty-sub{font-size:13px;color:var(--muted);opacity:0.7;}
+  .history-list{padding:14px 16px;display:flex;flex-direction:column;gap:10px;}
+  .job-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;cursor:pointer;transition:border-color 0.15s;position:relative;overflow:hidden;}
+  .job-card:active{border-color:var(--blue2);}
+  .job-card-accent{position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--red2);border-radius:12px 0 0 12px;}
+  .job-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:6px;}
+  .job-card-name{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:700;color:var(--white);letter-spacing:0.3px;flex:1;padding-right:8px;word-break:break-word;}
+  .job-card-date{font-family:'Barlow Condensed',sans-serif;font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap;flex-shrink:0;}
+  .job-card-shape{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--blue2);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;}
+  .job-card-dims{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--muted);margin-bottom:8px;}
+  .job-card-vols{display:flex;gap:6px;}
+  .job-vol-chip{background:var(--surface2);border-radius:6px;padding:4px 8px;text-align:center;flex:1;}
+  .job-vol-chip .val{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:900;color:var(--red2);line-height:1;}
+  .job-vol-chip .lbl{font-size:9px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--muted);}
+  .job-card-actions{display:flex;gap:6px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+  .job-action-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;padding:5px 10px;border-radius:6px;border:1.5px solid var(--border);background:transparent;cursor:pointer;transition:all 0.15s;}
+  .job-action-btn.rename{color:var(--blue2);border-color:rgba(59,130,246,0.3);}.job-action-btn.rename:active{background:rgba(59,130,246,0.1);}
+  .job-action-btn.delete{color:var(--red2);border-color:rgba(231,76,60,0.3);margin-left:auto;}.job-action-btn.delete:active{background:rgba(231,76,60,0.1);}
+  .job-action-btn.view{color:var(--white);border-color:var(--border);}.job-action-btn.view:active{background:var(--surface2);}
+  #jobDetailScreen{position:fixed;inset:0;background:var(--bg);z-index:30;display:none;flex-direction:column;padding-top:var(--safe-top);padding-bottom:var(--safe-bot);max-width:480px;margin:0 auto;}
+  #jobDetailScreen.open{display:flex;}
+  .detail-header{display:flex;align-items:center;gap:10px;padding:12px 16px 10px;border-bottom:1px solid var(--border);background:var(--bg);flex-shrink:0;}
+  .detail-back{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:var(--blue2);background:none;border:none;cursor:pointer;padding:4px 0;letter-spacing:0.3px;display:flex;align-items:center;gap:4px;}
+  .detail-title{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--white);flex:1;}
+  .detail-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:14px 16px;display:flex;flex-direction:column;gap:12px;}
+  .detail-section{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;}
+  .detail-section-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+  .detail-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px;}
+  .detail-row:last-child{margin-bottom:0;}
+  .detail-key{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;color:var(--muted);letter-spacing:0.3px;text-transform:uppercase;}
+  .detail-val{font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:700;color:var(--text);text-align:right;}
+  .detail-vol-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+  .detail-vol-cell{background:var(--surface2);border-radius:10px;padding:10px 8px;text-align:center;}
+  .detail-vol-val{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:900;color:var(--red2);line-height:1;margin-bottom:2px;}
+  .detail-vol-unit{font-size:10px;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;color:var(--muted);}
+  .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:50;display:none;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:20px;width:100%;max-width:360px;}
+  .modal-title{font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:900;color:var(--white);margin-bottom:14px;letter-spacing:0.3px;}
+  .modal input{width:100%;background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:600;padding:10px 12px;outline:none;-webkit-appearance:none;margin-bottom:14px;transition:border-color 0.15s;}
+  .modal input:focus{border-color:var(--red2);}
+  .modal-btns{display:flex;gap:8px;}.modal-btns .btn{flex:1;justify-content:center;}
+  .hidden{display:none!important;}
+  @keyframes flashGreen{0%{background:var(--green);}100%{background:var(--red2);}}
+  .save-flash{animation:flashGreen 0.6s ease forwards;}
 </style>
 </head>
 <body>
-
 <header>
   <div class="logo"><span class="v">V</span>olume<sup>3</sup></div>
   <div style="display:flex;gap:8px;align-items:center;">
@@ -466,11 +153,8 @@
   </div>
 </header>
 
-<!-- ═══════════════════════════════════════════════════════ CALCULATOR SCREEN -->
 <div class="screen active" id="screenCalc">
 <div class="scroll-area">
-
-  <!-- GRADE TOGGLE -->
   <div class="card" style="padding:10px 14px;">
     <div style="display:flex;gap:8px;align-items:center;justify-content:space-between;">
       <input type="text" class="text-field title-field" id="titleField" placeholder="Job / Pile Name" oninput="saveState()" style="flex:1;"/>
@@ -480,8 +164,6 @@
       </div>
     </div>
   </div>
-
-  <!-- SHAPE SELECTOR -->
   <div class="card">
     <div class="card-title">Shape Type</div>
     <div class="shape-tabs">
@@ -489,8 +171,6 @@
       <button class="shape-tab" id="tabCone" onclick="setShape('cone')">Conical</button>
     </div>
   </div>
-
-  <!-- RECTANGULAR INPUTS -->
   <div class="card" id="rectInputs">
     <div class="card-title">Dimensions — Base Measurements</div>
     <div class="input-row">
@@ -515,28 +195,14 @@
       </div>
     </div>
   </div>
-
-  <!-- SLOPES -->
   <div class="card" id="slopeCard">
     <div class="card-title">Wall Angles — Per Side (0–90°)</div>
     <div id="autoNoteAngles" class="auto-note hidden" style="margin-bottom:8px;">⟵ Auto-calculated from flat top dimensions</div>
     <div class="slope-grid">
-      <div class="slope-item">
-        <div class="slope-item-label">Front</div>
-        <div class="angle-input-wrap"><input type="number" inputmode="decimal" id="slopeFront" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/><span class="fi-unit">°</span></div>
-      </div>
-      <div class="slope-item">
-        <div class="slope-item-label">Back</div>
-        <div class="angle-input-wrap"><input type="number" inputmode="decimal" id="slopeBack" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/><span class="fi-unit">°</span></div>
-      </div>
-      <div class="slope-item">
-        <div class="slope-item-label">Left</div>
-        <div class="angle-input-wrap"><input type="number" inputmode="decimal" id="slopeLeft" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/><span class="fi-unit">°</span></div>
-      </div>
-      <div class="slope-item">
-        <div class="slope-item-label">Right</div>
-        <div class="angle-input-wrap"><input type="number" inputmode="decimal" id="slopeRight" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/><span class="fi-unit">°</span></div>
-      </div>
+      <div class="slope-item"><div class="slope-item-label">Front</div><div class="angle-input-wrap"><input type="number" inputmode="decimal" id="slopeFront" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/><span class="fi-unit">°</span></div></div>
+      <div class="slope-item"><div class="slope-item-label">Back</div><div class="angle-input-wrap"><input type="number" inputmode="decimal" id="slopeBack" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/><span class="fi-unit">°</span></div></div>
+      <div class="slope-item"><div class="slope-item-label">Left</div><div class="angle-input-wrap"><input type="number" inputmode="decimal" id="slopeLeft" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/><span class="fi-unit">°</span></div></div>
+      <div class="slope-item"><div class="slope-item-label">Right</div><div class="angle-input-wrap"><input type="number" inputmode="decimal" id="slopeRight" placeholder="45" min="0" max="90" step="0.1" oninput="onAngleInput()"/><span class="fi-unit">°</span></div></div>
     </div>
     <div class="or-divider"><span>or enter flat top</span></div>
     <div id="flatTopDims">
@@ -557,8 +223,6 @@
       </div>
     </div>
   </div>
-
-  <!-- CONICAL INPUTS -->
   <div class="card hidden" id="coneInputs">
     <div class="card-title">Dimensions</div>
     <div class="input-row">
@@ -581,15 +245,12 @@
       <div id="aorInfo" style="margin-top:6px;font-size:12px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-weight:600;letter-spacing:0.3px;"></div>
     </div>
   </div>
-
-  <!-- 3D PREVIEW -->
   <div class="card">
     <div class="card-title">3D Preview</div>
-    <!-- DIM TOGGLES -->
     <div class="dim-toggle-row" id="dimToggleRow">
       <span class="dim-toggle-label">Dims:</span>
       <button class="dim-toggle-btn base-btn on" id="btnBaseDim" onclick="toggleBaseDim()">Base</button>
-      <button class="dim-toggle-btn top-btn on"  id="btnTopDim"  onclick="toggleTopDim()">Top</button>
+      <button class="dim-toggle-btn top-btn on" id="btnTopDim" onclick="toggleTopDim()">Top</button>
     </div>
     <div class="canvas-wrap" id="canvasWrap">
       <canvas id="preview3d" width="480" height="300"></canvas>
@@ -598,12 +259,8 @@
       </div>
     </div>
   </div>
-
-  <!-- OUTPUT -->
   <div class="card">
-    <div class="section-header">
-      <div class="card-title" style="margin:0;">Volume Output</div>
-    </div>
+    <div class="section-header"><div class="card-title" style="margin:0;">Volume Output</div></div>
     <div class="output-grid">
       <div class="output-cell"><div class="output-val" id="outCF">—</div><div class="output-unit">Cubic Ft</div></div>
       <div class="output-cell"><div class="output-val" id="outCY">—</div><div class="output-unit">Cubic Yd</div></div>
@@ -612,33 +269,22 @@
     <div class="card-title" style="margin-bottom:6px;">Material Density</div>
     <div class="material-row">
       <select id="matSelect" onchange="setMaterial()"></select>
-      <div class="multiplier-wrap">
-        <input type="number" inputmode="decimal" id="densityVal" placeholder="1.35" step="0.01" min="0.1" oninput="calc()"/>
-        <span class="fi-unit">T/CY</span>
-      </div>
+      <div class="multiplier-wrap"><input type="number" inputmode="decimal" id="densityVal" placeholder="1.35" step="0.01" min="0.1" oninput="calc()"/><span class="fi-unit">T/CY</span></div>
     </div>
-    <div style="font-size:11px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.3px;">
-      Tons = CY × multiplier. Edit multiplier to override.
-    </div>
+    <div style="font-size:11px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:0.3px;">Tons = CY × multiplier. Edit multiplier to override.</div>
   </div>
-
-  <!-- NOTES -->
   <div class="card">
     <div class="card-title">Notes</div>
     <textarea class="text-field" id="notesField" rows="3" placeholder="Field notes, location, date..." oninput="saveState()"></textarea>
   </div>
-
-  <!-- ACTION BUTTONS -->
   <div class="btn-row">
     <button class="btn btn-blue" id="saveBtn" onclick="saveJob()">💾 Save to Log</button>
     <button class="btn btn-red" onclick="exportPDF()">📄 Export PDF</button>
   </div>
-
   <div style="height:20px;"></div>
 </div>
-</div><!-- end screenCalc -->
+</div>
 
-<!-- ═══════════════════════════════════════════════════════ HISTORY SCREEN -->
 <div class="screen" id="screenHistory">
   <div id="historyEmpty" class="history-empty">
     <div class="history-empty-icon">📋</div>
@@ -648,7 +294,6 @@
   <div id="historyList" class="history-list hidden"></div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ JOB DETAIL SCREEN -->
 <div id="jobDetailScreen">
   <div class="detail-header">
     <button class="detail-back" onclick="closeDetail()">‹ Back</button>
@@ -658,7 +303,6 @@
   <div class="detail-body" id="detailBody"></div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ RENAME MODAL -->
 <div class="modal-overlay" id="renameModal">
   <div class="modal">
     <div class="modal-title">Rename Job</div>
@@ -671,1358 +315,440 @@
 </div>
 
 <script>
-// ─── DATA ─────────────────────────────────────────────────────────────────────
+const MATERIALS=[{name:'— Select material —',tcy:null},{name:'Bank Gravel',tcy:1.50},{name:'Broken Asphalt',tcy:1.35},{name:'Broken Concrete',tcy:1.55},{name:'Clay — Dry',tcy:1.40},{name:'Clay — Wet',tcy:1.70},{name:'Coarse Gravel',tcy:1.65},{name:'Common Earth (Loose)',tcy:1.25},{name:'Common Earth (Compact)',tcy:1.45},{name:'Crushed Stone',tcy:1.55},{name:'Dense Graded Aggregate',tcy:1.60},{name:'Dredged Material',tcy:0.90},{name:'Fill Dirt',tcy:1.20},{name:'Fine Sand',tcy:1.30},{name:'Limestone (Crushed)',tcy:1.55},{name:'Loam',tcy:1.25},{name:'Mulch',tcy:0.40},{name:'Pea Gravel',tcy:1.45},{name:'Recycled Concrete Base',tcy:1.60},{name:'Rip Rap',tcy:1.65},{name:'Sand (Dry)',tcy:1.40},{name:'Sand (Wet)',tcy:1.70},{name:'Sandy Loam',tcy:1.30},{name:'Silty Clay',tcy:1.50},{name:'Slag',tcy:1.75},{name:'Topsoil',tcy:1.10}];
+const AOR_MATERIALS=[{name:'Clay (Damp)',aor:15,notes:'Cohesive, low angle'},{name:'Clay (Dry)',aor:25,notes:'Crumbly, moderate'},{name:'Coal',aor:35,notes:'Typical bulk coal'},{name:'Coarse Gravel',aor:35,notes:'Angular, self-supporting'},{name:'Crushed Stone',aor:38,notes:'Angular aggregate'},{name:'Fine Sand (Dry)',aor:30,notes:'Rounded particles'},{name:'Fine Sand (Wet)',aor:45,notes:'Capillary cohesion'},{name:'Grain (Corn/Wheat)',aor:28,notes:'Smooth, rounded'},{name:'Gravel (Mixed)',aor:32,notes:'Common fill gravel'},{name:'Iron Ore',aor:35,notes:'Dense angular'},{name:'Limestone (Crushed)',aor:38,notes:'Angular, locks well'},{name:'Loam',aor:20,notes:'Mixed fine soil'},{name:'Mulch (Wood)',aor:45,notes:'Fibrous, interlock'},{name:'Pea Gravel',aor:25,notes:'Rounded, low friction'},{name:'Sand (Coarse)',aor:34,notes:'Angular coarse grains'},{name:'Sandy Loam',aor:25,notes:'Mixed cohesion'},{name:'Silty Earth',aor:22,notes:'Low internal friction'},{name:'Slag (Crushed)',aor:40,notes:'Very angular, high lock'},{name:'Snow (Compacted)',aor:38,notes:'Bonded ice/snow'},{name:'Stone Dust',aor:30,notes:'Quarry fines'},{name:'Topsoil (Loose)',aor:20,notes:'Organic material'},{name:'Wood Chips',aor:45,notes:'Fibrous interlock'}];
 
-const MATERIALS = [
-  { name: '— Select material —',    tcy: null },
-  { name: 'Bank Gravel',            tcy: 1.50 },
-  { name: 'Broken Asphalt',         tcy: 1.35 },
-  { name: 'Broken Concrete',        tcy: 1.55 },
-  { name: 'Clay — Dry',             tcy: 1.40 },
-  { name: 'Clay — Wet',             tcy: 1.70 },
-  { name: 'Coarse Gravel',          tcy: 1.65 },
-  { name: 'Common Earth (Loose)',    tcy: 1.25 },
-  { name: 'Common Earth (Compact)',  tcy: 1.45 },
-  { name: 'Crushed Stone',          tcy: 1.55 },
-  { name: 'Dense Graded Aggregate', tcy: 1.60 },
-  { name: 'Dredged Material',       tcy: 0.90 },
-  { name: 'Fill Dirt',              tcy: 1.20 },
-  { name: 'Fine Sand',              tcy: 1.30 },
-  { name: 'Limestone (Crushed)',    tcy: 1.55 },
-  { name: 'Loam',                   tcy: 1.25 },
-  { name: 'Mulch',                  tcy: 0.40 },
-  { name: 'Pea Gravel',             tcy: 1.45 },
-  { name: 'Recycled Concrete Base', tcy: 1.60 },
-  { name: 'Rip Rap',                tcy: 1.65 },
-  { name: 'Sand (Dry)',             tcy: 1.40 },
-  { name: 'Sand (Wet)',             tcy: 1.70 },
-  { name: 'Sandy Loam',             tcy: 1.30 },
-  { name: 'Silty Clay',             tcy: 1.50 },
-  { name: 'Slag',                   tcy: 1.75 },
-  { name: 'Topsoil',                tcy: 1.10 },
-];
+let state={grade:'above',shape:'rect',lenFt:0,lenIn:0,widFt:0,widIn:0,htFt:0,htIn:0,topLenFt:0,topLenIn:0,topWidFt:0,topWidIn:0,coneDFt:0,coneDIn:0,coneHFt:0,coneHIn:0,slopeFront:45,slopeBack:45,slopeLeft:45,slopeRight:45,density:1.35,title:'',notes:'',cf:null,cy:null,tons:null,materialName:''};
+let jobHistory=[],lastEditSource='angles',currentScreen='calc',renameTargetId=null,detailJob=null;
+let showBaseDims=true,showTopDims=true;
+let vp={zoom:1,panX:0,panY:0},vpFit={zoom:1,panX:0,panY:0},lastDrawArgs=null;
+let drag={active:false,startX:0,startY:0,startPanX:0,startPanY:0};
+let pinch={active:false,startDist:0,startZoom:1};
 
-const AOR_MATERIALS = [
-  { name: 'Clay (Damp)',       aor: 15, notes: 'Cohesive, low angle' },
-  { name: 'Clay (Dry)',        aor: 25, notes: 'Crumbly, moderate' },
-  { name: 'Coal',              aor: 35, notes: 'Typical bulk coal' },
-  { name: 'Coarse Gravel',     aor: 35, notes: 'Angular, self-supporting' },
-  { name: 'Crushed Stone',     aor: 38, notes: 'Angular aggregate' },
-  { name: 'Fine Sand (Dry)',   aor: 30, notes: 'Rounded particles' },
-  { name: 'Fine Sand (Wet)',   aor: 45, notes: 'Capillary cohesion' },
-  { name: 'Grain (Corn/Wheat)',aor: 28, notes: 'Smooth, rounded' },
-  { name: 'Gravel (Mixed)',    aor: 32, notes: 'Common fill gravel' },
-  { name: 'Iron Ore',          aor: 35, notes: 'Dense angular' },
-  { name: 'Limestone (Crushed)',aor:38, notes: 'Angular, locks well' },
-  { name: 'Loam',              aor: 20, notes: 'Mixed fine soil' },
-  { name: 'Mulch (Wood)',      aor: 45, notes: 'Fibrous, interlock' },
-  { name: 'Pea Gravel',        aor: 25, notes: 'Rounded, low friction' },
-  { name: 'Sand (Coarse)',     aor: 34, notes: 'Angular coarse grains' },
-  { name: 'Sandy Loam',        aor: 25, notes: 'Mixed cohesion' },
-  { name: 'Silty Earth',       aor: 22, notes: 'Low internal friction' },
-  { name: 'Slag (Crushed)',    aor: 40, notes: 'Very angular, high lock' },
-  { name: 'Snow (Compacted)',  aor: 38, notes: 'Bonded ice/snow' },
-  { name: 'Stone Dust',        aor: 30, notes: 'Quarry fines' },
-  { name: 'Topsoil (Loose)',   aor: 20, notes: 'Organic material' },
-  { name: 'Wood Chips',        aor: 45, notes: 'Fibrous interlock' },
-];
+function toggleBaseDim(){showBaseDims=!showBaseDims;document.getElementById('btnBaseDim').classList.toggle('on',showBaseDims);redraw();}
+function toggleTopDim(){showTopDims=!showTopDims;document.getElementById('btnTopDim').classList.toggle('on',showTopDims);redraw();}
+function resetZoom(){vp={...vpFit};redraw();}
+function redraw(){if(!lastDrawArgs)return;const{type,args}=lastDrawArgs;if(type==='rect')draw3DRect(...args);else draw3DCone(...args);}
 
-// ─── STATE ────────────────────────────────────────────────────────────────────
+function canvasPt(e,canvas){const r=canvas.getBoundingClientRect();const sx=canvas.width/(window.devicePixelRatio||1)/r.width;const sy=canvas.height/(window.devicePixelRatio||1)/r.height;return{x:(e.clientX-r.left)*sx,y:(e.clientY-r.top)*sy};}
 
-let state = {
-  grade: 'above', shape: 'rect',
-  lenFt:0, lenIn:0, widFt:0, widIn:0, htFt:0, htIn:0,
-  topLenFt:0, topLenIn:0, topWidFt:0, topWidIn:0,
-  coneDFt:0, coneDIn:0, coneHFt:0, coneHIn:0,
-  slopeFront:45, slopeBack:45, slopeLeft:45, slopeRight:45,
-  density: 1.35, title: '', notes: '',
-  cf: null, cy: null, tons: null,
-  materialName: ''
-};
-
-let jobHistory = [];
-let lastEditSource = 'angles';
-let currentScreen = 'calc';
-let renameTargetId = null;
-let detailJob = null;
-
-// ─── DIM TOGGLE STATE ─────────────────────────────────────────────────────────
-let showBaseDims = true;
-let showTopDims  = true;
-
-function toggleBaseDim() {
-  showBaseDims = !showBaseDims;
-  const btn = document.getElementById('btnBaseDim');
-  btn.classList.toggle('on', showBaseDims);
-  redraw();
-}
-function toggleTopDim() {
-  showTopDims = !showTopDims;
-  const btn = document.getElementById('btnTopDim');
-  btn.classList.toggle('on', showTopDims);
-  redraw();
-}
-
-// ─── ZOOM / PAN STATE ─────────────────────────────────────────────────────────
-
-// viewport transform: the canvas coordinate system is fixed (CW x CH),
-// we apply a zoom+pan on top via ctx.setTransform before drawing.
-let vp = { zoom: 1, panX: 0, panY: 0 };
-let vpFit = { zoom: 1, panX: 0, panY: 0 }; // the auto-fit values, for reset
-
-// We store the last draw args so we can redraw on zoom/pan without recalculating
-let lastDrawArgs = null;
-
-function applyVP(ctx) {
-  ctx.setTransform(vp.zoom, 0, 0, vp.zoom, vp.panX, vp.panY);
-}
-
-function resetZoom() {
-  vp = { ...vpFit };
-  redraw();
-}
-
-function redraw() {
-  if (!lastDrawArgs) return;
-  const { type, args } = lastDrawArgs;
-  if (type === 'rect') draw3DRect(...args);
-  else draw3DCone(...args);
-}
-
-// ─── CANVAS INTERACTION ───────────────────────────────────────────────────────
-
-let drag = { active: false, startX: 0, startY: 0, startPanX: 0, startPanY: 0 };
-let pinch = { active: false, startDist: 0, startZoom: 1 };
-
-function canvasPt(e, canvas) {
-  const r = canvas.getBoundingClientRect();
-  const scaleX = canvas.width / (window.devicePixelRatio || 1) / r.width;
-  const scaleY = canvas.height / (window.devicePixelRatio || 1) / r.height;
-  return { x: (e.clientX - r.left) * scaleX, y: (e.clientY - r.top) * scaleY };
-}
-
-function initCanvasInteraction() {
-  const canvas = document.getElementById('preview3d');
-
-  // ── Mouse wheel zoom ──
-  canvas.addEventListener('wheel', e => {
+function initCanvasInteraction(){
+  const c=document.getElementById('preview3d');
+  c.addEventListener('wheel',e=>{e.preventDefault();const pt=canvasPt(e,c);zoomAround(pt.x,pt.y,e.deltaY<0?1.12:1/1.12);},{passive:false});
+  c.addEventListener('mousedown',e=>{drag.active=true;drag.startX=e.clientX;drag.startY=e.clientY;drag.startPanX=vp.panX;drag.startPanY=vp.panY;});
+  window.addEventListener('mousemove',e=>{if(!drag.active)return;vp.panX=drag.startPanX+(e.clientX-drag.startX);vp.panY=drag.startPanY+(e.clientY-drag.startY);redraw();});
+  window.addEventListener('mouseup',()=>{drag.active=false;});
+  c.addEventListener('touchstart',e=>{
+    if(e.touches.length===1){drag.active=true;drag.startX=e.touches[0].clientX;drag.startY=e.touches[0].clientY;drag.startPanX=vp.panX;drag.startPanY=vp.panY;pinch.active=false;}
+    else if(e.touches.length===2){drag.active=false;pinch.active=true;pinch.startDist=getTouchDist(e.touches);pinch.startZoom=vp.zoom;pinch.midX=(e.touches[0].clientX+e.touches[1].clientX)/2;pinch.midY=(e.touches[0].clientY+e.touches[1].clientY)/2;}
     e.preventDefault();
-    const pt = canvasPt(e, canvas);
-    const factor = e.deltaY < 0 ? 1.12 : 1/1.12;
-    zoomAround(pt.x, pt.y, factor);
-  }, { passive: false });
-
-  // ── Mouse drag pan ──
-  canvas.addEventListener('mousedown', e => {
-    drag.active = true;
-    drag.startX = e.clientX;
-    drag.startY = e.clientY;
-    drag.startPanX = vp.panX;
-    drag.startPanY = vp.panY;
-  });
-  window.addEventListener('mousemove', e => {
-    if (!drag.active) return;
-    vp.panX = drag.startPanX + (e.clientX - drag.startX);
-    vp.panY = drag.startPanY + (e.clientY - drag.startY);
-    redraw();
-  });
-  window.addEventListener('mouseup', () => { drag.active = false; });
-
-  // ── Touch: pan + pinch zoom ──
-  canvas.addEventListener('touchstart', e => {
-    if (e.touches.length === 1) {
-      drag.active = true;
-      drag.startX = e.touches[0].clientX;
-      drag.startY = e.touches[0].clientY;
-      drag.startPanX = vp.panX;
-      drag.startPanY = vp.panY;
-      pinch.active = false;
-    } else if (e.touches.length === 2) {
-      drag.active = false;
-      pinch.active = true;
-      pinch.startDist = getTouchDist(e.touches);
-      pinch.startZoom = vp.zoom;
-      pinch.midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
-      pinch.midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
-    }
+  },{passive:false});
+  c.addEventListener('touchmove',e=>{
+    if(drag.active&&e.touches.length===1){vp.panX=drag.startPanX+(e.touches[0].clientX-drag.startX);vp.panY=drag.startPanY+(e.touches[0].clientY-drag.startY);redraw();}
+    else if(pinch.active&&e.touches.length===2){const dist=getTouchDist(e.touches);const nz=Math.max(0.2,Math.min(8,pinch.startZoom*dist/pinch.startDist));const cv=document.getElementById('preview3d');const r=cv.getBoundingClientRect();const mx=(pinch.midX-r.left)*(cv.width/(window.devicePixelRatio||1)/r.width);const my=(pinch.midY-r.top)*(cv.height/(window.devicePixelRatio||1)/r.height);vp.panX=mx-(mx-vp.panX)*(nz/vp.zoom);vp.panY=my-(my-vp.panY)*(nz/vp.zoom);vp.zoom=nz;redraw();}
     e.preventDefault();
-  }, { passive: false });
-
-  canvas.addEventListener('touchmove', e => {
-    if (drag.active && e.touches.length === 1) {
-      vp.panX = drag.startPanX + (e.touches[0].clientX - drag.startX);
-      vp.panY = drag.startPanY + (e.touches[0].clientY - drag.startY);
-      redraw();
-    } else if (pinch.active && e.touches.length === 2) {
-      const dist = getTouchDist(e.touches);
-      const factor = dist / pinch.startDist;
-      const newZoom = Math.max(0.2, Math.min(8, pinch.startZoom * factor));
-      const canvas = document.getElementById('preview3d');
-      const r = canvas.getBoundingClientRect();
-      const midCx = (pinch.midX - r.left) * (canvas.width / (window.devicePixelRatio||1) / r.width);
-      const midCy = (pinch.midY - r.top)  * (canvas.height / (window.devicePixelRatio||1) / r.height);
-      vp.panX = midCx - (midCx - vp.panX) * (newZoom / vp.zoom);
-      vp.panY = midCy - (midCy - vp.panY) * (newZoom / vp.zoom);
-      vp.zoom = newZoom;
-      redraw();
-    }
-    e.preventDefault();
-  }, { passive: false });
-
-  canvas.addEventListener('touchend', e => {
-    if (e.touches.length < 2) pinch.active = false;
-    if (e.touches.length === 0) drag.active = false;
-  });
+  },{passive:false});
+  c.addEventListener('touchend',e=>{if(e.touches.length<2)pinch.active=false;if(e.touches.length===0)drag.active=false;});
 }
 
-function getTouchDist(touches) {
-  const dx = touches[0].clientX - touches[1].clientX;
-  const dy = touches[0].clientY - touches[1].clientY;
-  return Math.sqrt(dx*dx + dy*dy);
+function getTouchDist(t){const dx=t[0].clientX-t[1].clientX,dy=t[0].clientY-t[1].clientY;return Math.sqrt(dx*dx+dy*dy);}
+function zoomAround(cx,cy,factor){const nz=Math.max(0.2,Math.min(8,vp.zoom*factor));vp.panX=cx-(cx-vp.panX)*(nz/vp.zoom);vp.panY=cy-(cy-vp.panY)*(nz/vp.zoom);vp.zoom=nz;redraw();}
+function fi(fId,iId){return(parseFloat(document.getElementById(fId).value)||0)+(parseFloat(document.getElementById(iId).value)||0)/12;}
+function fmt(n,d){if(n===null||isNaN(n))return'—';const dd=d!==undefined?d:(n>=10000?0:n>=1000?1:2);return n.toLocaleString('en-US',{maximumFractionDigits:dd});}
+function fmtDim(ft,inches){const t=(ft||0)+(inches||0)/12;if(t===0)return'—';const f=Math.floor(t),i=Math.round((t-f)*12);return i>0?`${f}'-${i}"`:f+`'`;}
+function runPerRise(a){return 1/Math.tan(Math.max(0.1,Math.min(90,a))*Math.PI/180);}
+function angleFromRun(r){return r<=0?90:Math.atan(1/r)*180/Math.PI;}
+function getAngle(id){const v=parseFloat(document.getElementById(id).value);return isNaN(v)||v<=0?45:Math.max(0.1,Math.min(90,v));}
+function setInputVal(id,val,dec,auto){const el=document.getElementById(id);el.value=val!==null?val.toFixed(dec):'';el.classList.toggle('auto-filled',!!auto);}
+function clearAutoFilled(ids){ids.forEach(id=>document.getElementById(id).classList.remove('auto-filled'));}
+function formatDate(ts){const d=new Date(ts);return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})+' '+d.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+
+function autoFillTopDims(){const L=fi('lenFt','lenIn'),W=fi('widFt','widIn'),H=fi('htFt','htIn');if(L<=0||W<=0||H<=0)return;const topL=Math.max(0,L-H*(runPerRise(getAngle('slopeLeft'))+runPerRise(getAngle('slopeRight'))));const topW=Math.max(0,W-H*(runPerRise(getAngle('slopeFront'))+runPerRise(getAngle('slopeBack'))));setInputVal('topLenFt',Math.floor(topL),0,true);setInputVal('topLenIn',(topL-Math.floor(topL))*12,1,true);setInputVal('topWidFt',Math.floor(topW),0,true);setInputVal('topWidIn',(topW-Math.floor(topW))*12,1,true);document.getElementById('autoNoteTopDims').classList.remove('hidden');document.getElementById('autoNoteAngles').classList.add('hidden');}
+function autoFillAngles(){const L=fi('lenFt','lenIn'),W=fi('widFt','widIn'),H=fi('htFt','htIn');if(L<=0||W<=0||H<=0)return;const topL=fi('topLenFt','topLenIn'),topW=fi('topWidFt','topWidIn');if(topL>=L||topW>=W)return;const aLR=Math.max(0.1,Math.min(90,angleFromRun(((L-topL)/2)/H)));const aFB=Math.max(0.1,Math.min(90,angleFromRun(((W-topW)/2)/H)));setInputVal('slopeFront',aFB,1,true);setInputVal('slopeBack',aFB,1,true);setInputVal('slopeLeft',aLR,1,true);setInputVal('slopeRight',aLR,1,true);document.getElementById('autoNoteAngles').classList.remove('hidden');document.getElementById('autoNoteTopDims').classList.add('hidden');}
+function onBaseDimInput(){if(lastEditSource==='angles')autoFillTopDims();else autoFillAngles();calc();}
+function onAngleInput(){lastEditSource='angles';clearAutoFilled(['slopeFront','slopeBack','slopeLeft','slopeRight']);autoFillTopDims();calc();}
+function onTopDimInput(){lastEditSource='topdims';clearAutoFilled(['topLenFt','topLenIn','topWidFt','topWidIn']);autoFillAngles();calc();}
+
+function init(){
+  const mat=document.getElementById('matSelect');
+  MATERIALS.forEach(m=>{const o=document.createElement('option');o.value=m.tcy||'';o.textContent=m.name;mat.appendChild(o);});
+  const aor=document.getElementById('aorSelect');
+  AOR_MATERIALS.forEach(m=>{const o=document.createElement('option');o.value=JSON.stringify(m);o.textContent=`${m.name} — ${m.aor}°`;aor.appendChild(o);});
+  try{const s=localStorage.getItem('v3state');if(s){Object.assign(state,JSON.parse(s));applyStateToUI();}const h=localStorage.getItem('v3history');if(h){jobHistory=JSON.parse(h);}}catch(e){}
+  updateHistBadge();initCanvasInteraction();calc();
 }
 
-function zoomAround(cx, cy, factor) {
-  const newZoom = Math.max(0.2, Math.min(8, vp.zoom * factor));
-  vp.panX = cx - (cx - vp.panX) * (newZoom / vp.zoom);
-  vp.panY = cy - (cy - vp.panY) * (newZoom / vp.zoom);
-  vp.zoom = newZoom;
-  redraw();
+function applyStateToUI(){
+  const ids=['titleField','notesField','lenFt','lenIn','widFt','widIn','htFt','htIn','topLenFt','topLenIn','topWidFt','topWidIn','coneDFt','coneDIn','coneHFt','coneHIn','densityVal','slopeFront','slopeBack','slopeLeft','slopeRight'];
+  const keys=['title','notes','lenFt','lenIn','widFt','widIn','htFt','htIn','topLenFt','topLenIn','topWidFt','topWidIn','coneDFt','coneDIn','coneHFt','coneHIn','density','slopeFront','slopeBack','slopeLeft','slopeRight'];
+  ids.forEach((id,i)=>{const el=document.getElementById(id);if(el&&state[keys[i]]!==undefined)el.value=state[keys[i]]||'';});
+  setGrade(state.grade||'above',true);setShape(state.shape||'rect',true);
 }
+function saveState(){state.title=document.getElementById('titleField').value;state.notes=document.getElementById('notesField').value;try{localStorage.setItem('v3state',JSON.stringify(state));}catch(e){}}
+function saveHistory(){try{localStorage.setItem('v3history',JSON.stringify(jobHistory));}catch(e){}}
 
-// ─── HELPERS ──────────────────────────────────────────────────────────────────
+function showScreen(screen){currentScreen=screen;document.getElementById('screenCalc').classList.toggle('active',screen==='calc');document.getElementById('screenHistory').classList.toggle('active',screen==='history');document.getElementById('navCalc').classList.toggle('active',screen==='calc');document.getElementById('navHistory').classList.toggle('active',screen==='history');if(screen==='history')renderHistory();}
 
-function fi(ftId, inId) {
-  return (parseFloat(document.getElementById(ftId).value)||0) + (parseFloat(document.getElementById(inId).value)||0)/12;
-}
+function setGrade(g,silent){state.grade=g;const badge=document.getElementById('gradeBadge');const btnA=document.getElementById('btnAbove');const btnB=document.getElementById('btnBelow');if(g==='above'){badge.className='grade-badge above';badge.textContent='▲ Above';if(btnA){btnA.style.borderColor='var(--blue2)';btnA.style.color='var(--blue2)';}if(btnB){btnB.style.borderColor='var(--border)';btnB.style.color='var(--text)';}}else{badge.className='grade-badge below';badge.textContent='▼ Below';if(btnB){btnB.style.borderColor='var(--red2)';btnB.style.color='var(--red2)';}if(btnA){btnA.style.borderColor='var(--border)';btnA.style.color='var(--text)';}}if(!silent){saveState();calc();}}
+function setShape(s,silent){state.shape=s;document.getElementById('tabRect').classList.toggle('active',s==='rect');document.getElementById('tabCone').classList.toggle('active',s==='cone');document.getElementById('rectInputs').classList.toggle('hidden',s!=='rect');document.getElementById('coneInputs').classList.toggle('hidden',s!=='cone');document.getElementById('slopeCard').classList.toggle('hidden',s!=='rect');document.getElementById('dimToggleRow').classList.toggle('hidden',s!=='rect');if(!silent){saveState();calc();}}
+function setMaterial(){const sel=document.getElementById('matSelect');const val=parseFloat(sel.value);if(!isNaN(val)&&val>0){document.getElementById('densityVal').value=val;state.density=val;}const opt=sel.options[sel.selectedIndex];state.materialName=opt?opt.textContent:'';calc();}
+function setAOR(){const sel=document.getElementById('aorSelect');if(!sel.value){document.getElementById('aorInfo').textContent='';return;}try{const m=JSON.parse(sel.value);document.getElementById('aorInfo').textContent=`Typical angle: ${m.aor}° — ${m.notes}`;}catch(e){}}
 
-function fmt(n, decimals) {
-  if (n === null || isNaN(n)) return '—';
-  const d = decimals !== undefined ? decimals : (n >= 10000 ? 0 : n >= 1000 ? 1 : 2);
-  return n.toLocaleString('en-US', {maximumFractionDigits: d});
-}
+function calcRectVolume(L,W,H,topL,topW){if(L<=0||W<=0||H<=0)return null;const Ab=L*W,At=Math.max(0,topL)*Math.max(0,topW),Lm=(L+Math.max(0,topL))/2,Wm=(W+Math.max(0,topW))/2,Am=Lm*Wm;return(H/6)*(Ab+4*Am+At);}
+function calcConeVolume(D,H){if(D<=0||H<=0)return null;return(Math.PI*(D/2)*(D/2)*H)/3;}
 
-function fmtDim(ft, inches) {
-  const total = (ft||0) + (inches||0)/12;
-  if (total === 0) return '—';
-  const f = Math.floor(total);
-  const i = Math.round((total - f) * 12);
-  return i > 0 ? `${f}'-${i}"` : `${f}'`;
-}
-
-function runPerRise(angleDeg) {
-  const c = Math.max(0.1, Math.min(90, angleDeg));
-  return 1 / Math.tan(c * Math.PI / 180);
-}
-
-function angleFromRun(run) {
-  if (run <= 0) return 90;
-  return Math.atan(1 / run) * 180 / Math.PI;
-}
-
-function getAngle(id) {
-  const val = parseFloat(document.getElementById(id).value);
-  if (isNaN(val) || val <= 0) return 45;
-  return Math.max(0.1, Math.min(90, val));
-}
-
-function setInputVal(id, val, decimals, markAuto) {
-  const el = document.getElementById(id);
-  el.value = val !== null ? val.toFixed(decimals) : '';
-  el.classList.toggle('auto-filled', !!markAuto);
-}
-
-function clearAutoFilled(ids) {
-  ids.forEach(id => document.getElementById(id).classList.remove('auto-filled'));
-}
-
-function formatDate(ts) {
-  const d = new Date(ts);
-  return d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'}) + ' ' +
-         d.toLocaleTimeString('en-US', {hour:'numeric', minute:'2-digit'});
-}
-
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2); }
-
-// ─── AUTO-COMPLETE ─────────────────────────────────────────────────────────────
-
-function autoFillTopDims() {
-  const L = fi('lenFt','lenIn'), W = fi('widFt','widIn'), H = fi('htFt','htIn');
-  if (L<=0||W<=0||H<=0) return;
-  const topL = Math.max(0, L - H*(runPerRise(getAngle('slopeLeft'))+runPerRise(getAngle('slopeRight'))));
-  const topW = Math.max(0, W - H*(runPerRise(getAngle('slopeFront'))+runPerRise(getAngle('slopeBack'))));
-  setInputVal('topLenFt', Math.floor(topL), 0, true);
-  setInputVal('topLenIn', (topL-Math.floor(topL))*12, 1, true);
-  setInputVal('topWidFt', Math.floor(topW), 0, true);
-  setInputVal('topWidIn', (topW-Math.floor(topW))*12, 1, true);
-  document.getElementById('autoNoteTopDims').classList.remove('hidden');
-  document.getElementById('autoNoteAngles').classList.add('hidden');
-}
-
-function autoFillAngles() {
-  const L = fi('lenFt','lenIn'), W = fi('widFt','widIn'), H = fi('htFt','htIn');
-  if (L<=0||W<=0||H<=0) return;
-  const topL = fi('topLenFt','topLenIn'), topW = fi('topWidFt','topWidIn');
-  if (topL>=L||topW>=W) return;
-  const aLR = Math.max(0.1, Math.min(90, angleFromRun(((L-topL)/2)/H)));
-  const aFB = Math.max(0.1, Math.min(90, angleFromRun(((W-topW)/2)/H)));
-  setInputVal('slopeFront', aFB, 1, true);
-  setInputVal('slopeBack',  aFB, 1, true);
-  setInputVal('slopeLeft',  aLR, 1, true);
-  setInputVal('slopeRight', aLR, 1, true);
-  document.getElementById('autoNoteAngles').classList.remove('hidden');
-  document.getElementById('autoNoteTopDims').classList.add('hidden');
-}
-
-function onBaseDimInput() {
-  if (lastEditSource==='angles') autoFillTopDims(); else autoFillAngles();
-  calc();
-}
-function onAngleInput() {
-  lastEditSource = 'angles';
-  clearAutoFilled(['slopeFront','slopeBack','slopeLeft','slopeRight']);
-  autoFillTopDims(); calc();
-}
-function onTopDimInput() {
-  lastEditSource = 'topdims';
-  clearAutoFilled(['topLenFt','topLenIn','topWidFt','topWidIn']);
-  autoFillAngles(); calc();
-}
-
-// ─── INIT ─────────────────────────────────────────────────────────────────────
-
-function init() {
-  const mat = document.getElementById('matSelect');
-  MATERIALS.forEach(m => {
-    const opt = document.createElement('option');
-    opt.value = m.tcy||''; opt.textContent = m.name; mat.appendChild(opt);
-  });
-  const aor = document.getElementById('aorSelect');
-  AOR_MATERIALS.forEach(m => {
-    const opt = document.createElement('option');
-    opt.value = JSON.stringify(m);
-    opt.textContent = `${m.name} — ${m.aor}°`; aor.appendChild(opt);
-  });
-  try {
-    const saved = localStorage.getItem('v3state');
-    if (saved) { Object.assign(state, JSON.parse(saved)); applyStateToUI(); }
-    const hist = localStorage.getItem('v3history');
-    if (hist) { jobHistory = JSON.parse(hist); }
-  } catch(e) {}
-  updateHistBadge();
-  initCanvasInteraction();
-  calc();
-}
-
-function applyStateToUI() {
-  const ids = ['titleField','notesField','lenFt','lenIn','widFt','widIn','htFt','htIn',
-                'topLenFt','topLenIn','topWidFt','topWidIn','coneDFt','coneDIn','coneHFt','coneHIn','densityVal',
-                'slopeFront','slopeBack','slopeLeft','slopeRight'];
-  const keys= ['title','notes','lenFt','lenIn','widFt','widIn','htFt','htIn',
-                'topLenFt','topLenIn','topWidFt','topWidIn','coneDFt','coneDIn','coneHFt','coneHIn','density',
-                'slopeFront','slopeBack','slopeLeft','slopeRight'];
-  ids.forEach((id,i) => { const el=document.getElementById(id); if(el&&state[keys[i]]!==undefined) el.value=state[keys[i]]||''; });
-  setGrade(state.grade||'above', true);
-  setShape(state.shape||'rect', true);
-}
-
-function saveState() {
-  state.title  = document.getElementById('titleField').value;
-  state.notes  = document.getElementById('notesField').value;
-  try { localStorage.setItem('v3state', JSON.stringify(state)); } catch(e){}
-}
-
-function saveHistory() {
-  try { localStorage.setItem('v3history', JSON.stringify(jobHistory)); } catch(e){}
-}
-
-// ─── SCREEN NAV ───────────────────────────────────────────────────────────────
-
-function showScreen(screen) {
-  currentScreen = screen;
-  document.getElementById('screenCalc').classList.toggle('active', screen==='calc');
-  document.getElementById('screenHistory').classList.toggle('active', screen==='history');
-  document.getElementById('navCalc').classList.toggle('active', screen==='calc');
-  document.getElementById('navHistory').classList.toggle('active', screen==='history');
-  if (screen==='history') renderHistory();
-}
-
-// ─── MODE SETTERS ─────────────────────────────────────────────────────────────
-
-function setGrade(g, silent) {
-  state.grade = g;
-  const badge = document.getElementById('gradeBadge');
-  const btnA = document.getElementById('btnAbove');
-  const btnB = document.getElementById('btnBelow');
-  if (g==='above') {
-    badge.className='grade-badge above'; badge.textContent='▲ Above';
-    if(btnA){btnA.style.borderColor='var(--blue2)';btnA.style.color='var(--blue2)';}
-    if(btnB){btnB.style.borderColor='var(--border)';btnB.style.color='var(--text)';}
-  } else {
-    badge.className='grade-badge below'; badge.textContent='▼ Below';
-    if(btnB){btnB.style.borderColor='var(--red2)';btnB.style.color='var(--red2)';}
-    if(btnA){btnA.style.borderColor='var(--border)';btnA.style.color='var(--text)';}
-  }
-  if (!silent) { saveState(); calc(); }
-}
-
-function setShape(s, silent) {
-  state.shape = s;
-  document.getElementById('tabRect').classList.toggle('active', s==='rect');
-  document.getElementById('tabCone').classList.toggle('active', s==='cone');
-  document.getElementById('rectInputs').classList.toggle('hidden', s!=='rect');
-  document.getElementById('coneInputs').classList.toggle('hidden', s!=='cone');
-  document.getElementById('slopeCard').classList.toggle('hidden', s!=='rect');
-  document.getElementById('dimToggleRow').classList.toggle('hidden', s!=='rect');
-  if (!silent) { saveState(); calc(); }
-}
-
-function setMaterial() {
-  const sel = document.getElementById('matSelect');
-  const val = parseFloat(sel.value);
-  if (!isNaN(val)&&val>0) { document.getElementById('densityVal').value=val; state.density=val; }
-  const opt = sel.options[sel.selectedIndex];
-  state.materialName = opt ? opt.textContent : '';
-  calc();
-}
-
-function setAOR() {
-  const sel = document.getElementById('aorSelect');
-  if (!sel.value) { document.getElementById('aorInfo').textContent=''; return; }
-  try { const m=JSON.parse(sel.value); document.getElementById('aorInfo').textContent=`Typical angle: ${m.aor}° — ${m.notes}`; } catch(e){}
-}
-
-// ─── VOLUME CALCS ─────────────────────────────────────────────────────────────
-
-function calcRectVolume(L,W,H,topL,topW) {
-  if (L<=0||W<=0||H<=0) return null;
-  const Ab=L*W, At=Math.max(0,topL)*Math.max(0,topW);
-  const Lm=(L+Math.max(0,topL))/2, Wm=(W+Math.max(0,topW))/2, Am=Lm*Wm;
-  return (H/6)*(Ab+4*Am+At);
-}
-
-function calcConeVolume(D,H) {
-  if (D<=0||H<=0) return null;
-  return (Math.PI*(D/2)*(D/2)*H)/3;
-}
-
-// ─── MAIN CALC ────────────────────────────────────────────────────────────────
-
-function calc() {
-  const density = parseFloat(document.getElementById('densityVal').value)||1.35;
-  state.density = density;
-  let cf=null;
-
-  if (state.shape==='rect') {
-    const L=fi('lenFt','lenIn'), W=fi('widFt','widIn'), H=fi('htFt','htIn');
-    const topL=fi('topLenFt','topLenIn'), topW=fi('topWidFt','topWidIn');
-    const aFront=getAngle('slopeFront'), aBack=getAngle('slopeBack');
-    const aLeft=getAngle('slopeLeft'), aRight=getAngle('slopeRight');
-    const maxRunLR=Math.max(0,L/2), maxRunFB=Math.max(0,W/2);
-    const tLCalc = Math.max(0, L - Math.min(H*runPerRise(aLeft),maxRunLR) - Math.min(H*runPerRise(aRight),maxRunLR));
-    const tWCalc = Math.max(0, W - Math.min(H*runPerRise(aFront),maxRunFB) - Math.min(H*runPerRise(aBack),maxRunFB));
-    cf = calcRectVolume(L,W,H,tLCalc,tWCalc);
-    state.lenFt=parseFloat(document.getElementById('lenFt').value)||0;
-    state.lenIn=parseFloat(document.getElementById('lenIn').value)||0;
-    state.widFt=parseFloat(document.getElementById('widFt').value)||0;
-    state.widIn=parseFloat(document.getElementById('widIn').value)||0;
-    state.htFt=parseFloat(document.getElementById('htFt').value)||0;
-    state.htIn=parseFloat(document.getElementById('htIn').value)||0;
-    state.topLenFt=parseFloat(document.getElementById('topLenFt').value)||0;
-    state.topLenIn=parseFloat(document.getElementById('topLenIn').value)||0;
-    state.topWidFt=parseFloat(document.getElementById('topWidFt').value)||0;
-    state.topWidIn=parseFloat(document.getElementById('topWidIn').value)||0;
-    state.slopeFront=aFront; state.slopeBack=aBack; state.slopeLeft=aLeft; state.slopeRight=aRight;
+function calc(){
+  const density=parseFloat(document.getElementById('densityVal').value)||1.35;state.density=density;let cf=null;
+  if(state.shape==='rect'){
+    const L=fi('lenFt','lenIn'),W=fi('widFt','widIn'),H=fi('htFt','htIn');
+    const aFront=getAngle('slopeFront'),aBack=getAngle('slopeBack'),aLeft=getAngle('slopeLeft'),aRight=getAngle('slopeRight');
+    const maxLR=Math.max(0,L/2),maxFB=Math.max(0,W/2);
+    const tLCalc=Math.max(0,L-Math.min(H*runPerRise(aLeft),maxLR)-Math.min(H*runPerRise(aRight),maxLR));
+    const tWCalc=Math.max(0,W-Math.min(H*runPerRise(aFront),maxFB)-Math.min(H*runPerRise(aBack),maxFB));
+    cf=calcRectVolume(L,W,H,tLCalc,tWCalc);
+    state.lenFt=parseFloat(document.getElementById('lenFt').value)||0;state.lenIn=parseFloat(document.getElementById('lenIn').value)||0;
+    state.widFt=parseFloat(document.getElementById('widFt').value)||0;state.widIn=parseFloat(document.getElementById('widIn').value)||0;
+    state.htFt=parseFloat(document.getElementById('htFt').value)||0;state.htIn=parseFloat(document.getElementById('htIn').value)||0;
+    state.topLenFt=parseFloat(document.getElementById('topLenFt').value)||0;state.topLenIn=parseFloat(document.getElementById('topLenIn').value)||0;
+    state.topWidFt=parseFloat(document.getElementById('topWidFt').value)||0;state.topWidIn=parseFloat(document.getElementById('topWidIn').value)||0;
+    state.slopeFront=aFront;state.slopeBack=aBack;state.slopeLeft=aLeft;state.slopeRight=aRight;
     draw3DRect(L,W,H,tLCalc,tWCalc,aFront,aBack,aLeft,aRight);
-  } else {
-    const D=fi('coneDFt','coneDIn'), H=fi('coneHFt','coneHIn');
-    cf = calcConeVolume(D,H);
-    state.coneDFt=parseFloat(document.getElementById('coneDFt').value)||0;
-    state.coneDIn=parseFloat(document.getElementById('coneDIn').value)||0;
-    state.coneHFt=parseFloat(document.getElementById('coneHFt').value)||0;
-    state.coneHIn=parseFloat(document.getElementById('coneHIn').value)||0;
+  }else{
+    const D=fi('coneDFt','coneDIn'),H=fi('coneHFt','coneHIn');cf=calcConeVolume(D,H);
+    state.coneDFt=parseFloat(document.getElementById('coneDFt').value)||0;state.coneDIn=parseFloat(document.getElementById('coneDIn').value)||0;
+    state.coneHFt=parseFloat(document.getElementById('coneHFt').value)||0;state.coneHIn=parseFloat(document.getElementById('coneHIn').value)||0;
     draw3DCone(D,H);
   }
-
-  const cy = cf!==null ? cf/27 : null;
-  const tons = cy!==null ? cy*density : null;
-  state.cf=cf; state.cy=cy; state.tons=tons;
-
-  document.getElementById('outCF').textContent  = fmt(cf);
-  document.getElementById('outCY').textContent  = fmt(cy);
-  document.getElementById('outTons').textContent= fmt(tons);
+  const cy=cf!==null?cf/27:null,tons=cy!==null?cy*density:null;
+  state.cf=cf;state.cy=cy;state.tons=tons;
+  document.getElementById('outCF').textContent=fmt(cf);document.getElementById('outCY').textContent=fmt(cy);document.getElementById('outTons').textContent=fmt(tons);
   saveState();
 }
 
-// ─── JOB HISTORY ─────────────────────────────────────────────────────────────
-
-function saveJob() {
-  const name = (document.getElementById('titleField').value||'').trim() || 'Untitled Job';
-  const snapshot = {
-    id: uid(), savedAt: Date.now(), name,
-    grade: state.grade, shape: state.shape,
-    lenFt: state.lenFt, lenIn: state.lenIn,
-    widFt: state.widFt, widIn: state.widIn,
-    htFt:  state.htFt,  htIn:  state.htIn,
-    topLenFt: state.topLenFt, topLenIn: state.topLenIn,
-    topWidFt: state.topWidFt, topWidIn: state.topWidIn,
-    coneDFt: state.coneDFt, coneDIn: state.coneDIn,
-    coneHFt: state.coneHFt, coneHIn: state.coneHIn,
-    slopeFront: state.slopeFront, slopeBack: state.slopeBack,
-    slopeLeft:  state.slopeLeft,  slopeRight: state.slopeRight,
-    density: state.density,
-    materialName: state.materialName ||
-      (document.getElementById('matSelect').options[document.getElementById('matSelect').selectedIndex]||{}).textContent || '',
-    cf: state.cf, cy: state.cy, tons: state.tons,
-    notes: document.getElementById('notesField').value,
-    canvasDataUrl: document.getElementById('preview3d').toDataURL('image/png')
-  };
-  jobHistory.unshift(snapshot);
-  saveHistory();
-  updateHistBadge();
-  const btn = document.getElementById('saveBtn');
-  btn.textContent = '✓ Saved!';
-  btn.style.background = 'var(--green)';
-  setTimeout(()=>{ btn.innerHTML='💾 Save to Log'; btn.style.background=''; }, 1800);
+function saveJob(){
+  const name=(document.getElementById('titleField').value||'').trim()||'Untitled Job';
+  const snapshot={id:uid(),savedAt:Date.now(),name,grade:state.grade,shape:state.shape,lenFt:state.lenFt,lenIn:state.lenIn,widFt:state.widFt,widIn:state.widIn,htFt:state.htFt,htIn:state.htIn,topLenFt:state.topLenFt,topLenIn:state.topLenIn,topWidFt:state.topWidFt,topWidIn:state.topWidIn,coneDFt:state.coneDFt,coneDIn:state.coneDIn,coneHFt:state.coneHFt,coneHIn:state.coneHIn,slopeFront:state.slopeFront,slopeBack:state.slopeBack,slopeLeft:state.slopeLeft,slopeRight:state.slopeRight,density:state.density,materialName:state.materialName||(document.getElementById('matSelect').options[document.getElementById('matSelect').selectedIndex]||{}).textContent||'',cf:state.cf,cy:state.cy,tons:state.tons,notes:document.getElementById('notesField').value,canvasDataUrl:document.getElementById('preview3d').toDataURL('image/png')};
+  jobHistory.unshift(snapshot);saveHistory();updateHistBadge();
+  const btn=document.getElementById('saveBtn');btn.textContent='✓ Saved!';btn.style.background='var(--green)';
+  setTimeout(()=>{btn.innerHTML='💾 Save to Log';btn.style.background='';},1800);
 }
-
-function updateHistBadge() {
-  const badge = document.getElementById('histBadge');
-  if (jobHistory.length > 0) {
-    badge.textContent = jobHistory.length;
-    badge.classList.remove('hidden');
-  } else {
-    badge.classList.add('hidden');
-  }
-}
-
-function renderHistory() {
-  const empty = document.getElementById('historyEmpty');
-  const list  = document.getElementById('historyList');
-  if (jobHistory.length===0) { empty.style.display='flex'; list.classList.add('hidden'); return; }
-  empty.style.display='none'; list.classList.remove('hidden');
-  list.innerHTML = '';
-  jobHistory.forEach(job => {
-    const card = document.createElement('div');
-    card.className = 'job-card';
-    card.innerHTML = `
-      <div class="job-card-accent"></div>
-      <div class="job-card-header">
-        <div class="job-card-name">${escHtml(job.name)}</div>
-        <div class="job-card-date">${formatDate(job.savedAt)}</div>
-      </div>
-      <div class="job-card-shape">${job.shape==='rect'?'Rectangular':'Conical'} · ${job.grade==='above'?'Above Grade':'Below Grade'}</div>
-      <div class="job-card-dims">${jobDimSummary(job)}</div>
-      <div class="job-card-vols">
-        <div class="job-vol-chip"><div class="val">${fmt(job.cf)}</div><div class="lbl">CF</div></div>
-        <div class="job-vol-chip"><div class="val">${fmt(job.cy)}</div><div class="lbl">CY</div></div>
-        <div class="job-vol-chip"><div class="val">${fmt(job.tons)}</div><div class="lbl">Tons</div></div>
-      </div>
-      <div class="job-card-actions">
-        <button class="job-action-btn view" onclick="openDetail('${job.id}')">View</button>
-        <button class="job-action-btn rename" onclick="openRename('${job.id}')">Rename</button>
-        <button class="job-action-btn delete" onclick="deleteJob('${job.id}')">Delete</button>
-      </div>`;
+function updateHistBadge(){const b=document.getElementById('histBadge');if(jobHistory.length>0){b.textContent=jobHistory.length;b.classList.remove('hidden');}else{b.classList.add('hidden');}}
+function renderHistory(){
+  const empty=document.getElementById('historyEmpty'),list=document.getElementById('historyList');
+  if(jobHistory.length===0){empty.style.display='flex';list.classList.add('hidden');return;}
+  empty.style.display='none';list.classList.remove('hidden');list.innerHTML='';
+  jobHistory.forEach(job=>{
+    const card=document.createElement('div');card.className='job-card';
+    card.innerHTML=`<div class="job-card-accent"></div><div class="job-card-header"><div class="job-card-name">${escHtml(job.name)}</div><div class="job-card-date">${formatDate(job.savedAt)}</div></div><div class="job-card-shape">${job.shape==='rect'?'Rectangular':'Conical'} · ${job.grade==='above'?'Above Grade':'Below Grade'}</div><div class="job-card-dims">${jobDimSummary(job)}</div><div class="job-card-vols"><div class="job-vol-chip"><div class="val">${fmt(job.cf)}</div><div class="lbl">CF</div></div><div class="job-vol-chip"><div class="val">${fmt(job.cy)}</div><div class="lbl">CY</div></div><div class="job-vol-chip"><div class="val">${fmt(job.tons)}</div><div class="lbl">Tons</div></div></div><div class="job-card-actions"><button class="job-action-btn view" onclick="openDetail('${job.id}')">View</button><button class="job-action-btn rename" onclick="openRename('${job.id}')">Rename</button><button class="job-action-btn delete" onclick="deleteJob('${job.id}')">Delete</button></div>`;
     list.appendChild(card);
   });
 }
+function jobDimSummary(job){return job.shape==='rect'?`L: ${fmtDim(job.lenFt,job.lenIn)}  W: ${fmtDim(job.widFt,job.widIn)}  H: ${fmtDim(job.htFt,job.htIn)}`:`Ø: ${fmtDim(job.coneDFt,job.coneDIn)}  H: ${fmtDim(job.coneHFt,job.coneHIn)}`;}
+function escHtml(str){return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function deleteJob(id){if(!confirm('Delete this job from the log?'))return;jobHistory=jobHistory.filter(j=>j.id!==id);saveHistory();updateHistBadge();renderHistory();}
+function openRename(id){renameTargetId=id;const job=jobHistory.find(j=>j.id===id);if(!job)return;document.getElementById('renameInput').value=job.name;document.getElementById('renameModal').classList.add('open');setTimeout(()=>document.getElementById('renameInput').focus(),100);}
+function closeRename(){document.getElementById('renameModal').classList.remove('open');renameTargetId=null;}
+function confirmRename(){const n=document.getElementById('renameInput').value.trim();if(!n)return;const job=jobHistory.find(j=>j.id===renameTargetId);if(job){job.name=n;saveHistory();renderHistory();}closeRename();}
 
-function jobDimSummary(job) {
-  if (job.shape==='rect') {
-    return `L: ${fmtDim(job.lenFt,job.lenIn)}  W: ${fmtDim(job.widFt,job.widIn)}  H: ${fmtDim(job.htFt,job.htIn)}`;
-  } else {
-    return `Ø: ${fmtDim(job.coneDFt,job.coneDIn)}  H: ${fmtDim(job.coneHFt,job.coneHIn)}`;
-  }
-}
-
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function deleteJob(id) {
-  if (!confirm('Delete this job from the log?')) return;
-  jobHistory = jobHistory.filter(j=>j.id!==id);
-  saveHistory(); updateHistBadge(); renderHistory();
-}
-
-function openRename(id) {
-  renameTargetId = id;
-  const job = jobHistory.find(j=>j.id===id);
-  if (!job) return;
-  document.getElementById('renameInput').value = job.name;
-  document.getElementById('renameModal').classList.add('open');
-  setTimeout(()=>document.getElementById('renameInput').focus(), 100);
-}
-
-function closeRename() {
-  document.getElementById('renameModal').classList.remove('open');
-  renameTargetId = null;
-}
-
-function confirmRename() {
-  const newName = document.getElementById('renameInput').value.trim();
-  if (!newName) return;
-  const job = jobHistory.find(j=>j.id===renameTargetId);
-  if (job) { job.name = newName; saveHistory(); renderHistory(); }
-  closeRename();
-}
-
-// ─── JOB DETAIL ───────────────────────────────────────────────────────────────
-
-function openDetail(id) {
-  detailJob = jobHistory.find(j=>j.id===id);
-  if (!detailJob) return;
-  document.getElementById('detailTitle').textContent = detailJob.name;
-  const body = document.getElementById('detailBody');
-  body.innerHTML = '';
-  const dateEl = document.createElement('div');
-  dateEl.style.cssText='font-family:Barlow Condensed,sans-serif;font-size:12px;color:var(--muted);margin-bottom:2px;';
-  dateEl.textContent = 'Saved: ' + formatDate(detailJob.savedAt);
-  body.appendChild(dateEl);
-  if (detailJob.canvasDataUrl) {
-    const sec = makeDetailSection('3D Preview');
-    const img = document.createElement('img');
-    img.src = detailJob.canvasDataUrl;
-    img.style.cssText='width:100%;border-radius:8px;';
-    sec.appendChild(img); body.appendChild(sec);
-  }
-  const volSec = makeDetailSection('Volume Results');
-  const vg = document.createElement('div'); vg.className='detail-vol-grid';
-  [['CF',detailJob.cf],['CY',detailJob.cy],['Tons',detailJob.tons]].forEach(([u,v])=>{
-    vg.innerHTML+=`<div class="detail-vol-cell"><div class="detail-vol-val">${fmt(v)}</div><div class="detail-vol-unit">${u}</div></div>`;
-  });
-  volSec.appendChild(vg); body.appendChild(volSec);
-  const dimSec = makeDetailSection('Dimensions');
-  if (detailJob.shape==='rect') {
-    addDetailRow(dimSec,'Shape','Rectangular');
-    addDetailRow(dimSec,'Grade', detailJob.grade==='above'?'Above Grade (Pile)':'Below Grade (Cut)');
-    addDetailRow(dimSec,'Length', fmtDim(detailJob.lenFt,detailJob.lenIn));
-    addDetailRow(dimSec,'Width',  fmtDim(detailJob.widFt,detailJob.widIn));
-    addDetailRow(dimSec,'Height', fmtDim(detailJob.htFt,detailJob.htIn));
-    addDetailRow(dimSec,'Top Length', fmtDim(detailJob.topLenFt,detailJob.topLenIn));
-    addDetailRow(dimSec,'Top Width',  fmtDim(detailJob.topWidFt,detailJob.topWidIn));
-  } else {
-    addDetailRow(dimSec,'Shape','Conical');
-    addDetailRow(dimSec,'Grade', detailJob.grade==='above'?'Above Grade (Pile)':'Below Grade (Cut)');
-    addDetailRow(dimSec,'Diameter', fmtDim(detailJob.coneDFt,detailJob.coneDIn));
-    addDetailRow(dimSec,'Height',   fmtDim(detailJob.coneHFt,detailJob.coneHIn));
-  }
+function openDetail(id){
+  detailJob=jobHistory.find(j=>j.id===id);if(!detailJob)return;
+  document.getElementById('detailTitle').textContent=detailJob.name;
+  const body=document.getElementById('detailBody');body.innerHTML='';
+  const dateEl=document.createElement('div');dateEl.style.cssText='font-family:Barlow Condensed,sans-serif;font-size:12px;color:var(--muted);margin-bottom:2px;';dateEl.textContent='Saved: '+formatDate(detailJob.savedAt);body.appendChild(dateEl);
+  if(detailJob.canvasDataUrl){const sec=makeDetailSection('3D Preview');const img=document.createElement('img');img.src=detailJob.canvasDataUrl;img.style.cssText='width:100%;border-radius:8px;';sec.appendChild(img);body.appendChild(sec);}
+  const volSec=makeDetailSection('Volume Results');const vg=document.createElement('div');vg.className='detail-vol-grid';[['CF',detailJob.cf],['CY',detailJob.cy],['Tons',detailJob.tons]].forEach(([u,v])=>{vg.innerHTML+=`<div class="detail-vol-cell"><div class="detail-vol-val">${fmt(v)}</div><div class="detail-vol-unit">${u}</div></div>`;});volSec.appendChild(vg);body.appendChild(volSec);
+  const dimSec=makeDetailSection('Dimensions');
+  if(detailJob.shape==='rect'){addDetailRow(dimSec,'Shape','Rectangular');addDetailRow(dimSec,'Grade',detailJob.grade==='above'?'Above Grade (Pile)':'Below Grade (Cut)');addDetailRow(dimSec,'Length',fmtDim(detailJob.lenFt,detailJob.lenIn));addDetailRow(dimSec,'Width',fmtDim(detailJob.widFt,detailJob.widIn));addDetailRow(dimSec,'Height',fmtDim(detailJob.htFt,detailJob.htIn));addDetailRow(dimSec,'Top Length',fmtDim(detailJob.topLenFt,detailJob.topLenIn));addDetailRow(dimSec,'Top Width',fmtDim(detailJob.topWidFt,detailJob.topWidIn));}
+  else{addDetailRow(dimSec,'Shape','Conical');addDetailRow(dimSec,'Grade',detailJob.grade==='above'?'Above Grade (Pile)':'Below Grade (Cut)');addDetailRow(dimSec,'Diameter',fmtDim(detailJob.coneDFt,detailJob.coneDIn));addDetailRow(dimSec,'Height',fmtDim(detailJob.coneHFt,detailJob.coneHIn));}
   body.appendChild(dimSec);
-  if (detailJob.shape==='rect') {
-    const angSec = makeDetailSection('Wall Angles');
-    addDetailRow(angSec,'Front', `${detailJob.slopeFront}°`);
-    addDetailRow(angSec,'Back',  `${detailJob.slopeBack}°`);
-    addDetailRow(angSec,'Left',  `${detailJob.slopeLeft}°`);
-    addDetailRow(angSec,'Right', `${detailJob.slopeRight}°`);
-    body.appendChild(angSec);
-  }
-  const matSec = makeDetailSection('Material');
-  addDetailRow(matSec,'Material', detailJob.materialName||'—');
-  addDetailRow(matSec,'Density',  `${detailJob.density} T/CY`);
-  body.appendChild(matSec);
-  if (detailJob.notes) {
-    const notesSec = makeDetailSection('Notes');
-    const p = document.createElement('div');
-    p.style.cssText='font-size:14px;color:var(--text);line-height:1.5;';
-    p.textContent = detailJob.notes;
-    notesSec.appendChild(p); body.appendChild(notesSec);
-  }
-  const pdfBtn = document.createElement('button');
-  pdfBtn.className='btn btn-red'; pdfBtn.style.width='100%'; pdfBtn.style.justifyContent='center';
-  pdfBtn.innerHTML='📄 Export PDF Report';
-  pdfBtn.onclick=exportPDFFromDetail;
-  body.appendChild(pdfBtn);
+  if(detailJob.shape==='rect'){const angSec=makeDetailSection('Wall Angles');addDetailRow(angSec,'Front',`${detailJob.slopeFront}°`);addDetailRow(angSec,'Back',`${detailJob.slopeBack}°`);addDetailRow(angSec,'Left',`${detailJob.slopeLeft}°`);addDetailRow(angSec,'Right',`${detailJob.slopeRight}°`);body.appendChild(angSec);}
+  const matSec=makeDetailSection('Material');addDetailRow(matSec,'Material',detailJob.materialName||'—');addDetailRow(matSec,'Density',`${detailJob.density} T/CY`);body.appendChild(matSec);
+  if(detailJob.notes){const notesSec=makeDetailSection('Notes');const p=document.createElement('div');p.style.cssText='font-size:14px;color:var(--text);line-height:1.5;';p.textContent=detailJob.notes;notesSec.appendChild(p);body.appendChild(notesSec);}
+  const pdfBtn=document.createElement('button');pdfBtn.className='btn btn-red';pdfBtn.style.width='100%';pdfBtn.style.justifyContent='center';pdfBtn.innerHTML='📄 Export PDF Report';pdfBtn.onclick=exportPDFFromDetail;body.appendChild(pdfBtn);
   body.appendChild(document.createElement('div')).style.height='20px';
   document.getElementById('jobDetailScreen').classList.add('open');
 }
+function closeDetail(){document.getElementById('jobDetailScreen').classList.remove('open');detailJob=null;}
+function makeDetailSection(title){const sec=document.createElement('div');sec.className='detail-section';const t=document.createElement('div');t.className='detail-section-title';t.textContent=title;sec.appendChild(t);return sec;}
+function addDetailRow(sec,key,val){const row=document.createElement('div');row.className='detail-row';row.innerHTML=`<div class="detail-key">${key}</div><div class="detail-val">${escHtml(String(val))}</div>`;sec.appendChild(row);}
 
-function closeDetail() {
-  document.getElementById('jobDetailScreen').classList.remove('open');
-  detailJob = null;
+async function exportPDF(){const job={name:(document.getElementById('titleField').value||'').trim()||'Volume³ Report',savedAt:Date.now(),grade:state.grade,shape:state.shape,lenFt:state.lenFt,lenIn:state.lenIn,widFt:state.widFt,widIn:state.widIn,htFt:state.htFt,htIn:state.htIn,topLenFt:state.topLenFt,topLenIn:state.topLenIn,topWidFt:state.topWidFt,topWidIn:state.topWidIn,coneDFt:state.coneDFt,coneDIn:state.coneDIn,coneHFt:state.coneHFt,coneHIn:state.coneHIn,slopeFront:state.slopeFront,slopeBack:state.slopeBack,slopeLeft:state.slopeLeft,slopeRight:state.slopeRight,density:state.density,materialName:(document.getElementById('matSelect').options[document.getElementById('matSelect').selectedIndex]||{}).textContent||'',cf:state.cf,cy:state.cy,tons:state.tons,notes:document.getElementById('notesField').value,canvasDataUrl:document.getElementById('preview3d').toDataURL('image/png')};await generatePDF(job);}
+async function exportPDFFromDetail(){if(!detailJob)return;await generatePDF(detailJob);}
+async function generatePDF(job){let photoDataUrl=null;if(confirm('Would you like to attach a photo to this PDF?'))photoDataUrl=await pickPhoto();buildAndOpenPDF(job,photoDataUrl);}
+function pickPhoto(){return new Promise(resolve=>{const input=document.createElement('input');input.type='file';input.accept='image/*';input.capture='environment';input.onchange=()=>{const file=input.files[0];if(!file){resolve(null);return;}const reader=new FileReader();reader.onload=e=>resolve(e.target.result);reader.onerror=()=>resolve(null);reader.readAsDataURL(file);};input.oncancel=()=>resolve(null);input.click();});}
+
+function buildAndOpenPDF(job,photoDataUrl){
+  const now=formatDate(job.savedAt);
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><style>@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap');*{box-sizing:border-box;margin:0;padding:0;}body{font-family:'Barlow',sans-serif;background:#fff;color:#1a1a2e;}.page{max-width:780px;margin:0 auto;padding:32px 36px;}.header{display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:4px solid #c0392b;margin-bottom:24px;}.header-logo{font-family:'Barlow Condensed',sans-serif;font-size:52px;font-weight:900;line-height:1;}.header-logo .v{color:#e74c3c;}.header-logo sup{font-size:24px;vertical-align:super;color:#2563eb;}.header-right{text-align:right;}.header-job{font-family:'Barlow Condensed',sans-serif;font-size:22px;font-weight:700;color:#1a1a2e;}.header-date{font-family:'Barlow Condensed',sans-serif;font-size:12px;color:#666;margin-top:4px;letter-spacing:0.5px;}.header-badge{display:inline-block;background:${job.grade==='above'?'#2563eb':'#c0392b'};color:#fff;font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;padding:3px 10px;border-radius:4px;margin-top:6px;letter-spacing:1px;text-transform:uppercase;}.vol-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:24px;}.vol-cell{background:#f5f7ff;border:2px solid #e8ecff;border-radius:10px;padding:14px 10px;text-align:center;}.vol-val{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:900;color:#c0392b;line-height:1;}.vol-unit{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#666;margin-top:4px;}.section{margin-bottom:20px;}.section-title{font-family:'Barlow Condensed',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#2563eb;border-bottom:1.5px solid #e0e6ff;padding-bottom:5px;margin-bottom:10px;}.row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f0f0f0;}.row:last-child{border-bottom:none;}.row-key{font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;color:#666;text-transform:uppercase;letter-spacing:0.3px;}.row-val{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;color:#1a1a2e;}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;}.img-row{display:grid;grid-template-columns:${photoDataUrl?'1fr 1fr':'1fr'};gap:16px;margin-bottom:20px;}.img-box{border-radius:8px;overflow:hidden;border:1.5px solid #e0e6ff;}.img-box img{width:100%;display:block;}.img-label{font-family:'Barlow Condensed',sans-serif;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#999;text-align:center;padding:5px;background:#f5f7ff;}.notes-box{background:#f9f9f9;border:1.5px solid #e0e6ff;border-radius:8px;padding:12px 14px;font-size:14px;line-height:1.6;color:#333;white-space:pre-wrap;}.footer{margin-top:30px;padding-top:14px;border-top:2px solid #c0392b;display:flex;justify-content:space-between;align-items:center;}.footer-logo{font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:#c0392b;}.footer-note{font-size:10px;color:#aaa;font-family:'Barlow Condensed',sans-serif;letter-spacing:0.5px;}@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.page{padding:0;}}</style></head><body><div class="page"><div class="header"><div class="header-logo"><span class="v">V</span>olume<sup>3</sup></div><div class="header-right"><div class="header-job">${escHtmlPdf(job.name)}</div><div class="header-date">${now}</div><div class="header-badge">${job.grade==='above'?'▲ Above Grade (Pile)':'▼ Below Grade (Cut)'}</div></div></div><div class="section"><div class="section-title">Volume Results</div><div class="vol-grid"><div class="vol-cell"><div class="vol-val">${fmt(job.cf)}</div><div class="vol-unit">Cubic Feet</div></div><div class="vol-cell"><div class="vol-val">${fmt(job.cy)}</div><div class="vol-unit">Cubic Yards</div></div><div class="vol-cell"><div class="vol-val">${fmt(job.tons)}</div><div class="vol-unit">Tons</div></div></div></div><div class="img-row"><div class="img-box"><img src="${job.canvasDataUrl}" alt="3D Preview"/><div class="img-label">3D Preview</div></div>${photoDataUrl?`<div class="img-box"><img src="${photoDataUrl}" alt="Site Photo"/><div class="img-label">Site Photo</div></div>`:''}</div><div class="two-col"><div class="section"><div class="section-title">Dimensions</div>${job.shape==='rect'?`<div class="row"><span class="row-key">Shape</span><span class="row-val">Rectangular</span></div><div class="row"><span class="row-key">Length</span><span class="row-val">${fmtDim(job.lenFt,job.lenIn)}</span></div><div class="row"><span class="row-key">Width</span><span class="row-val">${fmtDim(job.widFt,job.widIn)}</span></div><div class="row"><span class="row-key">Height</span><span class="row-val">${fmtDim(job.htFt,job.htIn)}</span></div><div class="row"><span class="row-key">Top Length</span><span class="row-val">${fmtDim(job.topLenFt,job.topLenIn)}</span></div><div class="row"><span class="row-key">Top Width</span><span class="row-val">${fmtDim(job.topWidFt,job.topWidIn)}</span></div>`:`<div class="row"><span class="row-key">Shape</span><span class="row-val">Conical</span></div><div class="row"><span class="row-key">Diameter</span><span class="row-val">${fmtDim(job.coneDFt,job.coneDIn)}</span></div><div class="row"><span class="row-key">Height</span><span class="row-val">${fmtDim(job.coneHFt,job.coneHIn)}</span></div>`}</div><div class="section">${job.shape==='rect'?`<div class="section-title">Wall Angles</div><div class="row"><span class="row-key">Front</span><span class="row-val">${job.slopeFront}°</span></div><div class="row"><span class="row-key">Back</span><span class="row-val">${job.slopeBack}°</span></div><div class="row"><span class="row-key">Left</span><span class="row-val">${job.slopeLeft}°</span></div><div class="row"><span class="row-key">Right</span><span class="row-val">${job.slopeRight}°</span></div>`:`<div class="section-title">Geometry</div><div class="row"><span class="row-key">Type</span><span class="row-val">Conical / Cone</span></div>`}<div class="section-title" style="margin-top:14px;">Material</div><div class="row"><span class="row-key">Material</span><span class="row-val">${escHtmlPdf(job.materialName||'—')}</span></div><div class="row"><span class="row-key">Density</span><span class="row-val">${job.density} T/CY</span></div></div></div>${job.notes?`<div class="section"><div class="section-title">Field Notes</div><div class="notes-box">${escHtmlPdf(job.notes)}</div></div>`:''}<div class="footer"><div class="footer-logo">Volume³</div><div class="footer-note">Generated ${now} · Field Earthwork Calculator</div></div></div><script>window.onload=()=>{window.print();}<\/script></body></html>`;
+  const blob=new Blob([html],{type:'text/html'});const url=URL.createObjectURL(blob);window.open(url,'_blank');setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
-
-function makeDetailSection(title) {
-  const sec = document.createElement('div');
-  sec.className='detail-section';
-  const t = document.createElement('div'); t.className='detail-section-title'; t.textContent=title;
-  sec.appendChild(t); return sec;
-}
-
-function addDetailRow(sec, key, val) {
-  const row = document.createElement('div'); row.className='detail-row';
-  row.innerHTML=`<div class="detail-key">${key}</div><div class="detail-val">${escHtml(String(val))}</div>`;
-  sec.appendChild(row);
-}
-
-// ─── PDF EXPORT ───────────────────────────────────────────────────────────────
-
-async function exportPDF() {
-  const job = {
-    name: (document.getElementById('titleField').value||'').trim()||'Volume³ Report',
-    savedAt: Date.now(),
-    grade: state.grade, shape: state.shape,
-    lenFt:state.lenFt, lenIn:state.lenIn, widFt:state.widFt, widIn:state.widIn, htFt:state.htFt, htIn:state.htIn,
-    topLenFt:state.topLenFt, topLenIn:state.topLenIn, topWidFt:state.topWidFt, topWidIn:state.topWidIn,
-    coneDFt:state.coneDFt, coneDIn:state.coneDIn, coneHFt:state.coneHFt, coneHIn:state.coneHIn,
-    slopeFront:state.slopeFront, slopeBack:state.slopeBack, slopeLeft:state.slopeLeft, slopeRight:state.slopeRight,
-    density:state.density,
-    materialName: (document.getElementById('matSelect').options[document.getElementById('matSelect').selectedIndex]||{}).textContent||'',
-    cf:state.cf, cy:state.cy, tons:state.tons,
-    notes:document.getElementById('notesField').value,
-    canvasDataUrl:document.getElementById('preview3d').toDataURL('image/png')
-  };
-  await generatePDF(job);
-}
-
-async function exportPDFFromDetail() {
-  if (!detailJob) return;
-  await generatePDF(detailJob);
-}
-
-async function generatePDF(job) {
-  let photoDataUrl = null;
-  const usePhoto = confirm('Would you like to attach a photo to this PDF?');
-  if (usePhoto) photoDataUrl = await pickPhoto();
-  buildAndOpenPDF(job, photoDataUrl);
-}
-
-function pickPhoto() {
-  return new Promise(resolve => {
-    const input = document.createElement('input');
-    input.type='file'; input.accept='image/*'; input.capture='environment';
-    input.onchange = () => {
-      const file = input.files[0];
-      if (!file) { resolve(null); return; }
-      const reader = new FileReader();
-      reader.onload = e => resolve(e.target.result);
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    };
-    input.oncancel = () => resolve(null);
-    input.click();
-  });
-}
-
-function buildAndOpenPDF(job, photoDataUrl) {
-  const now = formatDate(job.savedAt);
-  const html = `<!DOCTYPE html>
-<html><head><meta charset="UTF-8"/>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@400;500;600&display=swap');
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Barlow', sans-serif; background: #fff; color: #1a1a2e; }
-  .page { max-width: 780px; margin: 0 auto; padding: 32px 36px; }
-  .header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 18px; border-bottom: 4px solid #c0392b; margin-bottom: 24px; }
-  .header-logo { font-family: 'Barlow Condensed', sans-serif; font-size: 52px; font-weight: 900; line-height: 1; }
-  .header-logo .v { color: #e74c3c; }
-  .header-logo sup { font-size: 24px; vertical-align: super; color: #2563eb; }
-  .header-right { text-align: right; }
-  .header-job { font-family: 'Barlow Condensed', sans-serif; font-size: 22px; font-weight: 700; color: #1a1a2e; }
-  .header-date { font-family: 'Barlow Condensed', sans-serif; font-size: 12px; color: #666; margin-top: 4px; letter-spacing: 0.5px; }
-  .header-badge { display:inline-block; background:${job.grade==='above'?'#2563eb':'#c0392b'}; color:#fff; font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; padding:3px 10px; border-radius:4px; margin-top:6px; letter-spacing:1px; text-transform:uppercase; }
-  .vol-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 24px; }
-  .vol-cell { background: #f5f7ff; border: 2px solid #e8ecff; border-radius: 10px; padding: 14px 10px; text-align: center; }
-  .vol-val { font-family: 'Barlow Condensed', sans-serif; font-size: 32px; font-weight: 900; color: #c0392b; line-height: 1; }
-  .vol-unit { font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: #666; margin-top: 4px; }
-  .section { margin-bottom: 20px; }
-  .section-title { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #2563eb; border-bottom: 1.5px solid #e0e6ff; padding-bottom: 5px; margin-bottom: 10px; }
-  .row { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f0f0f0; }
-  .row:last-child { border-bottom: none; }
-  .row-key { font-family: 'Barlow Condensed', sans-serif; font-size: 13px; font-weight: 600; color: #666; text-transform: uppercase; letter-spacing: 0.3px; }
-  .row-val { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 700; color: #1a1a2e; }
-  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
-  .img-row { display: grid; grid-template-columns: ${photoDataUrl ? '1fr 1fr' : '1fr'}; gap: 16px; margin-bottom: 20px; }
-  .img-box { border-radius: 8px; overflow: hidden; border: 1.5px solid #e0e6ff; }
-  .img-box img { width: 100%; display: block; }
-  .img-label { font-family: 'Barlow Condensed', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #999; text-align: center; padding: 5px; background: #f5f7ff; }
-  .notes-box { background: #f9f9f9; border: 1.5px solid #e0e6ff; border-radius: 8px; padding: 12px 14px; font-size: 14px; line-height: 1.6; color: #333; white-space: pre-wrap; }
-  .footer { margin-top: 30px; padding-top: 14px; border-top: 2px solid #c0392b; display: flex; justify-content: space-between; align-items: center; }
-  .footer-logo { font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 900; color: #c0392b; }
-  .footer-note { font-size: 10px; color: #aaa; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 0.5px; }
-  @media print { body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } .page { padding: 0; } }
-</style></head><body><div class="page">
-  <div class="header">
-    <div class="header-logo"><span class="v">V</span>olume<sup>3</sup></div>
-    <div class="header-right">
-      <div class="header-job">${escHtmlPdf(job.name)}</div>
-      <div class="header-date">${now}</div>
-      <div class="header-badge">${job.grade==='above'?'▲ Above Grade (Pile)':'▼ Below Grade (Cut)'}</div>
-    </div>
-  </div>
-  <div class="section">
-    <div class="section-title">Volume Results</div>
-    <div class="vol-grid">
-      <div class="vol-cell"><div class="vol-val">${fmt(job.cf)}</div><div class="vol-unit">Cubic Feet</div></div>
-      <div class="vol-cell"><div class="vol-val">${fmt(job.cy)}</div><div class="vol-unit">Cubic Yards</div></div>
-      <div class="vol-cell"><div class="vol-val">${fmt(job.tons)}</div><div class="vol-unit">Tons</div></div>
-    </div>
-  </div>
-  <div class="img-row">
-    <div class="img-box"><img src="${job.canvasDataUrl}" alt="3D Preview"/><div class="img-label">3D Preview</div></div>
-    ${photoDataUrl ? `<div class="img-box"><img src="${photoDataUrl}" alt="Site Photo"/><div class="img-label">Site Photo</div></div>` : ''}
-  </div>
-  <div class="two-col">
-    <div class="section">
-      <div class="section-title">Dimensions</div>
-      ${job.shape==='rect' ? `
-        <div class="row"><span class="row-key">Shape</span><span class="row-val">Rectangular</span></div>
-        <div class="row"><span class="row-key">Length</span><span class="row-val">${fmtDim(job.lenFt,job.lenIn)}</span></div>
-        <div class="row"><span class="row-key">Width</span><span class="row-val">${fmtDim(job.widFt,job.widIn)}</span></div>
-        <div class="row"><span class="row-key">Height</span><span class="row-val">${fmtDim(job.htFt,job.htIn)}</span></div>
-        <div class="row"><span class="row-key">Top Length</span><span class="row-val">${fmtDim(job.topLenFt,job.topLenIn)}</span></div>
-        <div class="row"><span class="row-key">Top Width</span><span class="row-val">${fmtDim(job.topWidFt,job.topWidIn)}</span></div>
-      ` : `
-        <div class="row"><span class="row-key">Shape</span><span class="row-val">Conical</span></div>
-        <div class="row"><span class="row-key">Diameter</span><span class="row-val">${fmtDim(job.coneDFt,job.coneDIn)}</span></div>
-        <div class="row"><span class="row-key">Height</span><span class="row-val">${fmtDim(job.coneHFt,job.coneHIn)}</span></div>
-      `}
-    </div>
-    <div class="section">
-      ${job.shape==='rect' ? `
-      <div class="section-title">Wall Angles</div>
-      <div class="row"><span class="row-key">Front</span><span class="row-val">${job.slopeFront}°</span></div>
-      <div class="row"><span class="row-key">Back</span><span class="row-val">${job.slopeBack}°</span></div>
-      <div class="row"><span class="row-key">Left</span><span class="row-val">${job.slopeLeft}°</span></div>
-      <div class="row"><span class="row-key">Right</span><span class="row-val">${job.slopeRight}°</span></div>
-      ` : `<div class="section-title">Geometry</div><div class="row"><span class="row-key">Type</span><span class="row-val">Conical / Cone</span></div>`}
-      <div class="section-title" style="margin-top:14px;">Material</div>
-      <div class="row"><span class="row-key">Material</span><span class="row-val">${escHtmlPdf(job.materialName||'—')}</span></div>
-      <div class="row"><span class="row-key">Density</span><span class="row-val">${job.density} T/CY</span></div>
-    </div>
-  </div>
-  ${job.notes ? `<div class="section"><div class="section-title">Field Notes</div><div class="notes-box">${escHtmlPdf(job.notes)}</div></div>` : ''}
-  <div class="footer">
-    <div class="footer-logo">Volume³</div>
-    <div class="footer-note">Generated ${now} · Field Earthwork Calculator</div>
-  </div>
-</div><script>window.onload=()=>{window.print();}<\/script>
-</body></html>`;
-
-  const blob = new Blob([html], {type:'text/html'});
-  const url  = URL.createObjectURL(blob);
-  window.open(url, '_blank');
-  setTimeout(()=>URL.revokeObjectURL(url), 60000);
-}
-
-function escHtmlPdf(str) {
-  return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
+function escHtmlPdf(str){return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// ─── 3D RENDERING ─────────────────────────────────────────────────────────────
+// 3D RENDERING
 // ═══════════════════════════════════════════════════════════════════════════════
 
-const CW = 480, CH = 300;
-const C_RED_LT  = '#e74c3c';
-const C_BLUE_LT = '#2563eb';
-const C_TOP     = '#1e3060';
-const C_SIDE_L  = '#14213d';
-const C_SIDE_R  = '#1a2d55';
-const C_WHITE   = '#dde4f5';
+const CW=480,CH=300;
 
-// Dim line colors
-const C_BASE_DIM = '#e74c3c';   // red for base
-const C_TOP_DIM  = '#3b82f6';   // blue for top
+// ── Face colors — distinct tones per face for clear slope visibility ──
+const C_TOP_FACE   = '#2a4a8a';   // top surface: medium blue, clearly different
+const C_FRONT_FACE = '#1c3666';   // front slope: lighter blue
+const C_RIGHT_FACE = '#142a52';   // right slope: mid
+const C_BACK_FACE  = '#0d1d3a';   // back/left slopes: darkest
+const C_GROUND     = '#0c1320';   // base ground plane
+const C_EDGE_HI    = '#5a9ef5';   // bright blue edge lines on ridges/top
+const C_EDGE_BASE  = '#e74c3c';   // red for base edges
+const C_BASE_DIM   = '#e74c3c';   // red dim lines for base dims
+const C_TOP_DIM    = '#3b82f6';   // blue dim lines for top dims
+const C_HT_DIM     = '#8aaecf';   // muted steel for height dim
 
-let canvasReady = false;
-
-function getCtx() {
-  const c = document.getElementById('preview3d');
-  const dpr = window.devicePixelRatio || 1;
-  if (!canvasReady) {
-    c.width  = CW * dpr;
-    c.height = CH * dpr;
-    c.style.width  = CW + 'px';
-    c.style.height = CH + 'px';
-    canvasReady = true;
-  }
-  const ctx = c.getContext('2d');
-  ctx.setTransform(1, 0, 0, 1, 0, 0); // reset
-  const dprScale = dpr;
-  ctx.scale(dprScale, dprScale);
-  return ctx;
+let canvasReady=false;
+function getCtx(){
+  const c=document.getElementById('preview3d'),dpr=window.devicePixelRatio||1;
+  if(!canvasReady){c.width=CW*dpr;c.height=CH*dpr;c.style.width=CW+'px';c.style.height=CH+'px';canvasReady=true;}
+  const ctx=c.getContext('2d');ctx.setTransform(1,0,0,1,0,0);ctx.scale(dpr,dpr);return ctx;
 }
 
-// Isometric projection: world (x,y,z) → screen (sx,sy)
-// ox,oy = screen origin, scale = pixels per world unit
-function isoProject(x, y, z, ox, oy, scale) {
-  const cosA = Math.cos(Math.PI / 6); // 30°
-  const sinA = Math.sin(Math.PI / 6);
-  return {
-    x: ox + (x - y) * cosA * scale,
-    y: oy - z * scale + (x + y) * sinA * scale
-  };
+function isoProject(x,y,z,ox,oy,scale){
+  const cosA=Math.cos(Math.PI/6),sinA=Math.sin(Math.PI/6);
+  return{x:ox+(x-y)*cosA*scale,y:oy-z*scale+(x+y)*sinA*scale};
 }
 
-function clearCanvas(ctx) {
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.fillStyle = '#131828';
-  ctx.fillRect(0, 0, CW * 3, CH * 3);
+function clearCanvas(ctx){ctx.setTransform(1,0,0,1,0,0);ctx.fillStyle='#131828';ctx.fillRect(0,0,CW*3,CH*3);}
+function drawEmpty(ctx){clearCanvas(ctx);ctx.fillStyle='#253055';ctx.font='600 13px Barlow Condensed,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('Enter dimensions to preview',CW/2,CH/2);}
+
+function computeFitTransform(pts,pad){
+  pad=pad||62;if(!pts||!pts.length)return{scale:1,ox:CW/2,oy:CH/2};
+  let x0=Infinity,x1=-Infinity,y0=Infinity,y1=-Infinity;
+  pts.forEach(p=>{if(p.x<x0)x0=p.x;if(p.x>x1)x1=p.x;if(p.y<y0)y0=p.y;if(p.y>y1)y1=p.y;});
+  const w=x1-x0||1,h=y1-y0||1,scale=Math.min((CW-pad*2)/w,(CH-pad*2)/h);
+  return{scale,ox:CW/2-((x0+x1)/2)*scale,oy:CH/2-((y0+y1)/2)*scale};
 }
 
-function drawEmpty(ctx) {
-  clearCanvas(ctx);
-  ctx.save();
-  applyVP(ctx);
-  ctx.fillStyle = '#253055';
-  ctx.font = '600 13px Barlow Condensed, sans-serif';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('Enter dimensions to preview', CW / 2, CH / 2);
-  ctx.restore();
+function getRectIsoPoints(L,W,H,topL,topW,isBelow){
+  const s=isBelow?-1:1,xc=Math.max(0,(L-topL)/2),yc=Math.max(0,(W-topW)/2),tL=Math.min(topL,L),tW=Math.min(topW,W);
+  return[isoProject(0,0,0,0,0,1),isoProject(L,0,0,0,0,1),isoProject(0,W,0,0,0,1),isoProject(L,W,0,0,0,1),isoProject(xc,yc,s*H,0,0,1),isoProject(xc+tL,yc,s*H,0,0,1),isoProject(xc,yc+tW,s*H,0,0,1),isoProject(xc+tL,yc+tW,s*H,0,0,1)];
+}
+function getConeIsoPoints(D,H,isBelow){
+  const r=D/2,s=isBelow?-1:1,pts=[];
+  for(let a=0;a<Math.PI*2;a+=Math.PI/8)pts.push(isoProject(D/2+r*Math.cos(a),D/2+r*Math.sin(a)*0.5,0,0,0,1));
+  pts.push(isoProject(D/2,D/2,s*H,0,0,1));return pts;
 }
 
-// ─── AUTO-FIT CALCULATION ─────────────────────────────────────────────────────
-// Returns { scale, ox, oy } so the pile fits with padding inside CW×CH
+// ─── RECT DRAW ────────────────────────────────────────────────────────────────
+function draw3DRect(L,W,H,topL,topW,aFront,aBack,aLeft,aRight){
+  lastDrawArgs={type:'rect',args:[L,W,H,topL,topW,aFront,aBack,aLeft,aRight]};
+  const ctx=getCtx();clearCanvas(ctx);
+  if(L<=0||W<=0||H<=0){drawEmpty(ctx);return;}
+  const isBelow=state.grade==='below',sign=isBelow?-1:1;
+  const rawPts=getRectIsoPoints(L,W,H,topL,topW,isBelow);
+  const fit=computeFitTransform(rawPts,64);
+  vpFit={zoom:fit.scale,panX:fit.ox,panY:fit.oy};
+  if(vp.zoom===1&&vp.panX===0&&vp.panY===0)vp={...vpFit};
 
-function computeFitTransform(isoPoints, padding) {
-  padding = padding || 52; // room for dim leaders
-  if (!isoPoints || isoPoints.length === 0) return { scale: 1, ox: CW/2, oy: CH/2 };
-  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
-  isoPoints.forEach(p => {
-    if (p.x < minX) minX = p.x;
-    if (p.x > maxX) maxX = p.x;
-    if (p.y < minY) minY = p.y;
-    if (p.y > maxY) maxY = p.y;
-  });
-  const w = maxX - minX || 1;
-  const h = maxY - minY || 1;
-  const scaleX = (CW - padding * 2) / w;
-  const scaleY = (CH - padding * 2) / h;
-  const scale = Math.min(scaleX, scaleY);
-  // Center
-  const cx = (minX + maxX) / 2;
-  const cy = (minY + maxY) / 2;
-  const ox = CW / 2 - cx * scale; // we'll bake scale into ox/oy offset
-  const oy = CH / 2 - cy * scale;
-  return { scale, ox, oy };
-}
+  function iso(x,y,z){const r=isoProject(x,y,z,0,0,1);return{x:r.x*vp.zoom+vp.panX,y:r.y*vp.zoom+vp.panY};}
 
-// Get raw iso points (before offset applied) for a rect shape at scale=1, ox=0, oy=0
-function getRectIsoPoints(L, W, H, topL, topW, isBelow) {
-  const sign = isBelow ? -1 : 1;
-  const maxRunLR = L / 2, maxRunFB = W / 2;
-  // Top corners: centered
-  const xc = Math.max(0, (L - topL) / 2);
-  const yc = Math.max(0, (W - topW) / 2);
-  const tL = Math.min(topL, L), tW = Math.min(topW, W);
-  const corners = [
-    isoProject(0,   0,   0,      0, 0, 1),
-    isoProject(L,   0,   0,      0, 0, 1),
-    isoProject(0,   W,   0,      0, 0, 1),
-    isoProject(L,   W,   0,      0, 0, 1),
-    isoProject(xc,        yc,        sign*H, 0, 0, 1),
-    isoProject(xc+tL,     yc,        sign*H, 0, 0, 1),
-    isoProject(xc,        yc+tW,     sign*H, 0, 0, 1),
-    isoProject(xc+tL,     yc+tW,     sign*H, 0, 0, 1),
-  ];
-  return corners;
-}
+  const xc=Math.max(0,(L-topL)/2),yc=Math.max(0,(W-topW)/2),tLS=Math.min(topL,L),tWS=Math.min(topW,W);
+  // 8 corners: base (front-left, front-right, back-left, back-right), top same order
+  const bFL=iso(0,0,0),bFR=iso(L,0,0),bBL=iso(0,W,0),bBR=iso(L,W,0);
+  const tFL=iso(xc,yc,sign*H),tFR=iso(xc+tLS,yc,sign*H),tBL=iso(xc,yc+tWS,sign*H),tBR=iso(xc+tLS,yc+tWS,sign*H);
 
-function getConeIsoPoints(D, H, isBelow) {
-  const r = D / 2;
-  const sign = isBelow ? -1 : 1;
-  const pts = [];
-  for (let a = 0; a < Math.PI * 2; a += Math.PI / 8) {
-    pts.push(isoProject(D/2 + r*Math.cos(a), D/2 + r*Math.sin(a)*0.5, 0, 0, 0, 1));
-  }
-  pts.push(isoProject(D/2, D/2, sign*H, 0, 0, 1));
-  return pts;
-}
-
-// ─── RECT 3D DRAW ─────────────────────────────────────────────────────────────
-
-function draw3DRect(L, W, H, topL, topW, aFront, aBack, aLeft, aRight) {
-  lastDrawArgs = { type: 'rect', args: [L, W, H, topL, topW, aFront, aBack, aLeft, aRight] };
-
-  const ctx = getCtx();
-  clearCanvas(ctx);
-
-  if (L <= 0 || W <= 0 || H <= 0) { drawEmpty(ctx); return; }
-
-  const isBelow = state.grade === 'below';
-  const sign = isBelow ? -1 : 1;
-
-  // ── Compute auto-fit transform ──
-  const rawPts = getRectIsoPoints(L, W, H, topL, topW, isBelow);
-  const fit = computeFitTransform(rawPts, 60);
-
-  // Apply the fit as the "base" view transform
-  vpFit = { zoom: fit.scale, panX: fit.ox, panY: fit.oy };
-  // On first draw (or if zoom==1 and pan==0 meaning untouched), snap to fit
-  if (vp.zoom === 1 && vp.panX === 0 && vp.panY === 0) {
-    vp = { ...vpFit };
-  }
-
-  // ── Helper: world→screen using current vp ──
-  function iso(x, y, z) {
-    const raw = isoProject(x, y, z, 0, 0, 1);
-    return {
-      x: raw.x * vp.zoom + vp.panX,
-      y: raw.y * vp.zoom + vp.panY
-    };
-  }
-
-  // ── Compute top corner offsets ──
-  const xc = Math.max(0, (L - topL) / 2);
-  const yc = Math.max(0, (W - topW) / 2);
-  const tLS = Math.min(topL, L);
-  const tWS = Math.min(topW, W);
-
-  // Base corners
-  const bFL = iso(0, 0, 0);
-  const bFR = iso(L, 0, 0);
-  const bBL = iso(0, W, 0);
-  const bBR = iso(L, W, 0);
-
-  // Top corners
-  const tFL = iso(xc,       yc,       sign * H);
-  const tFR = iso(xc + tLS, yc,       sign * H);
-  const tBL = iso(xc,       yc + tWS, sign * H);
-  const tBR = iso(xc + tLS, yc + tWS, sign * H);
-
-  // ── Draw geometry ──
-  function poly(pts, fill, stroke, lw) {
-    ctx.beginPath();
-    ctx.moveTo(pts[0].x, pts[0].y);
-    for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+  function poly(pts,fill,stroke,lw){
+    ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);
+    for(let i=1;i<pts.length;i++)ctx.lineTo(pts[i].x,pts[i].y);
     ctx.closePath();
-    if (fill)   { ctx.fillStyle   = fill;  ctx.fill(); }
-    if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = lw || 1; ctx.stroke(); }
+    if(fill){ctx.fillStyle=fill;ctx.fill();}
+    if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw||1;ctx.stroke();}
   }
 
-  if (!isBelow) {
-    poly([bFL, bFR, tFR, tFL], C_SIDE_R,      C_RED_LT + '66', 1);
-    poly([bFR, bBR, tBR, tFR], C_SIDE_L,      C_RED_LT + '44', 1);
-    poly([bFL, bBL, tBL, tFL], C_SIDE_L+'bb', C_BLUE_LT+'33', 0.5);
-    poly([tFL, tFR, tBR, tBL], C_TOP,         C_WHITE + 'aa', 1.5);
-    poly([bFL, bFR, bBR, bBL], null,           C_RED_LT + '44', 1);
-    ctx.strokeStyle = C_BLUE_LT + '33'; ctx.lineWidth = 1; ctx.setLineDash([4, 4]);
-    ctx.beginPath();
-    ctx.moveTo(bFL.x, bFL.y); ctx.lineTo(bFR.x, bFR.y);
-    ctx.moveTo(bFR.x, bFR.y); ctx.lineTo(bBR.x, bBR.y);
-    ctx.stroke(); ctx.setLineDash([]);
-  } else {
-    const gE = 30 * vp.zoom;
-    const g1 = { x: bFL.x - gE, y: bFL.y + gE * 0.5 };
-    const g2 = { x: bFR.x + gE, y: bFR.y + gE * 0.5 };
-    const g3 = { x: bBR.x + gE, y: bBR.y - gE * 0.5 };
-    const g4 = { x: bBL.x - gE, y: bBL.y - gE * 0.5 };
-    poly([g1, g2, g3, g4], '#1a2035', null);
-    poly([bFL, bFR, bBR, bBL], null,           C_RED_LT + '88', 1.5);
-    poly([tFL, tFR, tBR, tBL], C_TOP,         C_WHITE + '77', 1.5);
-    poly([bFL, bFR, tFR, tFL], C_SIDE_R,      C_RED_LT + '55', 1);
-    poly([bFR, bBR, tBR, tFR], C_SIDE_L,      C_RED_LT + '44', 1);
-    poly([bFL, bBL, tBL, tFL], C_SIDE_L+'cc', C_BLUE_LT+'33', 0.5);
-  }
-
-  // ── Height dimension — left side leader ──
-  drawHeightLeader(ctx, bFL, tFL, `H: ${H.toFixed(1)}'`);
-
-  // ── Base dims (red) ──
-  if (showBaseDims) {
-    drawArchDimLine(ctx, bFL, bFR, `L: ${L.toFixed(1)}'`, 'below', C_BASE_DIM, 22 * vp.zoom);
-    drawArchDimLine(ctx, bFR, bBR, `W: ${W.toFixed(1)}'`, 'right',  C_BASE_DIM, 22 * vp.zoom);
-  }
-
-  // ── Top dims (blue) — only when top is non-zero ──
-  if (showTopDims && topL > 0 && topW > 0) {
-    drawArchDimLine(ctx, tFL, tFR, `TL: ${topL.toFixed(1)}'`, 'above', C_TOP_DIM, 20 * vp.zoom);
-    drawArchDimLine(ctx, tFR, tBR, `TW: ${topW.toFixed(1)}'`, 'right-above', C_TOP_DIM, 20 * vp.zoom);
-  }
-}
-
-// ─── CONE 3D DRAW ─────────────────────────────────────────────────────────────
-
-function draw3DCone(D, H) {
-  lastDrawArgs = { type: 'cone', args: [D, H] };
-
-  const ctx = getCtx();
-  clearCanvas(ctx);
-
-  if (D <= 0 || H <= 0) { drawEmpty(ctx); return; }
-
-  const isBelow = state.grade === 'below';
-  const r = D / 2;
-  const sign = isBelow ? -1 : 1;
-
-  // Fit
-  const rawPts = getConeIsoPoints(D, H, isBelow);
-  const fit = computeFitTransform(rawPts, 55);
-  vpFit = { zoom: fit.scale, panX: fit.ox, panY: fit.oy };
-  if (vp.zoom === 1 && vp.panX === 0 && vp.panY === 0) vp = { ...vpFit };
-
-  function iso(x, y, z) {
-    const raw = isoProject(x, y, z, 0, 0, 1);
-    return { x: raw.x * vp.zoom + vp.panX, y: raw.y * vp.zoom + vp.panY };
-  }
-
-  // We render the cone as an ellipse base + two slant lines to apex
-  // The "base" center in iso world coords is (r, r, 0) — center of diameter
-  const baseCtr = iso(r, r, 0);
-  const apexPt  = iso(r, r, sign * H);
-
-  // Ellipse axes: in iso, the x-axis projects at 30°, y-axis at 150°
-  // For a circle of radius r in xz-plane: the ellipse half-axes
-  const cosA = Math.cos(Math.PI / 6);
-  const sinA = Math.sin(Math.PI / 6);
-  const rx = r * cosA * vp.zoom;
-  const ry = r * sinA * vp.zoom;
-
-  const leftPt  = { x: baseCtr.x - rx, y: baseCtr.y };
-  const rightPt = { x: baseCtr.x + rx, y: baseCtr.y };
-
-  if (!isBelow) {
-    // Back half of base (hidden)
-    ctx.beginPath();
-    ctx.ellipse(baseCtr.x, baseCtr.y, rx, ry, 0, 0, Math.PI);
-    ctx.fillStyle = C_SIDE_L; ctx.fill();
-
-    // Front cone surfaces
-    ctx.beginPath();
-    ctx.moveTo(apexPt.x, apexPt.y);
-    ctx.lineTo(leftPt.x, leftPt.y);
-    ctx.ellipse(baseCtr.x, baseCtr.y, rx, ry, 0, Math.PI, 2 * Math.PI);
-    ctx.closePath();
-    ctx.fillStyle = C_SIDE_R; ctx.fill();
-    ctx.strokeStyle = C_RED_LT + '88'; ctx.lineWidth = 1.5; ctx.stroke();
-
-    // Full base ellipse outline
-    ctx.beginPath();
-    ctx.ellipse(baseCtr.x, baseCtr.y, rx, ry, 0, 0, 2 * Math.PI);
-    ctx.strokeStyle = C_RED_LT + '55'; ctx.lineWidth = 1; ctx.stroke();
-
-    // Apex dot
-    ctx.beginPath();
-    ctx.arc(apexPt.x, apexPt.y, 3, 0, 2 * Math.PI);
-    ctx.fillStyle = C_WHITE; ctx.fill();
-
-    // Slant lines
-    ctx.beginPath();
-    ctx.moveTo(apexPt.x, apexPt.y); ctx.lineTo(leftPt.x, leftPt.y);
-    ctx.moveTo(apexPt.x, apexPt.y); ctx.lineTo(rightPt.x, rightPt.y);
-    ctx.strokeStyle = C_WHITE + 'bb'; ctx.lineWidth = 1.5; ctx.stroke();
+  if(!isBelow){
+    // Painter's order: back faces first, then front, then top
+    // Left face (back-ish)
+    poly([bFL,bBL,tBL,tFL],C_BACK_FACE,C_EDGE_HI+'44',0.5);
+    // Back face
+    poly([bBL,bBR,tBR,tBL],C_BACK_FACE,C_EDGE_HI+'33',0.5);
+    // Right face — distinctly lighter
+    poly([bFR,bBR,tBR,tFR],C_RIGHT_FACE,C_EDGE_HI+'99',1.5);
+    // Front face — lightest slope face
+    poly([bFL,bFR,tFR,tFL],C_FRONT_FACE,C_EDGE_HI+'cc',2);
+    // Top face — brightest
+    poly([tFL,tFR,tBR,tBL],C_TOP_FACE,C_EDGE_HI+'ff',2.5);
+    // Base outline dashed
+    ctx.save();ctx.strokeStyle=C_EDGE_BASE+'55';ctx.lineWidth=1;ctx.setLineDash([4,5]);
+    ctx.beginPath();ctx.moveTo(bFL.x,bFL.y);ctx.lineTo(bFR.x,bFR.y);ctx.moveTo(bFR.x,bFR.y);ctx.lineTo(bBR.x,bBR.y);ctx.moveTo(bBR.x,bBR.y);ctx.lineTo(bBL.x,bBL.y);ctx.moveTo(bBL.x,bBL.y);ctx.lineTo(bFL.x,bFL.y);ctx.stroke();ctx.setLineDash([]);ctx.restore();
+    // Ridge lines on slopes for definition
+    ctx.save();ctx.strokeStyle=C_EDGE_HI+'cc';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(bFL.x,bFL.y);ctx.lineTo(tFL.x,tFL.y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(bFR.x,bFR.y);ctx.lineTo(tFR.x,tFR.y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(bBR.x,bBR.y);ctx.lineTo(tBR.x,tBR.y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(bBL.x,bBL.y);ctx.lineTo(tBL.x,tBL.y);ctx.stroke();
+    // Top edge lines bold
+    ctx.strokeStyle=C_EDGE_HI+'ee';ctx.lineWidth=2.5;
+    ctx.beginPath();ctx.moveTo(tFL.x,tFL.y);ctx.lineTo(tFR.x,tFR.y);ctx.moveTo(tFR.x,tFR.y);ctx.lineTo(tBR.x,tBR.y);ctx.moveTo(tBR.x,tBR.y);ctx.lineTo(tBL.x,tBL.y);ctx.moveTo(tBL.x,tBL.y);ctx.lineTo(tFL.x,tFL.y);ctx.stroke();
+    ctx.restore();
   } else {
     // Below grade
-    ctx.beginPath();
-    ctx.ellipse(baseCtr.x, baseCtr.y, rx, ry, 0, 0, 2 * Math.PI);
-    ctx.fillStyle = C_TOP; ctx.fill();
-    ctx.strokeStyle = C_RED_LT + '88'; ctx.lineWidth = 1.5; ctx.stroke();
-
-    ctx.beginPath();
-    ctx.moveTo(apexPt.x, apexPt.y); ctx.lineTo(leftPt.x, leftPt.y);
-    ctx.moveTo(apexPt.x, apexPt.y); ctx.lineTo(rightPt.x, rightPt.y);
-    ctx.strokeStyle = C_WHITE + 'aa'; ctx.lineWidth = 1.5; ctx.stroke();
+    poly([bFL,bFR,bBR,bBL],C_GROUND,C_EDGE_BASE+'88',1.5);
+    poly([tFL,tFR,tBR,tBL],C_TOP_FACE,C_EDGE_HI+'cc',1.5);
+    poly([bFL,bFR,tFR,tFL],C_FRONT_FACE,C_EDGE_HI+'88',1.5);
+    poly([bFR,bBR,tBR,tFR],C_RIGHT_FACE,C_EDGE_HI+'66',1.5);
+    poly([bFL,bBL,tBL,tFL],C_BACK_FACE,C_EDGE_HI+'44',1);
+    ctx.save();ctx.strokeStyle=C_EDGE_HI+'aa';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(bFL.x,bFL.y);ctx.lineTo(tFL.x,tFL.y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(bFR.x,bFR.y);ctx.lineTo(tFR.x,tFR.y);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(bBR.x,bBR.y);ctx.lineTo(tBR.x,tBR.y);ctx.stroke();
+    ctx.restore();
   }
 
-  // Diameter label along base
-  drawArchDimLine(ctx, leftPt, rightPt, `Ø ${D.toFixed(1)}'`, 'below', C_BASE_DIM, 18 * vp.zoom);
+  // ── HEIGHT leader: left side of shape ──
+  drawHeightLeader(ctx,bFL,tFL,`H: ${H.toFixed(1)}'`);
 
-  // Height leader
-  drawHeightLeader(ctx, baseCtr, apexPt, `H: ${H.toFixed(1)}'`);
+  // ── BASE dims (red): come off BOTTOM-FRONT edges ──
+  // Length: front base edge bFL→bFR  (bottom-front horizontal)
+  // Width:  right base edge bFR→bBR  (bottom-front going back-right)
+  if(showBaseDims){
+    drawArchDimLine(ctx,bFL,bFR,`L: ${L.toFixed(1)}'`,'out-below',C_BASE_DIM,28*vp.zoom);
+    drawArchDimLine(ctx,bFR,bBR,`W: ${W.toFixed(1)}'`,'out-below',C_BASE_DIM,28*vp.zoom);
+  }
+
+  // ── TOP dims (blue): come off TOP-BACK edges ──
+  // Top Length: back top edge tBL→tBR  (top-back horizontal)
+  // Top Width:  left top edge tFL→tBL  (top-back going back-left)
+  if(showTopDims&&topL>0&&topW>0){
+    drawArchDimLine(ctx,tBL,tBR,`TL: ${topL.toFixed(1)}'`,'out-above',C_TOP_DIM,24*vp.zoom);
+    drawArchDimLine(ctx,tFL,tBL,`TW: ${topW.toFixed(1)}'`,'out-above',C_TOP_DIM,24*vp.zoom);
+  }
+}
+
+// ─── CONE DRAW ────────────────────────────────────────────────────────────────
+function draw3DCone(D,H){
+  lastDrawArgs={type:'cone',args:[D,H]};
+  const ctx=getCtx();clearCanvas(ctx);
+  if(D<=0||H<=0){drawEmpty(ctx);return;}
+  const isBelow=state.grade==='below',r=D/2,sign=isBelow?-1:1;
+  const rawPts=getConeIsoPoints(D,H,isBelow);
+  const fit=computeFitTransform(rawPts,55);
+  vpFit={zoom:fit.scale,panX:fit.ox,panY:fit.oy};
+  if(vp.zoom===1&&vp.panX===0&&vp.panY===0)vp={...vpFit};
+  function iso(x,y,z){const rr=isoProject(x,y,z,0,0,1);return{x:rr.x*vp.zoom+vp.panX,y:rr.y*vp.zoom+vp.panY};}
+  const baseCtr=iso(r,r,0),apexPt=iso(r,r,sign*H);
+  const cosA=Math.cos(Math.PI/6),sinA=Math.sin(Math.PI/6);
+  const rx=r*cosA*vp.zoom,ry=r*sinA*vp.zoom;
+  const leftPt={x:baseCtr.x-rx,y:baseCtr.y},rightPt={x:baseCtr.x+rx,y:baseCtr.y};
+  if(!isBelow){
+    ctx.beginPath();ctx.ellipse(baseCtr.x,baseCtr.y,rx,ry,0,0,Math.PI);ctx.fillStyle=C_BACK_FACE;ctx.fill();ctx.strokeStyle=C_EDGE_HI+'44';ctx.lineWidth=1;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(apexPt.x,apexPt.y);ctx.lineTo(leftPt.x,leftPt.y);ctx.ellipse(baseCtr.x,baseCtr.y,rx,ry,0,Math.PI,2*Math.PI);ctx.closePath();ctx.fillStyle=C_FRONT_FACE;ctx.fill();ctx.strokeStyle=C_EDGE_HI+'aa';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.ellipse(baseCtr.x,baseCtr.y,rx,ry,0,0,2*Math.PI);ctx.strokeStyle=C_EDGE_BASE+'77';ctx.lineWidth=1;ctx.stroke();
+    ctx.beginPath();ctx.arc(apexPt.x,apexPt.y,3,0,2*Math.PI);ctx.fillStyle='#dde4f5';ctx.fill();
+    ctx.beginPath();ctx.moveTo(apexPt.x,apexPt.y);ctx.lineTo(leftPt.x,leftPt.y);ctx.moveTo(apexPt.x,apexPt.y);ctx.lineTo(rightPt.x,rightPt.y);ctx.strokeStyle=C_EDGE_HI+'cc';ctx.lineWidth=2;ctx.stroke();
+  }else{
+    ctx.beginPath();ctx.ellipse(baseCtr.x,baseCtr.y,rx,ry,0,0,2*Math.PI);ctx.fillStyle=C_GROUND;ctx.fill();ctx.strokeStyle=C_EDGE_BASE+'88';ctx.lineWidth=1.5;ctx.stroke();
+    ctx.beginPath();ctx.moveTo(apexPt.x,apexPt.y);ctx.lineTo(leftPt.x,leftPt.y);ctx.moveTo(apexPt.x,apexPt.y);ctx.lineTo(rightPt.x,rightPt.y);ctx.strokeStyle=C_EDGE_HI+'aa';ctx.lineWidth=1.5;ctx.stroke();
+  }
+  drawArchDimLine(ctx,leftPt,rightPt,`Ø ${D.toFixed(1)}'`,'out-below',C_BASE_DIM,22*vp.zoom);
+  drawHeightLeader(ctx,baseCtr,apexPt,`H: ${H.toFixed(1)}'`);
 }
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// ─── ARCHITECTURAL DIMENSION HELPERS ─────────────────────────────────────────
+// DIM DRAWING HELPERS
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /**
- * drawArchDimLine — architectural style external dimension line
- * p1, p2: screen endpoints of the measured edge
- * label: text
- * side: 'below' | 'above' | 'right' | 'right-above'
- *   - below/above: offset perpendicular in screen Y
- *   - right/right-above: offset along the right screen side
- * color: stroke/text color
- * offset: distance from the edge to the dim line
+ * drawArchDimLine
+ * side: 'out-below' — normal pointing away from shape downward (base front edges)
+ *       'out-above' — normal pointing away from shape upward (top back edges)
+ *
+ * We always pick the normal that points AWAY from the visible center of the shape
+ * by choosing whichever of the two candidate normals has a larger positive dot
+ * product with the "outward" direction for that side.
+ *
+ * Text & everything scales with vp.zoom so it remains legible at any zoom level.
  */
-function drawArchDimLine(ctx, p1, p2, label, side, color, offset) {
-  const TICK = 6;  // perpendicular tick length each side of endpoint
-  const GAP  = 3;  // gap between shape edge and extension line start
-
-  // Direction vector of the dim line
-  const dx = p2.x - p1.x;
-  const dy = p2.y - p1.y;
-  const len = Math.sqrt(dx * dx + dy * dy);
-  if (len < 4) return; // too small to draw
-
-  // Unit vectors
-  const ux = dx / len, uy = dy / len;
-  // Perpendicular (rotated 90° CCW)
-  let nx = -uy, ny = ux;
-
-  // Choose normal direction based on side
-  // For 'below': we want the dim line to go "down" in screen coords (positive y)
-  // For 'above': negative y
-  // For 'right': positive x component
-  if (side === 'below') {
-    // ensure normal points mostly downward
-    if (ny < 0) { nx = -nx; ny = -ny; }
-  } else if (side === 'above') {
-    if (ny > 0) { nx = -nx; ny = -ny; }
-  } else if (side === 'right') {
-    if (nx < 0) { nx = -nx; ny = -ny; }
-  } else if (side === 'right-above') {
-    if (nx < 0) { nx = -nx; ny = -ny; }
+function drawArchDimLine(ctx,p1,p2,label,side,color,offset){
+  const TICK=6,GAP=4;
+  const dx=p2.x-p1.x,dy=p2.y-p1.y,len=Math.sqrt(dx*dx+dy*dy);
+  if(len<4)return;
+  const ux=dx/len,uy=dy/len;
+  // Two candidate normals (perpendicular to edge)
+  let nx=-uy,ny=ux;  // CCW
+  // Choose the one that points in the desired outward direction
+  if(side==='out-below'){
+    // We want the normal to point mostly "downward" in screen (positive y)
+    if(ny<0){nx=-nx;ny=-ny;}
+  } else if(side==='out-above'){
+    // We want the normal to point mostly "upward" in screen (negative y)
+    if(ny>0){nx=-nx;ny=-ny;}
   }
 
-  // Offset points (dim line positions)
-  const d1 = { x: p1.x + nx * offset, y: p1.y + ny * offset };
-  const d2 = { x: p2.x + nx * offset, y: p2.y + ny * offset };
+  const d1={x:p1.x+nx*offset,y:p1.y+ny*offset};
+  const d2={x:p2.x+nx*offset,y:p2.y+ny*offset};
 
   ctx.save();
-  ctx.strokeStyle = color;
-  ctx.fillStyle   = color;
-  ctx.lineWidth   = 1;
+  ctx.strokeStyle=color;ctx.fillStyle=color;
 
-  // Extension lines (from shape edge outward to dim line, with gap)
-  ctx.setLineDash([]);
-  ctx.globalAlpha = 0.7;
+  // Extension lines
+  ctx.lineWidth=1;ctx.globalAlpha=0.6;ctx.setLineDash([]);
+  ctx.beginPath();ctx.moveTo(p1.x+nx*GAP,p1.y+ny*GAP);ctx.lineTo(d1.x+nx*3,d1.y+ny*3);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(p2.x+nx*GAP,p2.y+ny*GAP);ctx.lineTo(d2.x+nx*3,d2.y+ny*3);ctx.stroke();
 
-  ctx.beginPath();
-  ctx.moveTo(p1.x + nx * GAP, p1.y + ny * GAP);
-  ctx.lineTo(d1.x + nx * 4,   d1.y + ny * 4);
-  ctx.stroke();
+  ctx.globalAlpha=0.9;
+  // Main dim line
+  ctx.beginPath();ctx.moveTo(d1.x,d1.y);ctx.lineTo(d2.x,d2.y);ctx.lineWidth=1.2;ctx.stroke();
 
-  ctx.beginPath();
-  ctx.moveTo(p2.x + nx * GAP, p2.y + ny * GAP);
-  ctx.lineTo(d2.x + nx * 4,   d2.y + ny * 4);
-  ctx.stroke();
-
-  ctx.globalAlpha = 0.9;
-
-  // Main dimension line
-  ctx.beginPath();
-  ctx.moveTo(d1.x, d1.y);
-  ctx.lineTo(d2.x, d2.y);
-  ctx.stroke();
-
-  // Tick marks at endpoints (architectural: short diagonal ticks at 45° to dim line)
-  function drawTick(pt) {
-    const tx = ux * TICK * 0.6 + nx * TICK * 0.6;
-    const ty = uy * TICK * 0.6 + ny * TICK * 0.6;
-    ctx.beginPath();
-    ctx.moveTo(pt.x - tx, pt.y - ty);
-    ctx.lineTo(pt.x + tx, pt.y + ty);
-    ctx.lineWidth = 1.5;
-    ctx.stroke();
-    ctx.lineWidth = 1;
+  // Architectural tick marks
+  function drawTick(pt){
+    const tx=ux*TICK*0.6+nx*TICK*0.6,ty=uy*TICK*0.6+ny*TICK*0.6;
+    ctx.beginPath();ctx.moveTo(pt.x-tx,pt.y-ty);ctx.lineTo(pt.x+tx,pt.y+ty);ctx.lineWidth=1.8;ctx.stroke();ctx.lineWidth=1.2;
   }
-  drawTick(d1);
-  drawTick(d2);
+  drawTick(d1);drawTick(d2);
 
-  // Label — centered on dim line, offset slightly away from shape
-  const mx = (d1.x + d2.x) / 2 + nx * 10;
-  const my = (d1.y + d2.y) / 2 + ny * 10;
-
-  ctx.globalAlpha = 1;
-  ctx.font = `700 ${Math.max(9, Math.min(12, 10 * vp.zoom))}px Barlow Condensed, sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-
-  // Text background pill for readability
-  const tw = ctx.measureText(label).width;
-  const th = 13;
-  ctx.fillStyle = '#0a0c14';
-  ctx.globalAlpha = 0.75;
-  roundRect(ctx, mx - tw/2 - 3, my - th/2, tw + 6, th, 3);
-  ctx.fill();
-
-  ctx.globalAlpha = 1;
-  ctx.fillStyle = color;
-  ctx.fillText(label, mx, my);
-
+  // Label — font size proportional to zoom, clamped so always readable
+  const mx=(d1.x+d2.x)/2+nx*12,my=(d1.y+d2.y)/2+ny*12;
+  ctx.globalAlpha=1;
+  const fs=Math.max(11,Math.min(17,12*vp.zoom));
+  ctx.font=`700 ${fs}px Barlow Condensed,sans-serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  const tw=ctx.measureText(label).width,th=fs+5;
+  ctx.fillStyle='#0a0c14';ctx.globalAlpha=0.85;
+  roundRect(ctx,mx-tw/2-4,my-th/2,tw+8,th,3);ctx.fill();
+  ctx.globalAlpha=1;ctx.fillStyle=color;ctx.fillText(label,mx,my);
   ctx.restore();
 }
 
 /**
- * drawHeightLeader — vertical leader on the left side with dashed line
+ * drawHeightLeader — left-side vertical leader with horizontal extension lines
+ * Text scales with zoom.
  */
-function drawHeightLeader(ctx, basePoint, topPoint, label) {
-  const LEADER_OFFSET = 18;
-
-  const lx = Math.min(basePoint.x, topPoint.x) - LEADER_OFFSET;
-  const by = basePoint.y;
-  const ty = topPoint.y;
-
-  if (Math.abs(by - ty) < 6) return;
-
-  ctx.save();
-  ctx.strokeStyle = C_WHITE + 'aa';
-  ctx.lineWidth   = 1;
-  ctx.globalAlpha = 0.75;
-  ctx.setLineDash([3, 3]);
-
-  // Extension lines (horizontal, from shape to leader)
-  ctx.beginPath();
-  ctx.moveTo(basePoint.x, by);
-  ctx.lineTo(lx - 2, by);
-  ctx.stroke();
-
-  ctx.beginPath();
-  ctx.moveTo(topPoint.x, ty);
-  ctx.lineTo(lx - 2, ty);
-  ctx.stroke();
-
+function drawHeightLeader(ctx,basePoint,topPoint,label){
+  const OFF=22;
+  const lx=Math.min(basePoint.x,topPoint.x)-OFF;
+  const by=basePoint.y,ty=topPoint.y;
+  if(Math.abs(by-ty)<6)return;
+  ctx.save();ctx.strokeStyle=C_HT_DIM;ctx.lineWidth=1;ctx.globalAlpha=0.7;ctx.setLineDash([3,4]);
+  ctx.beginPath();ctx.moveTo(basePoint.x,by);ctx.lineTo(lx-2,by);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(topPoint.x,ty);ctx.lineTo(lx-2,ty);ctx.stroke();
   ctx.setLineDash([]);
-
-  // Vertical leader line
-  ctx.beginPath();
-  ctx.moveTo(lx, by);
-  ctx.lineTo(lx, ty);
-  ctx.stroke();
-
-  // Tick marks at top and bottom of leader
-  const TICK = 5;
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(lx - TICK, by); ctx.lineTo(lx + TICK, by);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(lx - TICK, ty); ctx.lineTo(lx + TICK, ty);
-  ctx.stroke();
-
-  // Label
-  const my = (by + ty) / 2;
-  ctx.globalAlpha = 1;
-  ctx.font = `700 ${Math.max(9, Math.min(11, 10 * vp.zoom))}px Barlow Condensed, sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-
-  const tw = ctx.measureText(label).width;
-  ctx.fillStyle = '#0a0c14';
-  ctx.globalAlpha = 0.75;
-  roundRect(ctx, lx - tw/2 - 3, my - 6.5, tw + 6, 13, 3);
-  ctx.fill();
-
-  ctx.globalAlpha = 1;
-  ctx.fillStyle = C_WHITE + 'cc';
-  ctx.fillText(label, lx, my);
-
+  ctx.beginPath();ctx.moveTo(lx,by);ctx.lineTo(lx,ty);ctx.stroke();
+  const T=5;ctx.lineWidth=1.8;
+  ctx.beginPath();ctx.moveTo(lx-T,by);ctx.lineTo(lx+T,by);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(lx-T,ty);ctx.lineTo(lx+T,ty);ctx.stroke();
+  const my=(by+ty)/2;
+  ctx.globalAlpha=1;
+  const fs=Math.max(11,Math.min(17,12*vp.zoom));
+  ctx.font=`700 ${fs}px Barlow Condensed,sans-serif`;
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  const tw=ctx.measureText(label).width,th=fs+5;
+  ctx.fillStyle='#0a0c14';ctx.globalAlpha=0.85;
+  roundRect(ctx,lx-tw/2-4,my-th/2,tw+8,th,3);ctx.fill();
+  ctx.globalAlpha=1;ctx.fillStyle=C_HT_DIM;ctx.fillText(label,lx,my);
   ctx.restore();
 }
 
-// ─── UTILITY ──────────────────────────────────────────────────────────────────
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();}
 
-function roundRect(ctx, x, y, w, h, r) {
-  ctx.beginPath();
-  ctx.moveTo(x + r, y);
-  ctx.lineTo(x + w - r, y);
-  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
-  ctx.lineTo(x + w, y + h - r);
-  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
-  ctx.lineTo(x + r, y + h);
-  ctx.quadraticCurveTo(x, y + h, x, y + h - r);
-  ctx.lineTo(x, y + r);
-  ctx.quadraticCurveTo(x, y, x + r, y);
-  ctx.closePath();
-}
-
-// ─── SERVICE WORKER ───────────────────────────────────────────────────────────
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
-}
-
-window.addEventListener('DOMContentLoaded', init);
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+window.addEventListener('DOMContentLoaded',init);
 </script>
 </body>
 </html>
